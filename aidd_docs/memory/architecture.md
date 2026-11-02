@@ -18,6 +18,8 @@ flowchart LR
 
 ## Key decisions
 
+- Hors App Sandbox, avec le chiffrement de l'historique comme protection principale des données : voir `aidd_docs/memory/internal/decisions/hors-app-sandbox.md`.
+
 - 100 % Apple : aucune dépendance tierce ; toute exception se demande d'abord.
 - Architecture MV à la manière d'Apple, rangée par feature, avec un cœur isolé dans des packages Swift locaux (`CopyKitCore`, `CopyKitData`, `CopyKitSystem`) dont les dépendances vont vers le cœur : voir `aidd_docs/memory/internal/decisions/architecture-mv-feature-core.md`.
 - Un objet `@Observable` suffixé `…ViewModel` seulement pour un écran qui porte de la logique propre, jamais par réflexe.

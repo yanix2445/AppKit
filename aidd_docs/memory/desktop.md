@@ -9,7 +9,8 @@ The desktop app: framework, native access, and packaging.
 
 ## Native access
 
-- App Sandbox et Hardened Runtime activés. L'App Sandbox bloque l'Accessibility (coller dans d'autres apps, raccourcis système) : la décision de le garder ou non se prend à l'étape B, dans un ADR.
+- Hors App Sandbox, Hardened Runtime activé, signature Developer ID et notarisation : voir `aidd_docs/memory/internal/decisions/hors-app-sandbox.md`. Le réglage `ENABLE_APP_SANDBOX` du projet vaut encore `YES`, en écart connu avec l'ADR.
+- Sans conteneur, la protection des données repose sur le chiffrement de l'historique : jamais de clé ni de copie en clair sur le disque.
 - Toute permission se demande au moment où elle sert, avec une phrase qui dit ce qui ne marche pas sans elle.
 
 ## Build and release

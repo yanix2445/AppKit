@@ -4,8 +4,9 @@ What this project is, the problem it solves, and its domain language. The non-de
 
 ## What it is
 
-- CopyKit : une application macOS native et personnelle, conçue de zéro avec uniquement les outils et frameworks d'Apple.
-- Le besoin n'est pas encore cadré : il sort du brainstorm (`aidd-refine:01-brainstorm`), puis du Product Brief dans `aidd_docs/product/`.
+- CopyKit : une app de barre de menus macOS, gratuite et open source (MIT), qui réunit en une seule app privée, rapide et sobre ce que font Paste, CleanShot X et Swish ; 100 % Apple.
+- Le besoin est cadré dans le Product Brief `aidd_docs/product/copykit.md`, issu du brainstorm `aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md`.
+- Public : tous les utilisateurs de Mac, débutants compris, selon le principe « simple par défaut, puissant sur demande ».
 
 ## Why it exists
 
