@@ -3,7 +3,7 @@
 ← [Retour à l'index](README.md) · Architecture : [05-architectures.md](05-architectures.md) · Principes : [03-stack-et-architecture.md](03-stack-et-architecture.md)
 
 ✅ **Validé le 2026-10-31** et tracé dans
-[ADR 0001](../adr/0001-architecture-mv-feature-core.md). Elle applique l'architecture retenue : **MV à la manière d'Apple,
+[ADR 0001](../../internal/decisions/architecture-mv-feature-core.md). Elle applique l'architecture retenue : **MV à la manière d'Apple,
 rangé par feature, avec un cœur métier isolé** (Clean Architecture légère).
 
 > Les features citées (`History`, `QuickPanel`, `MenuBar`, `Settings`,
@@ -163,16 +163,20 @@ CopyKit/                                   racine du dépôt git
 ├── TestPlans/
 │   └── CopyKit.xctestplan                 unitaires + UI, clair et sombre, couverture
 │
-├── docs/                                  documentation (dossier synchronisé, sans cible)
-│   ├── BRIEF.md                           brief produit
-│   ├── STORIES.md                         backlog
-│   ├── DESIGN-SYSTEM.md                   quel token utiliser quand
-│   ├── adr/                               décisions d'architecture
-│   │   └── 0001-architecture-mv-feature-core.md
-│   └── plugins/                           cette documentation
-│
-└── aidd_docs/                             mémoire et tâches gérées par AIDD
+└── aidd_docs/                             TOUTE la documentation du projet (dossier synchronisé, sans cible)
+    ├── README.md · GUIDELINES.md · CONTRIBUTING.md
+    ├── memory/                            mémoire projet, chargée à chaque session
+    │   ├── *.md                           architecture, design, navigation, vcs…
+    │   ├── internal/decisions/            décisions d'architecture (ADR)
+    │   └── external/plugins-et-workflow/  cette documentation, lue à la demande
+    ├── product/                           Product Brief
+    ├── backlog/                           epics, stories, spikes, defects, tasks
+    └── tasks/                             brainstorms, plans, revues, audits
 ```
+
+Il n'y a plus de dossier `docs/` : tout vit dans `aidd_docs/`, aux places
+prévues par AIDD. Détail des chemins :
+[07-catalogue-skills-aidd.md](07-catalogue-skills-aidd.md#où-aidd-range-ses-fichiers).
 
 ---
 
@@ -205,5 +209,6 @@ Comme `CopyKit/`, `CopyKitTests/` et `CopyKitUITests/` sont des dossiers
 synchronisés, Xcode prend les sous-dossiers en compte tout seul. Les packages
 locaux s'ajoutent une fois au projet, puis à la cible app.
 
-La mise en place est la première tâche de la phase 3 du
+`App/` et `Resources/` sont déjà en place. `Features/`, `Shared/`, `Intents/`
+et `Packages/` arriveront avec la première story, à l'étape E du
 [workflow](02-workflow-macos.md).

@@ -6,7 +6,7 @@ Ce fichier fixe le **cadre** de CopyKit : uniquement des outils et des
 frameworks **natifs Apple et Swift**, dans leurs dernières versions, et des
 principes de conception clairs. Les décisions précises (fonctionnalités,
 découpage final, modèles de données) se prennent plus tard avec les skills, et
-chacune est tracée dans un ADR (`docs/adr/`).
+chacune est tracée dans un ADR (`aidd_docs/memory/internal/decisions/`).
 
 CopyKit est **ta propre application**, conçue de zéro.
 
@@ -196,7 +196,7 @@ CopyKit (cible app Xcode)  : SwiftUI, scènes, menus, assemblage des dépendance
   SwiftUI, ni SwiftData, ni AppKit.
 - La cible app est la **racine de composition** : le seul endroit qui crée les
   implémentations réelles et les injecte.
-- ✅ Validé dans l'[ADR 0001](../adr/0001-architecture-mv-feature-core.md) ; arborescence et nommage dans [06](06-arborescence-et-nommage.md). On commence par `CopyKitCore` + la
+- ✅ Validé dans l'[ADR 0001](../../internal/decisions/architecture-mv-feature-core.md) ; arborescence et nommage dans [06](06-arborescence-et-nommage.md). On commence par `CopyKitCore` + la
   cible app, puis on découpe quand un signal le demande (5.7).
 
 ### 5.2 Des coutures avec deux implémentations
@@ -236,7 +236,7 @@ message qui dit quoi faire. Le `fatalError` du template sur le
 Signaux de bilan : fin de milestone, fichier de plus de 600 lignes, feature qui
 touche plus de 6 fichiers, bug qui revient au même endroit. Refactor un pas
 par commit, comportement prouvé identique par les tests. Décisions difficiles
-à défaire → `docs/adr/` ; bugs → `docs/FIXLOG.md` avec une ligne `Rule:`.
+à défaire → un ADR dans `aidd_docs/memory/internal/decisions/` ; leçon tirée d'un bug → `aidd-context:10-learn`.
 
 Checklist de revue (`aidd-dev:checker`) : pas de duplication, pas
 d'incohérence, pas de sur-ingénierie, pas de code mort ni de reste de debug.
@@ -268,6 +268,6 @@ d'incohérence, pas de sur-ingénierie, pas de code mort ni de reste de debug.
 | Un bug commence par un test qui échoue | `aidd-dev:08-debug` + Swift Testing |
 | Revue indépendante avant merge | `aidd-dev:05-review` puis `aidd-refine:02-challenge` |
 | Mémoire du projet à jour | `aidd-context:02-project-memory`, leçons via `aidd-context:10-learn` |
-| Décisions tracées | ADR dans `docs/adr/` (sandbox, persistance, modules) |
+| Décisions tracées | ADR dans `aidd_docs/memory/internal/decisions/` (sandbox, persistance, modules) |
 | Distribution | Archive Xcode → Developer ID → `notarytool` → `stapler` (ou Mac App Store si le sandbox reste) |
 | Versions | semver, tag annoté et notes (`aidd-vcs:03-release-tag`) |

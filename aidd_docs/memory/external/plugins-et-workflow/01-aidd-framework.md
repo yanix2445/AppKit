@@ -97,7 +97,7 @@ Légende : ✅ utile dans le parcours macOS · ⚪ ponctuel ou optionnel · ❌ 
 
 | Skill | À quoi il sert | Comment il marche | Pour une app macOS |
 | --- | --- | --- | --- |
-| `01-plan` | Transforme une demande, un ticket ou un fichier en **plan par phases**. N'écrit jamais de code | `gather` → `explore` (lit le code) → `wireframe` (ASCII, si UI) → `plan` | ✅ pour une feature transverse |
+| `01-plan` | Transforme une demande, un ticket ou un fichier en **plan par phases**. N'écrit jamais de code | `capture` → `explore` (lit le code, pose les questions bloquantes) → `conclude` (phases, wireframe ASCII par écran, validation par script, relecture par un sous-agent) | ✅ pour chaque story |
 | `02-implement` | Exécute un plan existant phase par phase jusqu'à ce que tous les critères d'acceptation passent | `prepare` (plan + branche) → `execute` (tâche par tâche) → `finalize`. **Un commit local par tâche validée**, statut du plan mis à jour | ✅ |
 | `03-assert` | Vérifie que le travail fonctionne : relance les assertions du projet et corrige jusqu'au vert | Facettes : `assert` (toujours), `assert-architecture` (sur demande, rapporte seulement), `assert-frontend` (UI qui tourne, pensée pour le web) | ✅ facette code ; pour l'UI Mac : XCUITest et les Previews |
 | `04-audit` | Audit **en lecture seule** sur 7 piliers : qualité, architecture, sécurité, dépendances, performance, tests, UI | Demande « les 7 ou un seul ? » ; écrit `aidd_docs/tasks/<yyyy_mm>/<date>_audit/<pilier>.md` + `report.md` | ✅ en fin de milestone |
@@ -216,7 +216,7 @@ backlog d'issues.
 `ask | create | manage | review | refine` : tri des nouvelles demandes,
 raffinement (via `three-amigos`), revue de santé, réparation. Délègue
 l'écriture aux skills `aidd-pm`. ⚪ Utile si tu gères le backlog en issues
-plutôt que dans `docs/STORIES.md`.
+plutôt que dans `aidd_docs/backlog/`.
 
 ---
 

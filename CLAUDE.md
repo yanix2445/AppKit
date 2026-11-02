@@ -9,8 +9,8 @@ Swift 6), SwiftUI, SwiftData, Swift Testing, XCUITest. Cible macOS 27.0.
   dans le build ou les tests. Demander avant toute exception.
 - **Architecture** : MV à la manière d'Apple, rangé par feature, cœur métier
   isolé dans des packages Swift locaux. Voir
-  [ADR 0001](docs/adr/0001-architecture-mv-feature-core.md) et
-  [l'arborescence et le nommage](docs/plugins/06-arborescence-et-nommage.md).
+  [la décision d'architecture](aidd_docs/memory/internal/decisions/architecture-mv-feature-core.md) et
+  [l'arborescence et le nommage](aidd_docs/memory/external/plugins-et-workflow/06-arborescence-et-nommage.md).
 - **Nommage** : un type par fichier, le fichier porte le nom du type, le rôle
   est donné par un suffixe (`…View`, `…Row`, `…ViewModel`, `…Record`,
   `…Policy`, `…Service`, `…Error`…). Préfixes `System…` / `Fake…` seulement
@@ -24,7 +24,7 @@ Swift 6), SwiftUI, SwiftData, Swift Testing, XCUITest. Cible macOS 27.0.
   éditer `project.pbxproj` à la main. Seule exception : référencer un dossier
   ou un fichier racine (règle suivante), qu'aucun outil MCP ne sait faire.
 - **Tout doit être visible dans Xcode** :
-  - `CopyKit/`, `CopyKitTests/`, `CopyKitUITests/` et `docs/` sont des
+  - `CopyKit/`, `CopyKitTests/`, `CopyKitUITests/` et `aidd_docs/` sont des
     dossiers synchronisés : tout ce qui est créé dedans apparaît tout seul ;
   - un **nouveau dossier à la racine** du dépôt est déclaré, dès sa création,
     comme dossier synchronisé (`PBXFileSystemSynchronizedRootGroup`) **sans
@@ -63,7 +63,7 @@ CopyKit/
   Item.swift                modèle du template, à remplacer par la première feature
 CopyKitTests/               tests Swift Testing
 CopyKitUITests/             tests XCUITest
-docs/                       documentation (dossier synchronisé, sans cible)
+aidd_docs/                  toute la documentation (dossier synchronisé, sans cible)
 ```
 
 `Features/`, `Shared/`, `Intents/` et `Packages/` apparaîtront avec leur premier
@@ -71,5 +71,42 @@ fichier.
 
 ## Documentation
 
-- [docs/plugins/](docs/plugins/README.md) : plugins, stack, workflow, architecture.
-- [docs/adr/](docs/adr/) : décisions d'architecture.
+- [aidd_docs/memory/external/plugins-et-workflow/](aidd_docs/memory/external/plugins-et-workflow/README.md) : plugins, stack, workflow, architecture.
+- [aidd_docs/memory/internal/decisions/](aidd_docs/memory/internal/decisions/) : décisions d'architecture.
+
+## Memory Management
+
+Project docs, memory, specs, and plans live in `aidd_docs/`.
+
+Read only task-relevant context and linked memory files; complete required reads.
+
+<!-- aidd_project_memory:start -->
+
+@aidd_docs/memory/architecture.md
+@aidd_docs/memory/backlog.md
+@aidd_docs/memory/codebase-map.md
+@aidd_docs/memory/coding-assertions.md
+@aidd_docs/memory/database.md
+@aidd_docs/memory/design.md
+@aidd_docs/memory/desktop.md
+@aidd_docs/memory/ecosystem.md
+@aidd_docs/memory/forms.md
+@aidd_docs/memory/navigation.md
+@aidd_docs/memory/project-brief.md
+@aidd_docs/memory/testing.md
+@aidd_docs/memory/vcs.md
+
+<!-- read on demand, not auto-loaded -->
+- aidd_docs/memory/internal/decisions/architecture-mv-feature-core.md
+- aidd_docs/memory/external/plugins-et-workflow/01-aidd-framework.md
+- aidd_docs/memory/external/plugins-et-workflow/02-workflow-macos.md
+- aidd_docs/memory/external/plugins-et-workflow/03-stack-et-architecture.md
+- aidd_docs/memory/external/plugins-et-workflow/04-plugin-apple-xcode.md
+- aidd_docs/memory/external/plugins-et-workflow/05-architectures.md
+- aidd_docs/memory/external/plugins-et-workflow/06-arborescence-et-nommage.md
+- aidd_docs/memory/external/plugins-et-workflow/07-catalogue-skills-aidd.md
+
+<!-- aidd_project_memory:end -->
+
+- Load `aidd_docs/memory/external/*` only when asked.
+- Load `aidd_docs/memory/internal/*` when relevant.

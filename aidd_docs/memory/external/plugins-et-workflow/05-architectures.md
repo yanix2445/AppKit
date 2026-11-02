@@ -155,7 +155,7 @@ Pièges à éviter :
   *Environment* du skill Apple) ;
 - utiliser `@Query` hors d'une vue : ça ne fonctionne pas.
 
-✅ Choix validé le 2026-10-31 : [ADR 0001](../adr/0001-architecture-mv-feature-core.md).
+✅ Choix validé le 2026-10-31 : [ADR 0001](../../internal/decisions/architecture-mv-feature-core.md).
 
 ## Sources
 

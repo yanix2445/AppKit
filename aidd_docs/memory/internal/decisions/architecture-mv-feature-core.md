@@ -1,10 +1,9 @@
-# ADR 0001 : architecture MV par feature avec un cœur isolé
+# Architecture MV par feature avec un cœur isolé
 
-- **Statut** : accepté
-- **Date** : 2026-10-31
-- **Décideur** : Yanis HARRAT
+- Date: 2026-10-31
+- Status: Accepted
 
-## Contexte
+## Context
 
 CopyKit est une application macOS native, conçue de zéro, avec uniquement des
 outils et des frameworks Apple : Xcode 27.1, Swift 6.4, SwiftUI, SwiftData,
@@ -22,7 +21,7 @@ On veut :
 - pouvoir ajouter, modifier ou supprimer une fonctionnalité à un seul endroit ;
 - rester simple pour une application de cette taille.
 
-## Décision
+## Decision
 
 1. **Pattern de présentation : MV, à la manière d'Apple.** Les vues lisent
    directement les modèles `@Observable`, l'environnement et `@Query`. Un
@@ -51,9 +50,9 @@ On veut :
    - Une feature n'importe jamais une autre feature : c'est vérifié en revue.
 
 L'arborescence complète, le tableau des suffixes et le tableau des imports
-font foi dans [docs/plugins/06-arborescence-et-nommage.md](../plugins/06-arborescence-et-nommage.md).
+font foi dans [06-arborescence-et-nommage.md](../../external/plugins-et-workflow/06-arborescence-et-nommage.md).
 
-## Alternatives écartées
+## Alternatives
 
 | Alternative | Raison |
 | --- | --- |
@@ -64,7 +63,7 @@ font foi dans [docs/plugins/06-arborescence-et-nommage.md](../plugins/06-arbores
 | Clean Architecture complète (use cases, repositories partout) | Trop lourde ; on n'en garde que la règle de dépendance et les protocoles |
 | Rangement par couche (`Models/`, `Views/`, `ViewModels/`) | Une modification touche plusieurs dossiers à la fois |
 
-## Conséquences
+## Consequences
 
 - ✅ Le métier se teste en isolation avec Swift Testing, et le système se
   remplace par des `Fake…` dans les tests.
@@ -74,13 +73,11 @@ font foi dans [docs/plugins/06-arborescence-et-nommage.md](../plugins/06-arbores
   `Package.swift`.
 - ⚠️ Il faut juger, écran par écran, si un `…ViewModel` est justifié. Ce point
   est contrôlé en revue (`aidd-dev:05-review`).
-- Les fichiers du template Xcode (`ContentView.swift`, `Item.swift`,
-  `Assets.xcassets` à la racine de `CopyKit/`) seront remplacés ou déplacés
-  pendant la préparation du projet (phase 3 du workflow).
+- Les fichiers du template Xcode `ContentView.swift` et `Item.swift` seront
+  remplacés par la première story (étape E du workflow). `Assets.xcassets`
+  est déjà déplacé dans `Resources/`.
 
-## On commence petit
-
-On ne crée d'abord que la cible app avec `App/`, `Features/`, `Shared/` et
+**On commence petit.** On ne crée d'abord que la cible app avec `App/`, `Features/`, `Shared/` et
 `Resources/`, plus `CopyKitCore`. `CopyKitData` et `CopyKitSystem` arrivent
 avec la première fonctionnalité qui en a besoin. On ne crée jamais de dossier
 ou de package vide.
