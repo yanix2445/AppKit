@@ -1,7 +1,8 @@
 # CopyKit
 
 Application macOS native, 100 % Apple : Xcode 27.1, Swift 6.4 (mode de langage
-Swift 6), SwiftUI, SwiftData, Swift Testing, XCUITest. Cible macOS 27.0.
+Swift 6), SwiftUI, SwiftData, Swift Testing, XCUITest. SDK de macOS 27,
+compatible macOS 26, Mac Apple silicon seulement.
 
 ## Règles
 
