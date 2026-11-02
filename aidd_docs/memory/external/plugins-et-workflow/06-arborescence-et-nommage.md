@@ -6,9 +6,11 @@
 [ADR 0001](../../internal/decisions/architecture-mv-feature-core.md). Elle applique l'architecture retenue : **MV à la manière d'Apple,
 rangé par feature, avec un cœur métier isolé** (Clean Architecture légère).
 
-> Les features citées (`History`, `QuickPanel`, `MenuBar`, `Settings`,
-> `Permissions`) et les types (`Clip…`) sont des **exemples** pour montrer
-> les règles. Les vraies features sortiront du brief et du backlog.
+> Les features citées (`HistoryStrip`, `MenuBar`, `Settings`, `Permissions`,
+> `Onboarding`, `Updates`) sortent du backlog de la V1. Les types (`Clip…`)
+> restent des **exemples** pour montrer les règles. Mis à jour le 2026-11-03
+> après le challenge de l'architecture et
+> l'[ADR historique chiffré](../../internal/decisions/historique-chiffre-en-memoire.md).
 
 ---
 
@@ -65,26 +67,26 @@ CopyKit/                                   racine du dépôt git
 │
 ├── CopyKit/                               CIBLE APP (dossier synchronisé Xcode)
 │   ├── App/                               démarrage et assemblage
-│   │   ├── CopyKitApp.swift               @main : scènes (fenêtre, MenuBarExtra, Settings)
+│   │   ├── CopyKitApp.swift               @main : scènes MenuBarExtra et Settings, sans fenêtre principale
 │   │   ├── AppDependencies.swift          crée les services réels, une seule fois
 │   │   └── EnvironmentValues+Dependencies.swift   expose les services via @Entry
 │   │
 │   ├── Features/                          UN DOSSIER PAR FONCTIONNALITÉ
-│   │   ├── History/
-│   │   │   ├── HistoryView.swift          liste lue avec @Query (MV pur)
-│   │   │   └── HistoryRow.swift
-│   │   ├── QuickPanel/
-│   │   │   ├── QuickPanelView.swift
-│   │   │   ├── QuickPanelViewModel.swift  ici il y a de la logique : recherche, sélection, collage
-│   │   │   └── QuickPanelController.swift pont AppKit (NSPanel) si nécessaire
+│   │   ├── HistoryStrip/                  le bandeau en bas de l'écran
+│   │   │   ├── HistoryStripView.swift     lit l'historique déchiffré en mémoire (@Observable), pas @Query
+│   │   │   ├── HistoryStripViewModel.swift recherche, filtres, sélection, collage
+│   │   │   └── HistoryStripController.swift NSPanel non activant qui glisse depuis le bas de l'écran
 │   │   ├── MenuBar/
-│   │   │   └── MenuBarView.swift
+│   │   │   └── MenuBarView.swift          l'icône, la pause, les Réglages
 │   │   ├── Settings/
 │   │   │   ├── SettingsView.swift         onglets
-│   │   │   ├── GeneralSettingsView.swift
-│   │   │   └── ShortcutSettingsView.swift
-│   │   └── Permissions/
-│   │       └── PermissionsView.swift
+│   │   │   └── GeneralSettingsView.swift
+│   │   ├── Permissions/
+│   │   │   └── PermissionsView.swift
+│   │   ├── Onboarding/
+│   │   │   └── OnboardingView.swift
+│   │   └── Updates/
+│   │       └── UpdateService.swift        Sparkle, seule dépendance tierce, isolée ici
 │   │
 │   ├── Intents/                           App Intents (Raccourcis, Spotlight)
 │   │   ├── CopyClipIntent.swift
@@ -121,7 +123,7 @@ CopyKit/                                   racine du dépôt git
 │   │       ├── ClipMatcherTests.swift
 │   │       └── ClipRetentionPolicyTests.swift
 │   │
-│   ├── CopyKitData/                       stockage SwiftData ; dépend de CopyKitCore
+│   ├── CopyKitData/                       stockage chiffré : SwiftData, CryptoKit, index de recherche ; dépend de CopyKitCore
 │   │   ├── Package.swift
 │   │   ├── Sources/CopyKitData/
 │   │   │   ├── ClipRecord.swift
@@ -153,12 +155,12 @@ CopyKit/                                   racine du dépôt git
 │
 ├── CopyKitTests/                          TESTS SWIFT TESTING DE LA CIBLE APP (miroir de Features/)
 │   └── Features/
-│       └── QuickPanel/
-│           └── QuickPanelViewModelTests.swift
+│       └── HistoryStrip/
+│           └── HistoryStripViewModelTests.swift
 │
 ├── CopyKitUITests/                        TESTS XCUITEST (un fichier par feature)
-│   ├── HistoryUITests.swift
-│   └── QuickPanelUITests.swift
+│   ├── HistoryStripUITests.swift
+│   └── SettingsUITests.swift
 │
 ├── TestPlans/
 │   └── CopyKit.xctestplan                 unitaires + UI, clair et sombre, couverture
@@ -185,8 +187,8 @@ prévues par AIDD. Détail des chemins :
 | Couche | Peut importer | Ne doit jamais importer |
 | --- | --- | --- |
 | `CopyKitCore` | Foundation | SwiftUI, SwiftData, AppKit, les autres packages |
-| `CopyKitData` | `CopyKitCore`, SwiftData | SwiftUI, AppKit, `CopyKitSystem` |
-| `CopyKitSystem` | `CopyKitCore`, AppKit, Carbon, ServiceManagement | SwiftUI, SwiftData, `CopyKitData` |
+| `CopyKitData` | `CopyKitCore`, SwiftData, CryptoKit | SwiftUI, AppKit, `CopyKitSystem` |
+| `CopyKitSystem` | `CopyKitCore`, AppKit, Carbon, ServiceManagement, Security, ApplicationServices, QuickLookThumbnailing, UniformTypeIdentifiers | SwiftUI, SwiftData, `CopyKitData` |
 | Cible app (`Features/`, `App/`, `Intents/`) | tout ce qui précède, SwiftUI, App Intents | — |
 | Une feature | `Shared/`, les packages | **une autre feature** (on passe par `Shared/` ou un package) |
 

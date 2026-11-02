@@ -19,6 +19,8 @@ flowchart LR
 ## Key decisions
 
 - Hors App Sandbox, avec le chiffrement de l'historique comme protection principale des données : voir `aidd_docs/memory/internal/decisions/hors-app-sandbox.md`.
+- Historique chiffré dans SwiftData, lu en mémoire par un objet `@Observable` avec un index de recherche contigu, jamais avec `@Query` : voir `aidd_docs/memory/internal/decisions/historique-chiffre-en-memoire.md`.
+- App de barre de menus sans fenêtre principale ; le bandeau est un `NSPanel` non activant qui glisse depuis le bas de l'écran.
 
 - 100 % Apple : aucune dépendance tierce ; toute exception se demande d'abord.
 - Architecture MV à la manière d'Apple, rangée par feature, avec un cœur isolé dans des packages Swift locaux (`CopyKitCore`, `CopyKitData`, `CopyKitSystem`) dont les dépendances vont vers le cœur : voir `aidd_docs/memory/internal/decisions/architecture-mv-feature-core.md`.
