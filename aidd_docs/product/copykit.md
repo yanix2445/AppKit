@@ -11,12 +11,12 @@ CopyKit est une app de barre de menus macOS, gratuite et open source, qui réuni
 
 Garder un historique du presse-papiers sur Mac impose aujourd'hui un compromis :
 
-- **Paste** est soigné et synchronisé, mais fermé et en abonnement (environ 30 $/an) ;
-- **Maccy** est gratuit et ouvert, mais minimaliste par choix, sans synchronisation ;
-- **Raycast** est gratuit et soigné, mais fermé, et son historique n'est qu'une fonction d'un lanceur ;
+- **Paste** est soigné et synchronise l'historique et les pinboards par iCloud, mais il est fermé et vendu en abonnement (2,49 $/mois ou 29,99 $/an, avec aussi une offre à vie) ;
+- **Maccy** est gratuit et ouvert (MIT), mais minimaliste par choix et sans synchronisation : la demande, ouverte en 2020, attend toujours une contribution ;
+- **Raycast** est soigné et inclut l'historique dans son offre gratuite, mais il le garde 3 mois (illimité et synchronisé avec l'offre Pro), il est fermé, et son historique n'est qu'une fonction d'un lanceur ;
 - **Spotlight** (macOS 26) est intégré, mais désactivé par défaut, limité à 7 jours au plus, sans épinglés ni synchronisation.
 
-S'équiper complètement coûte environ 50 $ par an, plus une licence (Paste, CleanShot X, Swish), pour trois apps fermées, dont une qui voit tout ce qu'on copie. Il faut choisir entre une belle interface et l'ouverture et la confidentialité.
+S'équiper complètement coûte environ 50 $ par an (29,99 $ pour Paste et 19 $ pour les mises à jour de CleanShot X), plus deux licences (35 $ pour CleanShot X, 16 $ pour Swish), pour trois apps fermées, dont une qui voit tout ce qu'on copie. Il faut choisir entre une belle interface et l'ouverture et la confidentialité.
 
 Pourquoi maintenant : SwiftUI et le design Liquid Glass de macOS 26 et 27 permettent à une personne seule de construire une app native moderne. Spotlight a fait découvrir l'historique au grand public sans répondre à l'usage durable, et Paste est passé à l'abonnement.
 
@@ -40,8 +40,10 @@ Le premier pari à valider est la V1.0 : un historique qui remplace Paste.
 
 | Claim | Status | Basis or next check |
 | --- | --- | --- |
-| Spotlight est désactivé par défaut, limité à 30 min, 8 h ou 7 jours, sans épinglés | evidence | [MacRumors](https://www.macrumors.com/2025/11/04/more-spotlight-clipboard-settings-macos-26-1/) et [MacMost](https://macmost.com/how-to-use-the-spotlight-clipboard-history-in-macos-tahoe.html) (macOS 26.1) ; à revérifier sur macOS 27 |
-| Paste coûte environ 30 $/an, CleanShot X 29 $ puis environ 19 $/an, Swish environ 16 $ | evidence | sites tiers ([Toolradar](https://toolradar.com/tools/paste), [TrustRadius](https://trustradius.com/products/cleanshot-x/pricing), [Freedom251](https://freedom251.com/apps/swish/)) ; à confirmer sur les sites officiels |
+| Spotlight est désactivé par défaut, limité à 30 min, 8 h ou 7 jours, sans épinglés ni synchronisation de l'historique | evidence | [MacRumors](https://www.macrumors.com/2025/11/04/more-spotlight-clipboard-settings-macos-26-1/), [MacMost](https://macmost.com/how-to-use-the-spotlight-clipboard-history-in-macos-tahoe.html) (macOS 26.1) et [DEV Community](https://dev.to/jrw0ng/macos-tahoe-has-built-in-clipboard-history-heres-what-its-still-missing-for-developers-2026-4eko) ; à revérifier sur macOS 27 |
+| Paste coûte 2,49 $/mois ou 29,99 $/an, CleanShot X 35 $ avec un an de mises à jour puis 19 $/an, Swish 16 $ une fois | evidence | sites officiels : [Paste](https://pasteapp.io/pricing), [CleanShot](https://cleanshot.com/pricing), [Swish](https://highlyopinionated.co/swish/) |
+| Raycast garde l'historique 3 mois en gratuit, illimité avec Pro, qui ajoute la synchronisation | evidence | [Raycast](https://www.raycast.com/pricing) ; à préciser si la synchronisation couvre l'historique |
+| Maccy n'a pas de synchronisation entre Mac | evidence | [issue #182](https://github.com/p0deje/Maccy/issues/182), ouverte depuis 2020 |
 | Maccy reste minimaliste par choix, et ceux qui veulent du soigné partent vers Paste ou Raycast | evidence | [MacRumors](https://forums.macrumors.com/threads/what-clipboard-manager-do-you-recommend-to-replace-paste.2470509/), [r/macapps](https://reddit.birdcat.cafe/r/macapps/comments/1iij0wz/best_clipboard_app), [TeenyApps](https://teenyapps-website.pages.dev/articles/maccy-alternatives.html) |
 | Aucune app ne réunit belle interface, gratuité, code ouvert et confidentialité | assumption | revue concurrentielle plus large (AlternativeTo, Setapp) pendant l'étape B |
 | Yanis remplacera Paste au quotidien | assumption | utiliser la V1.0 quatre semaines sans revenir à Paste |
@@ -77,12 +79,12 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 | | Spotlight | Maccy | Paste | Raycast | **CopyKit** |
 | --- | --- | --- | --- | --- | --- |
-| Prix | gratuit | gratuit | ~30 $/an | gratuit (historique) | **gratuit** |
+| Prix | gratuit | gratuit | 2,49 $/mois, 29,99 $/an ou à vie | gratuit (historique) | **gratuit** |
 | Code ouvert | non | oui (MIT) | non | non | **oui (MIT)** |
 | Interface | intégrée à Spotlight | minimaliste | soignée | soignée | **soignée, native Apple** |
-| Durée de l'historique | 30 min à 7 jours | selon le nombre d'éléments | illimitée | à vérifier | **1 jour à « jamais »** |
+| Durée de l'historique | 30 min à 7 jours | selon le nombre d'éléments | illimitée | 3 mois (gratuit), illimitée (Pro) | **1 jour à « jamais »** |
 | Épinglés | non | oui | oui (pinboards) | à vérifier | **oui, puis pinboards (1.1)** |
-| Synchronisation entre Mac | non | non | oui | à vérifier | **oui (1.2), l'historique local d'abord** |
+| Synchronisation entre Mac | non | non | oui | avec Pro, à préciser pour l'historique | **oui (1.2), l'historique local d'abord** |
 | Historique chiffré par l'app | à vérifier | à vérifier | à vérifier | à vérifier | **oui (AES-256-GCM)** |
 
 ## Open Decisions
