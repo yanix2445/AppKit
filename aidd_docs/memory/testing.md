@@ -31,6 +31,7 @@ Ce qui vaut pour toute story, en plus de ses propres critères :
 - les tests unitaires et d'interface passent ;
 - tout se fait au clavier, et chaque contrôle a un libellé VoiceOver ;
 - l'interface est vérifiée en mode clair et en mode sombre ;
+- chaque texte de l'interface est dans le String Catalog, en français (langue source) et en anglais ;
 - aucune copie ni aucune clé n'est écrite en clair sur le disque ;
 - les budgets de performance de la story tiennent sur le Mac de référence.
 

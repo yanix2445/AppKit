@@ -16,6 +16,6 @@ order: 9
 ## Acceptance
 
 - Un texte enrichi (RTF, RTFD ou HTML) est gardé avec tous ses formats, se recolle avec sa mise en forme et s'affiche dans la catégorie Texte enrichi (Swift Testing et XCUITest)
-- Un lien, même copié comme simple texte, s'affiche dans la catégorie Lien (Swift Testing)
+- Une copie qui n'est qu'une adresse web, même copiée comme simple texte et espaces autour ignorés, s'affiche dans la catégorie Lien ; un texte qui contient une adresse parmi d'autres mots reste un Texte (Swift Testing)
 - Une couleur copiée s'affiche dans la catégorie Couleur, avec une pastille (XCUITest)
 - Une couleur écrite en texte (`#FF5733`, `rgb(255, 87, 51)`…) s'affiche aussi avec une pastille et se recolle comme texte (Swift Testing et XCUITest)

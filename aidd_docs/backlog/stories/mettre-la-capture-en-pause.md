@@ -19,3 +19,4 @@ order: 22
 - Pendant la pause, aucune copie n'est gardée ni écrite sur le disque (Swift Testing)
 - L'icône de la barre de menus montre que la capture est en pause (XCUITest)
 - La capture reprend seule à la fin de la durée choisie, ou après la copie ignorée (Swift Testing)
+- Une pause « jusqu'à réactivation » reste active après un redémarrage de CopyKit ou du Mac, et l'icône continue de l'indiquer (Swift Testing)

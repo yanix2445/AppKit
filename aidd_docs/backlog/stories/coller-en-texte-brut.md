@@ -16,5 +16,6 @@ order: 7
 ## Acceptance
 
 - ⇧Entrée sur une copie la colle en texte brut, sans police, couleur ni lien (Swift Testing et XCUITest)
+- Sans la permission Accessibilité, ⇧Entrée met le texte brut dans le presse-papiers et affiche « Copié · fais ⌘V » (XCUITest)
 - Le menu contextuel d'une copie propose « Coller en texte brut » (XCUITest)
 - Coller en texte brut ne modifie pas la copie gardée dans l'historique, qui garde tous ses formats (Swift Testing)

@@ -17,4 +17,4 @@ order: 16
 
 - La touche ⌫ sur une copie sélectionnée, ou « Supprimer » dans son menu contextuel, la retire aussitôt du bandeau, sans confirmation (XCUITest)
 - ⌘Z annule la dernière suppression tant que le bandeau reste ouvert (XCUITest)
-- Une copie supprimée disparaît du disque et de l'index de recherche, épinglée ou non (Swift Testing)
+- Une copie supprimée, épinglée ou non, est effacée du disque et de l'index de recherche à la fermeture du bandeau, quand ⌘Z ne peut plus la rappeler (Swift Testing)

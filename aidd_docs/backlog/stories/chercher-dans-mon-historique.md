@@ -16,6 +16,6 @@ order: 13
 ## Acceptance
 
 - Bandeau ouvert, taper des lettres filtre aussitôt l'historique, sans tenir compte des majuscules ni des accents (XCUITest)
-- Chaque mot de la requête est cherché séparément, dans le texte, les liens, les noms de fichiers et les couleurs (Swift Testing)
+- Un résultat contient tous les mots de la requête, chacun cherché séparément, dans le texte, les liens, les noms de fichiers et les couleurs ; chaque mot ajouté affine la recherche (Swift Testing)
 - Les résultats arrivent en 50 ms au plus pour 10 000 éléments et en 150 ms au plus pour 100 000, historique chiffré compris (test de performance XCTest)
 - Échap efface la recherche, puis ferme le bandeau (XCUITest)
