@@ -64,6 +64,7 @@ Le premier pari à valider est la V1.0 : un historique qui remplace Paste.
 ## Boundaries
 
 - Addresses: un historique du presse-papiers complet et privé (V1), puis les captures (V2) et la gestion des fenêtres (V3), sur Mac Apple silicon, à partir de macOS 26.
+- Leaves out: dans la V1 (tranches 1.0 à 1.2), les captures (V2), la gestion des fenêtres (V3), le choix libre du raccourci global avant la 1.1, et l'installation par Homebrew
 - Leaves out: iPhone et iPad pour l'instant, Mac Intel, App Store, version payante, compte ou serveur propriétaire, statistiques sans accord, accès au contenu des copies par quiconque d'autre que l'utilisateur.
 
 ## Success
@@ -94,5 +95,4 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 ## Open Decisions
 
-- Les limites par défaut : durée de conservation et stockage, à trancher à l'étape C.
 - Avant la première release publique : la marque « CopyKit » dans les bases de l'EUIPO, de l'INPI et de l'USPTO, le statut d'EdDSA dans le guide 2026 de l'ANSSI, et une relecture juridique du Cyber Resilience Act.
