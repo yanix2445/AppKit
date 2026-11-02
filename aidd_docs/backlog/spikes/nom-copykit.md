@@ -1,6 +1,6 @@
 ---
 type: spike
-status: in-progress
+status: resolved
 source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
 related_to:
   - aidd_docs/product/copykit.md
@@ -30,11 +30,11 @@ Garder le nom ou en changer avant la première release publique.
 
 ## Outcome
 
-- Result: en cours. Le risque de confusion est déjà réel, indépendamment de toute marque déposée : une app du même nom, dans la même catégorie, existe sur l'App Store.
+- Result: Yanis **garde le nom « CopyKit »**, en connaissance de cause : une app du même nom, dans la même catégorie, existe sur l'App Store (un gestionnaire de bouts de texte pour iPad). Le risque de confusion est accepté. Aucune marque « CopyKit » n'a été trouvée par le web.
 - Confidence: bonne pour l'app existante (fiche App Store) ; faible pour les marques (bases officielles non consultées).
 - Remaining uncertainty: les dépôts de marque à l'EUIPO, à l'INPI et à l'USPTO.
 
 ## Follow-up
 
-- Consulter les bases officielles : [EUIPO eSearch](https://euipo.europa.eu/eSearch/), [INPI](https://data.inpi.fr/), [USPTO](https://tmsearch.uspto.gov/).
-- Décision de Yanis : garder « CopyKit » malgré l'app existante, ou choisir un autre nom avant la première release publique.
+- Avant la première release publique, consulter les bases officielles : [EUIPO eSearch](https://euipo.europa.eu/eSearch/), [INPI](https://data.inpi.fr/), [USPTO](https://tmsearch.uspto.gov/). Un dépôt de marque existant en classe 9 rouvrirait la décision.
+- Mettre à jour la question ouverte correspondante du brainstorm.
