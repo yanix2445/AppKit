@@ -49,9 +49,14 @@ Le premier pari à valider est la V1.0 : un historique qui remplace Paste.
 | Yanis remplacera Paste au quotidien | assumption | utiliser la V1.0 quatre semaines sans revenir à Paste |
 | Des débutants adopteront CopyKit s'il est simple par défaut | assumption | 5 testeurs débutants l'installent et s'en servent sans aide |
 | Des utilisateurs garderont CopyKit plutôt que Spotlight ou Maccy | assumption | bêta publique : comptage des vérifications de mises à jour semaine après semaine |
-| Une personne seule peut livrer et maintenir la V1 en 100 % Apple | assumption | spikes de l'étape B |
-| La synchronisation iCloud fonctionne pour une app Developer ID | assumption | spike iCloud |
-| CopyKit est hors du champ du Cyber Resilience Act | assumption | texte du règlement 2024/2847 et guide de la Commission, puis relecture juridique |
+| Le cœur de la V1 est faisable en 100 % Apple : lecture du presse-papiers sans alerte, recherche chiffrée rapide, copies du presse-papiers universel | evidence | spikes de l'étape B, avec essais réels sur macOS 27.2 : [presse-papiers](../backlog/spikes/alerte-confidentialite-presse-papiers.md), [recherche chiffrée](../backlog/spikes/chiffrement-et-recherche.md), [presse-papiers universel](../backlog/spikes/presse-papiers-universel.md) |
+| Une personne seule peut livrer et maintenir la V1 | assumption | rythme réel des tranches de la V1 |
+| La synchronisation iCloud fonctionne pour une app Developer ID | evidence | [spike iCloud](../backlog/spikes/icloud-developer-id.md) (documentation Apple) ; premier essai signé au début de la 1.2 |
+| CopyKit est hors du champ du Cyber Resilience Act, tant que les dons restent volontaires | evidence | [spike CRA](../backlog/spikes/cyber-resilience-act.md) (guide de la Commission) ; relecture juridique avant la release |
+| Go : CopyKit est lancé, après les spikes de l'étape B | decision | décision de Yanis du 2 novembre 2026 |
+| Hors App Sandbox, avec le chiffrement de l'historique comme protection principale | decision | [ADR hors App Sandbox](../memory/internal/decisions/hors-app-sandbox.md) |
+| Sparkle 2 pour les mises à jour, avec la signature Developer ID et la notarisation comme chaîne de confiance principale | decision | [spike outil de mise à jour](../backlog/spikes/outil-de-mise-a-jour.md) |
+| Le nom « CopyKit » est gardé malgré une app iPad du même nom | decision | [spike nom](../backlog/spikes/nom-copykit.md) |
 | 100 % Apple, sauf l'outil de mise à jour | decision | [brainstorm](../tasks/2026_10/2026_10_31_copykit/brainstorm.md) |
 | Gratuit, open source (MIT), financé par des dons | decision | [brainstorm](../tasks/2026_10/2026_10_31_copykit/brainstorm.md) |
 | Rien n'est envoyé sans accord, et l'app est conforme par conception (RGPD, CRA volontaire, ANSSI) | decision | [brainstorm](../tasks/2026_10/2026_10_31_copykit/brainstorm.md) |
@@ -71,7 +76,7 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 ## Validation and Feedback
 
-**Prochaine vérification** : les spikes de l'étape B, qui décident du go ou no-go. Ils portent sur le presse-papiers de macOS 26 et 27, iCloud en Developer ID, le chiffrement face à la vitesse de recherche, Xcode 27.1 sur les Mac de GitHub, l'outil de mise à jour et le nom « CopyKit ». Ensuite, côté valeur : Yanis utilise la V1.0 quatre semaines sans revenir à Paste, et 5 débutants l'installent et s'en servent sans aide.
+**Prochaine vérification** : les spikes de l'étape B ont rendu le cœur de la V1 faisable, et la décision est **go**. Le risque principal est maintenant la valeur : Yanis utilise la V1.0 quatre semaines sans revenir à Paste, et 5 débutants l'installent et s'en servent sans aide.
 
 **Retour après usage** : les téléchargements de chaque release (GitHub), le comptage anonyme des vérifications de mises à jour (site sur Vercel, sans adresse IP), les issues, Discussions, étoiles et dons. Yanis les regarde à chaque release et chaque mois. Ils peuvent changer l'ordre des tranches : avancer la synchronisation (1.2) si elle est très demandée, retravailler l'onboarding si les téléchargements ne deviennent pas des utilisateurs actifs, ou lancer la V2.
 
@@ -89,8 +94,5 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 ## Open Decisions
 
-- Les limites par défaut : durée de conservation et stockage.
-- Le sandbox de l'app : ADR à l'étape B.
-- L'outil de mise à jour : Sparkle ou une alternative, et la compatibilité d'Ed25519 avec l'ANSSI.
-- Le go ou no-go après les spikes.
-- La place réelle de CopyKit face au Cyber Resilience Act.
+- Les limites par défaut : durée de conservation et stockage, à trancher à l'étape C.
+- Avant la première release publique : la marque « CopyKit » dans les bases de l'EUIPO, de l'INPI et de l'USPTO, le statut d'EdDSA dans le guide 2026 de l'ANSSI, et une relecture juridique du Cyber Resilience Act.
