@@ -4,7 +4,7 @@ status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/retrouver-mes-images-et-mes-pdf.md
-order: 23
+order: 24
 ---
 
 # Story: Retrouver les copies venues de mon iPhone

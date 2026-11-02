@@ -4,7 +4,7 @@ status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/garder-mon-historique-chiffre.md
-order: 21
+order: 22
 ---
 
 # Story: Mettre la capture en pause

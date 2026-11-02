@@ -5,7 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/coller-directement-dans-l-app-active.md
   - aidd_docs/backlog/stories/lancer-copykit-a-l-ouverture-de-session.md
-order: 25
+order: 26
 ---
 
 # Story: Voir et régler mes permissions

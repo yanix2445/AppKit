@@ -4,7 +4,7 @@ status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/filtrer-par-categorie.md
-order: 20
+order: 21
 ---
 
 # Story: Exclure des catégories

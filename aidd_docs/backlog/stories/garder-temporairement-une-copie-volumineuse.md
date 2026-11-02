@@ -4,7 +4,7 @@ status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/limiter-la-place-sur-le-disque.md
-order: 18
+order: 19
 ---
 
 # Story: Garder temporairement une copie volumineuse

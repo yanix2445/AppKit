@@ -24,6 +24,7 @@ seulement un historique.
 ## Boundaries
 
 - Includes: les pinboards, des collections nommées et organisées d'éléments
+- Includes: donner un nom personnalisé à une copie, gardé quand elle est recopiée
 - Includes: le collage multiple
 - Includes: les raccourcis configurables, avec la détection et la gestion des conflits avec d'autres raccourcis
 - Excludes: épingler et désépingler un élément, déjà livré par l'epic 1

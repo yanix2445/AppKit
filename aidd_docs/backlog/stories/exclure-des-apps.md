@@ -4,7 +4,7 @@ status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/ne-jamais-garder-une-copie-confidentielle.md
-order: 19
+order: 20
 ---
 
 # Story: Exclure des apps

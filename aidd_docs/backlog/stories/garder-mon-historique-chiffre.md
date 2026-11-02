@@ -21,3 +21,4 @@ order: 4
 - Si la clé est introuvable alors qu'un historique chiffré existe, CopyKit n'efface rien et affiche « Ton historique est chiffré avec une clé introuvable sur ce Mac », avec Réessayer et Repartir à zéro ; Repartir à zéro passe par une confirmation qui annonce la suppression, épinglés compris (Swift Testing et XCUITest)
 - Si la clé est momentanément inaccessible, la capture se met en pause, l'icône de la barre de menus le signale, et aucune copie n'est écrite en clair (Swift Testing)
 - Après un arrêt brutal pendant une écriture, l'historique reste lisible, sans copie à moitié écrite (Swift Testing)
+- Quand le disque est plein, la capture se met en pause et l'icône de la barre de menus le signale ; aucune copie n'est écrite à moitié, et la capture reprend seule dès qu'il y a de la place (Swift Testing)

@@ -19,3 +19,4 @@ order: 5
 - Le bandeau est visible en 100 ms au plus après le raccourci, et en 300 ms au plus la première fois après le démarrage de CopyKit (test de performance XCTest)
 - À l'ouverture, la copie la plus récente est sélectionnée : Entrée la recolle aussitôt (XCUITest)
 - Le bandeau s'ouvre sur l'écran où se trouve le pointeur (essai manuel avec deux écrans)
+- Si ⇧⌘V est déjà pris par une autre app, comme Paste, CopyKit le dit clairement et propose un autre raccourci ; le bandeau reste accessible par l'icône de la barre de menus (Swift Testing et essai manuel avec Paste installé)

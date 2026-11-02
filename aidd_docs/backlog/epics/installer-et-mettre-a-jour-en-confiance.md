@@ -51,6 +51,9 @@ merge par Yanis).
 | --- | --- | --- |
 | Certificats Developer ID Application et Developer ID Installer, et accès à la notarisation | dependency | à créer sur le compte Apple Developer de Yanis |
 | Sous-domaine exact du flux de mises à jour (piste : `copykit.yanis-harrat.com`) | decision | à trancher par Yanis |
+| Site web de Yanis sur Vercel, dans son propre dépôt (bouton de téléchargement, politique de confidentialité, page de dons, flux de mises à jour) | dependency | à construire hors de ce dépôt ; il n'existe pas encore |
+| Publication du flux de mises à jour sur le site à chaque release | assumption | interface entre le workflow de release et le site, à définir à la conception (étape D) |
+| Conservation des adresses IP dans les journaux de Vercel | assumption | à vérifier et régler pour le comptage anonyme |
 | Sparkle 2 et l'architecture `arm64e` d'Enhanced Security | assumption | à vérifier à l'intégration ; au besoin, `ENABLE_POINTER_AUTHENTICATION = NO` sur la cible qui le lie ([décisions de sécurité](../../memory/internal/xcode-security-settings.md)) |
 | Choix de Sparkle 2 et statut d'Ed25519 pour l'ANSSI | dependency | [spike résolu](../spikes/outil-de-mise-a-jour.md) ; statut d'EdDSA dans le guide 2026 à vérifier avant la release |
 | Image `xcode-27` en préversion et présence d'Xcode 27.1 | dependency | [spike résolu](../spikes/mac-github-actions.md) ; version à fixer au moment d'écrire le workflow |

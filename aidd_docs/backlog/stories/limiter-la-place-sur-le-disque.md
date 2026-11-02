@@ -4,7 +4,7 @@ status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/epingler-et-desepingler.md
-order: 17
+order: 18
 ---
 
 # Story: Limiter la place prise sur le disque

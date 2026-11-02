@@ -4,7 +4,7 @@ status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/voir-et-regler-mes-permissions.md
-order: 26
+order: 27
 ---
 
 # Story: Découvrir CopyKit avec l'onboarding
