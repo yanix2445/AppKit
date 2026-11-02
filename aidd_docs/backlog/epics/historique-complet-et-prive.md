@@ -35,7 +35,7 @@ copies du presse-papiers universel lisibles.
 - Includes: la durée de conservation, la limite de stockage, les copies volumineuses temporaires, le nettoyage automatique et les confirmations avant suppression
 - Includes: la confidentialité complète (marqueurs, apps exclues, catégories exclues, pause de la capture) et le retour visuel et sonore
 - Includes: le chiffrement de l'historique et la gestion de sa clé
-- Includes: l'icône dans la barre de menus, le raccourci global et le lancement à l'ouverture de session
+- Includes: le bandeau de l'historique en bas de l'écran, l'icône dans la barre de menus, le raccourci global et le lancement à l'ouverture de session
 - Includes: l'onboarding, les Réglages et la page « Permissions »
 - Includes: les budgets de sobriété et de réactivité
 - Excludes: les pinboards, le collage multiple et les raccourcis configurables (epic 3, tranche 1.1)
@@ -59,7 +59,7 @@ sur le disque, et qu'aucune copie n'y est écrite en clair.
 
 | Item | Kind | Handling |
 | --- | --- | --- |
-| Durée de conservation et limite de stockage par défaut (piste : 1 Go, jusqu'à 10 Go) | decision | à trancher par Yanis pendant le découpage en stories |
+| Durée de conservation et limite de stockage par défaut | decision | tranché : 1 mois de conservation et 1 Go par défaut, limite réglable jusqu'à 10 Go ([brainstorm](../../tasks/2026_10/2026_10_31_copykit/brainstorm.md)) |
 | Hors App Sandbox, chiffrement comme protection principale | decision | [ADR hors App Sandbox](../../memory/internal/decisions/hors-app-sandbox.md) |
 | Lecture du presse-papiers sans alerte | dependency | [spike résolu](../spikes/alerte-confidentialite-presse-papiers.md) ; une future activation de l'alerte par Apple reste à surveiller |
 | Copies du presse-papiers universel | dependency | [spike résolu](../spikes/presse-papiers-universel.md) |

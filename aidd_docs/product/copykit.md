@@ -94,5 +94,4 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 ## Open Decisions
 
-- Les limites par défaut : durée de conservation et stockage, à trancher à l'étape C.
 - Avant la première release publique : la marque « CopyKit » dans les bases de l'EUIPO, de l'INPI et de l'USPTO, le statut d'EdDSA dans le guide 2026 de l'ANSSI, et une relecture juridique du Cyber Resilience Act.
