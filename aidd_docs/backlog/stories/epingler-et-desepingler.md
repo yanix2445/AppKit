@@ -17,6 +17,7 @@ order: 15
 
 - Le menu contextuel d'une copie propose Épingler ou Désépingler (XCUITest)
 - Les épinglés s'affichent dans une section à part, dans l'ordre que je choisis en les déplaçant (XCUITest)
+- Au clavier, ⌥⌘← et ⌥⌘→ déplacent l'épinglé sélectionné d'un cran dans sa section (XCUITest)
 - Dans l'historique, un épinglé garde sa place chronologique, avec un badge (XCUITest)
 - Un épinglé n'est jamais supprimé par le nettoyage automatique et ne compte pas dans la limite de stockage (Swift Testing)
 - Recopier un épinglé le garde épinglé, à la même place dans la section (Swift Testing)
