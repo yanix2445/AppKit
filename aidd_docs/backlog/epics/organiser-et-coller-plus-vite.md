@@ -26,8 +26,8 @@ seulement un historique.
 - Includes: les pinboards, des collections nommées et organisées d'éléments
 - Includes: donner un nom personnalisé à une copie, gardé quand elle est recopiée
 - Includes: le collage multiple
-- Includes: les raccourcis configurables, avec la détection et la gestion des conflits avec d'autres raccourcis
 - Excludes: épingler et désépingler un élément, déjà livré par l'epic 1
+- Excludes: les raccourcis personnalisables, déjà livrés par l'epic 1
 - Excludes: la synchronisation des pinboards entre Mac (epic 4)
 
 ## Success Evidence
@@ -35,7 +35,7 @@ seulement un historique.
 Yanis retrouve dans les pinboards de CopyKit ce qu'il range aujourd'hui dans
 ceux de Paste, et n'utilise plus les pinboards de Paste. Les tests
 automatiques couvrent la création, la modification et la suppression des
-pinboards, le collage multiple et la détection des conflits de raccourcis.
+pinboards et le collage multiple.
 
 ## Dependencies and Unknowns
 
@@ -43,4 +43,3 @@ pinboards, le collage multiple et la détection des conflits de raccourcis.
 | --- | --- | --- |
 | Historique complet et privé | dependency | `depends_on` |
 | Forme exacte du collage multiple (plusieurs éléments à la suite, ou combinés en un seul collage) | decision | à trancher par Yanis au découpage de la tranche 1.1 |
-| Conflits de raccourcis à détecter (raccourcis du système, des autres apps, de CopyKit) | decision | à trancher au découpage de la tranche 1.1 |
