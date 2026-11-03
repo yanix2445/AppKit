@@ -12,6 +12,11 @@ The visual language: the design system, tokens, and UI conventions. What it look
 - Aujourd'hui, seule la couleur d'accent existe : `CopyKit/Resources/Assets.xcassets/AccentColor.colorset`.
 - Aucune valeur brute (couleur, rayon, espacement, durée) dans les vues : chaque valeur passe par un token Swift partagé.
 
+## Voice
+
+- L'app vouvoie, partout : interface, messages, alertes, onboarding et notifications (« Copié · faites ⌘V »).
+- Phrases courtes qui disent quoi faire ; une permission dit toujours ce qui ne marche pas sans elle.
+
 ## Accessibility
 
 - Tout se fait au clavier ; chaque contrôle a un libellé VoiceOver ; le sens ne repose jamais sur la couleur seule ; Reduce Motion respecté.
