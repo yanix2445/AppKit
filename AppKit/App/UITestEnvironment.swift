@@ -6,6 +6,8 @@ import Foundation
 struct UITestEnvironment {
     let storeURL: URL
     let keyService: any EncryptionKeyService
+    /// Tests copy here rather than on the general pasteboard, which belongs to the user.
+    let pasteboardName: String
 
     static let identifierVariable = "APPKIT_UI_TEST_ID"
     static let deleteKeyVariable = "APPKIT_UI_TEST_DELETE_KEY"
@@ -21,7 +23,8 @@ struct UITestEnvironment {
         }
         return UITestEnvironment(
             storeURL: directory.appending(path: "History.store"),
-            keyService: FileKeyService(url: keyURL)
+            keyService: FileKeyService(url: keyURL),
+            pasteboardName: "appkit.uitest.\(identifier)"
         )
     }
 

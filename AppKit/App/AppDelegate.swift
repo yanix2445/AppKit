@@ -1,5 +1,6 @@
 import AppKit
 import AppKitCore
+import AppKitSystem
 
 /// Starts what a menu bar app needs before any scene appears.
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -9,6 +10,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let copiedMessage = CopiedMessageController()
     private let settings = SettingsWindowController()
     private let recovery = HistoryRecoveryAlertPresenter()
+    private let hotKeyConflict = HotKeyConflictAlertPresenter()
+    private var globalHotKey: GlobalHotKeyController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         #if DEBUG
@@ -30,6 +33,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         )
         dependencies.start { [weak self] state in
             self?.handle(state)
+        }
+        startGlobalHotKey(historyStrip: historyStrip)
+    }
+
+    private func startGlobalHotKey(historyStrip: HistoryStripController) {
+        let globalHotKey = GlobalHotKeyController(
+            service: SystemHotKeyService(),
+            onTrigger: { historyStrip.toggle() },
+            askForFallback: { [hotKeyConflict] taken, fallbacks in
+                hotKeyConflict.askForFallback(taken: taken, fallbacks: fallbacks)
+            }
+        )
+        self.globalHotKey = globalHotKey
+        // Past launch, as the alert about a taken shortcut runs modally.
+        Task { [weak self] in
+            globalHotKey.start()
+            historyStrip.setOpenHotKey(globalHotKey.registered)
+            self?.statusItem?.setOpenHistoryHotKey(globalHotKey.registered)
         }
     }
 

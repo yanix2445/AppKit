@@ -8,29 +8,29 @@ final class HistoryStripUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    /// Launches the app and gives the pasteboard back to the user at the end of the test.
+    /// Each test launches with its own history and its own pasteboard, away from the real ones.
     @MainActor private func launchApp() {
-        let savedText = NSPasteboard.general.string(forType: .string)
         let app = self.app
         addTeardownBlock { @MainActor in
             app.terminate()
-            if let savedText {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(savedText, forType: .string)
-            }
         }
         useFreshHistory()
         app.launch()
     }
 
-    /// Each launch can use its own history, away from the real one and the real keychain.
     @MainActor private func useFreshHistory() {
         app.launchEnvironment["APPKIT_UI_TEST_ID"] = UUID().uuidString
     }
 
+    /// The private pasteboard the app watches during this test.
+    @MainActor private var pasteboard: NSPasteboard {
+        let identifier = app.launchEnvironment["APPKIT_UI_TEST_ID"] ?? ""
+        return NSPasteboard(name: NSPasteboard.Name("appkit.uitest.\(identifier)"))
+    }
+
     @MainActor private func copy(_ text: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: .string)
+        pasteboard.clearContents()
+        pasteboard.setString(text, forType: .string)
     }
 
     @MainActor private var statusItem: XCUIElement {
@@ -48,6 +48,10 @@ final class HistoryStripUITests: XCTestCase {
     @MainActor private func openStrip() {
         XCTAssertTrue(statusItem.waitForExistence(timeout: 5))
         statusItem.click()
+        // A real click elsewhere on this Mac closes the strip, as it should: try once more.
+        if !strip.waitForExistence(timeout: 5) {
+            statusItem.click()
+        }
         XCTAssertTrue(strip.waitForExistence(timeout: 5))
     }
 
@@ -109,9 +113,9 @@ final class HistoryStripUITests: XCTestCase {
 
     @MainActor private func copyMarked(_ text: String, marker: String) {
         let type = NSPasteboard.PasteboardType(marker)
-        NSPasteboard.general.declareTypes([.string, type], owner: nil)
-        NSPasteboard.general.setString(text, forType: .string)
-        NSPasteboard.general.setString("", forType: type)
+        pasteboard.declareTypes([.string, type], owner: nil)
+        pasteboard.setString(text, forType: .string)
+        pasteboard.setString("", forType: type)
         Thread.sleep(forTimeInterval: 1)
     }
 
@@ -197,8 +201,42 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["history.empty"].waitForExistence(timeout: 5))
     }
 
+    @MainActor func testTheGlobalShortcutOpensAndClosesTheStrip() {
+        launchApp()
+        XCTAssertTrue(statusItem.waitForExistence(timeout: 5))
+        // Past the launch, for the shortcut to be registered.
+        Thread.sleep(forTimeInterval: 1)
+
+        XCUIApplication(bundleIdentifier: "com.apple.finder").activate()
+        pressGlobalShortcut()
+        XCTAssertTrue(strip.waitForExistence(timeout: 5))
+
+        pressGlobalShortcut()
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+    }
+
+    @MainActor func testEnterAfterTheShortcutPutsTheNewestCopyBack() {
+        launchApp()
+        copyAndWait("ancien")
+        copyAndWait("récent")
+        pressGlobalShortcut()
+        XCTAssertTrue(strip.waitForExistence(timeout: 5))
+        waitForCards(2)
+        XCTAssertTrue(cards.element(boundBy: 0).isSelected)
+
+        copy("autre chose")
+        Thread.sleep(forTimeInterval: 1)
+        strip.typeKey(.return, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(pasteboardText(), "récent")
+    }
+
+    @MainActor private func pressGlobalShortcut() {
+        XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
+    }
+
     @MainActor private func pasteboardText() -> String? {
-        NSPasteboard.general.string(forType: .string)
+        pasteboard.string(forType: .string)
     }
 
     @MainActor func testClickingACopyPutsItBackAndMovesItToTheTop() {

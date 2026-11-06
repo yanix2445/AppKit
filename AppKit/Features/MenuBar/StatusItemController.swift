@@ -1,4 +1,5 @@
 import AppKit
+import AppKitCore
 
 /// The menu bar icon: a click opens the strip, a right click shows the menu.
 @MainActor
@@ -7,6 +8,7 @@ final class StatusItemController: NSObject {
     private let onPrimaryClick: () -> Void
     private let onOpenSettings: () -> Void
     private var state = HistoryLifecycleState.starting
+    private var openHistoryHotKey: HotKeyCombination?
 
     init(onPrimaryClick: @escaping () -> Void, onOpenSettings: @escaping () -> Void) {
         self.onPrimaryClick = onPrimaryClick
@@ -25,6 +27,11 @@ final class StatusItemController: NSObject {
     func setHistoryState(_ state: HistoryLifecycleState) {
         self.state = state
         updateImage()
+    }
+
+    /// Shown next to the menu entry, as a reminder.
+    func setOpenHistoryHotKey(_ combination: HotKeyCombination?) {
+        openHistoryHotKey = combination
     }
 
     private func updateImage() {
@@ -80,6 +87,10 @@ final class StatusItemController: NSObject {
         }
         let open = NSMenuItem(title: String(localized: "Ouvrir l’historique"), action: #selector(openHistory), keyEquivalent: "")
         open.target = self
+        if let openHistoryHotKey {
+            open.keyEquivalent = openHistoryHotKey.character.lowercased()
+            open.keyEquivalentModifierMask = Self.eventModifiers(openHistoryHotKey.modifiers)
+        }
         menu.addItem(open)
         menu.addItem(.separator())
         let settings = NSMenuItem(title: String(localized: "Réglages…"), action: #selector(openSettings), keyEquivalent: ",")
@@ -91,6 +102,15 @@ final class StatusItemController: NSObject {
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
         statusItem.menu = nil
+    }
+
+    private static func eventModifiers(_ modifiers: HotKeyModifiers) -> NSEvent.ModifierFlags {
+        var flags: NSEvent.ModifierFlags = []
+        if modifiers.contains(.command) { flags.insert(.command) }
+        if modifiers.contains(.shift) { flags.insert(.shift) }
+        if modifiers.contains(.option) { flags.insert(.option) }
+        if modifiers.contains(.control) { flags.insert(.control) }
+        return flags
     }
 
     @objc private func openHistory() {

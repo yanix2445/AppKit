@@ -9,13 +9,18 @@ final class HistoryStripController {
     private let appearanceProvider = SourceAppAppearanceProvider()
     private lazy var panel = makePanel()
     private var clickMonitor: Any?
-    private var resignKeyObserver: NSObjectProtocol?
+    private var activationObserver: NSObjectProtocol?
 
     private(set) var isOpen = false
 
     /// - Parameter onChoose: called with the copy the user picks; the strip then closes.
     init(history: ClipHistory, onChoose: @escaping (Clip) -> Void) {
         viewModel = HistoryStripViewModel(history: history, onChoose: onChoose)
+    }
+
+    /// The shortcut that opens the strip, which the empty strip mentions.
+    func setOpenHotKey(_ combination: HotKeyCombination?) {
+        viewModel.openHotKey = combination
     }
 
     func toggle() {
@@ -40,13 +45,17 @@ final class HistoryStripController {
         clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
             MainActor.assumeIsolated { self?.close() }
         }
-        // A click elsewhere can also reach the strip as a loss of the keyboard.
-        resignKeyObserver = NotificationCenter.default.addObserver(
-            forName: NSWindow.didResignKeyNotification,
-            object: panel,
+        // ⌘Tab and an app coming forward by itself are not clicks, but they end the strip too.
+        activationObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
             queue: .main
-        ) { [weak self] _ in
-            MainActor.assumeIsolated { self?.close() }
+        ) { [weak self] notification in
+            let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
+            let isOtherApp = app?.processIdentifier != ProcessInfo.processInfo.processIdentifier
+            MainActor.assumeIsolated {
+                if isOtherApp { self?.close() }
+            }
         }
     }
 
@@ -57,9 +66,9 @@ final class HistoryStripController {
             NSEvent.removeMonitor(clickMonitor)
             self.clickMonitor = nil
         }
-        if let resignKeyObserver {
-            NotificationCenter.default.removeObserver(resignKeyObserver)
-            self.resignKeyObserver = nil
+        if let activationObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(activationObserver)
+            self.activationObserver = nil
         }
         animate(to: hiddenFrame(from: panel.frame)) { [weak self] in
             // The strip may have been reopened during the slide.
