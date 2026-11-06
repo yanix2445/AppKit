@@ -2,10 +2,21 @@
   "sourceLanguage": "fr",
   "strings": {
     "%1$@, %2$@, %3$@, %4$@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
+            "value": "%1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@, %@, %@, %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "new",
             "value": "%1$@, %2$@, %3$@, %4$@"
           }
         }
@@ -31,7 +42,28 @@
         }
       }
     },
+    "Copié · faites": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied · press"
+          }
+        }
+      }
+    },
+    "Copié · faites ⌘V": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied · press ⌘V"
+          }
+        }
+      }
+    },
     "Fermer": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {

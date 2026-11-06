@@ -8,9 +8,11 @@ import SwiftUI
 final class HistoryStripViewModel {
     let history: ClipHistory
     private(set) var selectedClipID: Clip.ID?
+    private let onChoose: (Clip) -> Void
 
-    init(history: ClipHistory) {
+    init(history: ClipHistory, onChoose: @escaping (Clip) -> Void = { _ in }) {
         self.history = history
+        self.onChoose = onChoose
     }
 
     /// Each opening starts on the newest copy.
@@ -25,8 +27,16 @@ final class HistoryStripViewModel {
         }
     }
 
-    func select(_ id: Clip.ID) {
+    func choose(_ id: Clip.ID) {
+        guard let clip = history.clips.first(where: { $0.id == id }) else { return }
         selectedClipID = id
+        onChoose(clip)
+    }
+
+    func chooseSelection() {
+        if let selectedClipID {
+            choose(selectedClipID)
+        }
     }
 
     func moveSelection(_ direction: MoveCommandDirection) {

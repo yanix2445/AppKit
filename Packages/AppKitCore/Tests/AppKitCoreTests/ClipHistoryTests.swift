@@ -15,6 +15,27 @@ struct ClipHistoryTests {
         #expect(history.clips.map(\.content) == [.text("récent"), .text("ancien")])
     }
 
+    @Test func promotingMovesACopyToTheTopWithoutDuplicatingIt() throws {
+        let history = ClipHistory()
+        history.insert(clip("ancien"))
+        history.insert(clip("récent"))
+        let older = history.clips[1]
+        let date = Date(timeIntervalSinceReferenceDate: 1_000_000_000)
+
+        history.promote(older.id, at: date)
+
+        #expect(history.clips.map(\.content) == [.text("ancien"), .text("récent")])
+        #expect(history.clips[0].id == older.id)
+        #expect(history.clips[0].capturedAt == date)
+    }
+
+    @Test func promotingAnUnknownCopyChangesNothing() {
+        let history = ClipHistory()
+        history.insert(clip("seule"))
+        history.promote(UUID(), at: .now)
+        #expect(history.clips.count == 1)
+    }
+
     @Test func aNewHistoryStartsEmpty() {
         let history = ClipHistory()
         history.insert(clip("gardé en mémoire"))

@@ -20,6 +20,14 @@ public final class FakePasteboardService: PasteboardService {
         state.withLock { $0.text }
     }
 
+    public func write(text: String) -> Int {
+        state.withLock {
+            $0.changeCount += 1
+            $0.text = text
+            return $0.changeCount
+        }
+    }
+
     public func copy(text: String?) {
         state.withLock {
             $0.changeCount += 1

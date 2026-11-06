@@ -34,6 +34,14 @@ public actor ClipboardMonitor {
         )
     }
 
+    /// Puts a copy back on the pasteboard, without capturing it as a new one.
+    public func restore(_ clip: Clip) {
+        switch clip.content {
+        case .text(let text):
+            lastChangeCount = pasteboard.write(text: text)
+        }
+    }
+
     /// New clips, for as long as the stream is being read.
     public func clips() -> AsyncStream<Clip> {
         AsyncStream { continuation in

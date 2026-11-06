@@ -20,6 +20,10 @@ struct HistoryStripView: View {
             .onAppear { isFocused = true }
             .onMoveCommand { viewModel.moveSelection($0) }
             .onExitCommand(perform: close)
+            .onKeyPress(.return) {
+                viewModel.chooseSelection()
+                return .handled
+            }
             .onChange(of: viewModel.history.clips.first?.id) { viewModel.historyDidChange() }
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Historique des copies")
@@ -41,7 +45,8 @@ struct HistoryStripView: View {
                                 appearance: appearanceProvider.appearance(forBundleIdentifier: clip.source?.bundleIdentifier)
                             )
                             .id(clip.id)
-                            .onTapGesture { viewModel.select(clip.id) }
+                            .onTapGesture { viewModel.choose(clip.id) }
+                            .accessibilityAction { viewModel.choose(clip.id) }
                         }
                     }
                     .padding(.horizontal, Spacing.medium)

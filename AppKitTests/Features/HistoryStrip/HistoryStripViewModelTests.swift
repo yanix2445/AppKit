@@ -53,4 +53,30 @@ struct HistoryStripViewModelTests {
         viewModel.moveSelection(.right)
         #expect(viewModel.selectedClipID == viewModel.history.clips[1].id)
     }
+
+    @Test func choosingACopyHandsItOver() {
+        let history = ClipHistory()
+        history.insert(clip("a"))
+        history.insert(clip("b"))
+        var chosen: [Clip] = []
+        let viewModel = HistoryStripViewModel(history: history) { chosen.append($0) }
+
+        viewModel.choose(history.clips[1].id)
+
+        #expect(chosen.map(\.content) == [.text("a")])
+    }
+
+    @Test func enterChoosesTheSelection() {
+        let history = ClipHistory()
+        history.insert(clip("a"))
+        var chosen: [Clip] = []
+        let viewModel = HistoryStripViewModel(history: history) { chosen.append($0) }
+
+        viewModel.chooseSelection()
+        #expect(chosen.isEmpty)
+
+        viewModel.prepareForPresentation()
+        viewModel.chooseSelection()
+        #expect(chosen.map(\.content) == [.text("a")])
+    }
 }
