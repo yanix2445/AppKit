@@ -1,8 +1,8 @@
 ---
 type: epic
 status: proposed
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
-goal: aidd_docs/product/copykit.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
+goal: aidd_docs/product/appkit.md
 depends_on:
   - aidd_docs/backlog/epics/historique-complet-et-prive.md
 order: 4
@@ -10,7 +10,7 @@ order: 4
 
 # Epic: Mes copies sur tous mes Mac
 
-Avec CopyKit 1.2, une copie faite sur un Mac est disponible sur les autres Mac
+Avec AppKit 1.2, une copie faite sur un Mac est disponible sur les autres Mac
 de l'utilisateur, en privé par son iCloud, sans jamais mettre en danger
 l'historique local.
 

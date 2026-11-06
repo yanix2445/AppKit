@@ -1,12 +1,14 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: disponibilité du nom CopyKit
+
+> Historique : CopyKit était le nom de travail. Le nom définitif est AppKit, validé par Yanis le 2026-11-06.
 
 ## Question
 

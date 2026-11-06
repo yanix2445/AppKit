@@ -10,10 +10,10 @@ n'a été lancé pour coder.
 | --- | --- |
 | [README.md](README.md) | Ce fichier : ce qui est installé, l'état du projet |
 | [01-aidd-framework.md](01-aidd-framework.md) | Les 6 plugins AIDD installés, skill par skill, plus leurs agents et leur hook |
-| [02-workflow-macos.md](02-workflow-macos.md) | **L'ordre d'utilisation** pour construire CopyKit |
+| [02-workflow-macos.md](02-workflow-macos.md) | **L'ordre d'utilisation** pour construire AppKit |
 | [03-stack-et-architecture.md](03-stack-et-architecture.md) | La stack 100 % Apple (dernières versions) et les principes d'architecture, de design et de livraison |
 | [04-plugin-apple-xcode.md](04-plugin-apple-xcode.md) | Le plugin **officiel Apple** `xcode-integration` livré avec Xcode 27.1 (15 skills + serveur MCP Xcode), et l'analyse des plugins de Paul Hudson |
-| [05-architectures.md](05-architectures.md) | MVC, MVVM, MV, TCA, VIPER, Clean Architecture, organisation par feature : ce qu'Apple conseille et la recommandation pour CopyKit |
+| [05-architectures.md](05-architectures.md) | MVC, MVVM, MV, TCA, VIPER, Clean Architecture, organisation par feature : ce qu'Apple conseille et la recommandation pour AppKit |
 | [06-arborescence-et-nommage.md](06-arborescence-et-nommage.md) | L'arborescence complète des dossiers et fichiers, les suffixes par rôle et les règles d'import entre couches |
 | [07-catalogue-skills-aidd.md](07-catalogue-skills-aidd.md) | **Les 47 skills AIDD installés** (et les 4 désinstallés), un par un : étape, rôle, fichiers produits, prérequis, enchaînements |
 
@@ -80,12 +80,12 @@ un serveur MCP `xcode` (`xcrun mcpbridge`). Installé depuis un marketplace loca
 | `gh` (GitHub CLI) | `aidd-vcs` (PR, issues), `async-dev` | ✅ `/opt/homebrew/bin/gh` |
 | Node 22+ | hook `SessionStart` d'`aidd-context` | ✅ `/opt/homebrew/bin/node` (version non vérifiée) |
 
-## État actuel du projet CopyKit
+## État actuel du projet AppKit
 
 Le dépôt contient le **template Xcode par défaut** (pas encore de code
-métier) : `CopyKit.xcodeproj`, `CopyKit/` (`CopyKitApp.swift`,
-`ContentView.swift`, `Item.swift` en SwiftData), `CopyKitTests/`,
-`CopyKitUITests/`. Réglages : cible macOS 27.0, catégorie Productivity, isolation
+métier) : `AppKit.xcodeproj`, `AppKit/` (`AppKitApp.swift`,
+`ContentView.swift`, `Item.swift` en SwiftData), `AppKitTests/`,
+`AppKitUITests/`. Réglages : cible macOS 27.0, catégorie Productivity, isolation
 main-actor par défaut, Swift Testing, dossiers synchronisés, signature
 automatique avec ton équipe, `SWIFT_VERSION = 5.0`, `ENABLE_APP_SANDBOX = YES`.
 

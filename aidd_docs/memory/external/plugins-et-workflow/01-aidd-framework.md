@@ -123,7 +123,7 @@ C'est la séparation exécutant / vérificateur qui donne sa valeur à `01-sdlc`
 
 | Skill | À quoi il sert | Points clés |
 | --- | --- | --- |
-| `00-repo-init` | `git init`, branche par défaut, commit d'amorçage, `CONTRIBUTING.md`, remote en option (`publish`) | Expérimental. Idempotent : ne fait rien si le dépôt existe déjà (c'est le cas de CopyKit) |
+| `00-repo-init` | `git init`, branche par défaut, commit d'amorçage, `CONTRIBUTING.md`, remote en option (`publish`) | Expérimental. Idempotent : ne fait rien si le dépôt existe déjà (c'est le cas d'AppKit) |
 | `01-commit` | Commits conventionnels atomiques, un sujet par commit | Options `auto` (ne demande rien), `interactive`, `push`. Réessaie après un hook refusé seulement pour des corrections déterministes dans les mêmes fichiers |
 | `02-pull-request` | Ouvre une PR (GitHub) ou une MR (GitLab) **en draft** | Base déduite du préfixe de branche, jamais supposée `main`. Ne commit, ne push et ne crée jamais de branche |
 | `03-release-tag` | Release semver avec tag annoté et notes de version | Te fait valider version, notes et fichiers avant de taguer |
@@ -222,7 +222,7 @@ plutôt que dans `aidd_docs/backlog/`.
 
 ## Ce qu'AIDD n'apporte pas pour le Mac
 
-- Aucune connaissance Swift, SwiftUI, AppKit, ni des APIs macOS.
+- Aucune connaissance Swift, SwiftUI, framework AppKit, ni des APIs macOS.
 - Les tests de parcours (`06-test` journey, `aidd-qa`) et la facette
   `assert-frontend` visent le **navigateur**.
 - `01-bootstrap` vise un SaaS.

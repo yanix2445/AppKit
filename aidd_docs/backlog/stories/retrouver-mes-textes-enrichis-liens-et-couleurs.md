@@ -10,7 +10,7 @@ order: 9
 # Story: Retrouver mes textes enrichis, mes liens et mes couleurs
 
 **As** un utilisateur de Mac
-**I want** que CopyKit reconnaisse les textes mis en forme, les liens et les couleurs
+**I want** qu'AppKit reconnaisse les textes mis en forme, les liens et les couleurs
 **So that** je les recolle tels quels et les repère d'un coup d'œil
 
 ## Acceptance

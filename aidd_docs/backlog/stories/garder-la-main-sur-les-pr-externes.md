@@ -9,7 +9,7 @@ order: 2
 
 # Story: Garder la main sur les PR externes
 
-**As** Yanis, mainteneur de CopyKit
+**As** Yanis, mainteneur d'AppKit
 **I want** décider quand le code d'une PR externe tourne sur GitHub, et merger quand tout est vert
 **So that** aucun code inconnu ne tourne sans mon accord, sans que je doive surveiller chaque PR
 

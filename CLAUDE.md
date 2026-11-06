@@ -1,4 +1,4 @@
-# CopyKit
+# AppKit
 
 Application macOS native, 100 % Apple : Xcode 27.1, Swift 6.4 (mode de langage
 Swift 6), SwiftUI, SwiftData, Swift Testing, XCUITest. SDK de macOS 27,
@@ -6,8 +6,8 @@ compatible macOS 26, Mac Apple silicon seulement.
 
 ## Règles
 
-- **Zéro dépendance tierce** : aucun package Swift externe, aucun outil tiers
-  dans le build ou les tests. Demander avant toute exception.
+- **Une seule dépendance tierce, Sparkle 2** : aucun autre package Swift externe, aucun outil tiers
+  dans le build ou les tests. Demander avant toute autre exception.
 - **Architecture** : MV à la manière d'Apple, rangé par feature, cœur métier
   isolé dans des packages Swift locaux. Voir
   [la décision d'architecture](aidd_docs/memory/internal/decisions/architecture-mv-feature-core.md) et
@@ -25,7 +25,7 @@ compatible macOS 26, Mac Apple silicon seulement.
   éditer `project.pbxproj` à la main. Seule exception : référencer un dossier
   ou un fichier racine (règle suivante), qu'aucun outil MCP ne sait faire.
 - **Tout doit être visible dans Xcode** :
-  - `CopyKit/`, `CopyKitTests/`, `CopyKitUITests/` et `aidd_docs/` sont des
+  - `AppKit/`, `AppKitTests/`, `AppKitUITests/` et `aidd_docs/` sont des
     dossiers synchronisés : tout ce qui est créé dedans apparaît tout seul ;
   - un **nouveau dossier à la racine** du dépôt est déclaré, dès sa création,
     comme dossier synchronisé (`PBXFileSystemSynchronizedRootGroup`) **sans
@@ -41,13 +41,13 @@ Les builds et les tests passent par Portly (`portly temp` puis `portly wait`).
 
 ```bash
 # Build
-xcodebuild -project CopyKit.xcodeproj -scheme CopyKit -destination 'platform=macOS' build
+xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' build
 
 # Tests unitaires (Swift Testing)
-xcodebuild -project CopyKit.xcodeproj -scheme CopyKit -destination 'platform=macOS' test -only-testing:CopyKitTests
+xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test -only-testing:AppKitTests
 
 # Tous les tests, y compris l'interface (XCUITest)
-xcodebuild -project CopyKit.xcodeproj -scheme CopyKit -destination 'platform=macOS' test
+xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test
 ```
 
 Quand Xcode est ouvert, les outils MCP Xcode (`BuildProject`, `RunAllTests`,
@@ -57,13 +57,13 @@ l'IDE.
 ## Arborescence actuelle
 
 ```text
-CopyKit/
-  App/CopyKitApp.swift      point d'entrée
+AppKit/
+  App/AppKitApp.swift      point d'entrée
   Resources/Assets.xcassets
   ContentView.swift         modèle du template, à remplacer par la première feature
   Item.swift                modèle du template, à remplacer par la première feature
-CopyKitTests/               tests Swift Testing
-CopyKitUITests/             tests XCUITest
+AppKitTests/               tests Swift Testing
+AppKitUITests/             tests XCUITest
 aidd_docs/                  toute la documentation (dossier synchronisé, sans cible)
 ```
 

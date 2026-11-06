@@ -3,9 +3,9 @@ objective: "Donner à chaque utilisateur de Mac un gestionnaire de presse-papier
 revision: current
 ---
 
-# Product Brief: CopyKit
+# Product Brief: AppKit
 
-CopyKit est une app de barre de menus macOS, gratuite et open source, qui réunit dans une seule app privée, rapide et sobre ce que font aujourd'hui Paste, CleanShot X et Swish. Elle s'adresse à tous les utilisateurs de Mac, débutants compris. L'idée est validée (brainstorm approuvé), aucun code n'est écrit.
+AppKit est une app de barre de menus macOS, gratuite et open source, qui réunit dans une seule app privée, rapide et sobre ce que font aujourd'hui Paste, CleanShot X et Swish. Elle s'adresse à tous les utilisateurs de Mac, débutants compris. L'idée est validée (brainstorm approuvé), aucun code n'est écrit.
 
 ## Opportunity
 
@@ -30,7 +30,7 @@ Situation commune : copier-coller toute la journée, entre apps et entre Mac. Pr
 
 ## Product Bet
 
-Si CopyKit offre la beauté et la simplicité de Paste avec l'ouverture et la confidentialité de Maccy, gratuitement, en natif Apple, simple par défaut et puissant sur demande, alors Yanis abandonnera Paste, et d'autres utilisateurs le garderont plutôt que Spotlight, Maccy ou Paste.
+Si AppKit offre la beauté et la simplicité de Paste avec l'ouverture et la confidentialité de Maccy, gratuitement, en natif Apple, simple par défaut et puissant sur demande, alors Yanis abandonnera Paste, et d'autres utilisateurs le garderont plutôt que Spotlight, Maccy ou Paste.
 
 Ensuite, les captures (V2) et la gestion des fenêtres (V3) dans la même app remplaceront CleanShot X et Swish.
 
@@ -47,32 +47,32 @@ Le premier pari à valider est la V1.0 : un historique qui remplace Paste.
 | Maccy reste minimaliste par choix, et ceux qui veulent du soigné partent vers Paste ou Raycast | evidence | [MacRumors](https://forums.macrumors.com/threads/what-clipboard-manager-do-you-recommend-to-replace-paste.2470509/), [r/macapps](https://reddit.birdcat.cafe/r/macapps/comments/1iij0wz/best_clipboard_app), [TeenyApps](https://teenyapps-website.pages.dev/articles/maccy-alternatives.html) |
 | Aucune app ne réunit belle interface, gratuité, code ouvert et confidentialité | assumption | revue concurrentielle plus large (AlternativeTo, Setapp) pendant l'étape B |
 | Yanis remplacera Paste au quotidien | assumption | utiliser la V1.0 quatre semaines sans revenir à Paste |
-| Des débutants adopteront CopyKit s'il est simple par défaut | assumption | 5 testeurs débutants l'installent et s'en servent sans aide |
-| Des utilisateurs garderont CopyKit plutôt que Spotlight ou Maccy | assumption | bêta publique : comptage des vérifications de mises à jour semaine après semaine |
+| Des débutants adopteront AppKit s'il est simple par défaut | assumption | 5 testeurs débutants l'installent et s'en servent sans aide |
+| Des utilisateurs garderont AppKit plutôt que Spotlight ou Maccy | assumption | bêta publique : comptage des vérifications de mises à jour semaine après semaine |
 | Le cœur de la V1 est faisable en 100 % Apple : lecture du presse-papiers sans alerte, recherche chiffrée rapide, copies du presse-papiers universel | evidence | spikes de l'étape B, avec essais réels sur macOS 27.2 : [presse-papiers](../backlog/spikes/alerte-confidentialite-presse-papiers.md), [recherche chiffrée](../backlog/spikes/chiffrement-et-recherche.md), [presse-papiers universel](../backlog/spikes/presse-papiers-universel.md) |
 | Une personne seule peut livrer et maintenir la V1 | assumption | rythme réel des tranches de la V1 |
 | La synchronisation iCloud fonctionne pour une app Developer ID | evidence | [spike iCloud](../backlog/spikes/icloud-developer-id.md) (documentation Apple) ; premier essai signé au début de la 1.2 |
-| CopyKit est hors du champ du Cyber Resilience Act, tant que les dons restent volontaires | evidence | [spike CRA](../backlog/spikes/cyber-resilience-act.md) (guide de la Commission) ; relecture juridique avant la release |
-| Go : CopyKit est lancé, après les spikes de l'étape B | decision | décision de Yanis du 2 novembre 2026 |
+| AppKit est hors du champ du Cyber Resilience Act, tant que les dons restent volontaires | evidence | [spike CRA](../backlog/spikes/cyber-resilience-act.md) (guide de la Commission) ; relecture juridique avant la release |
+| Go : AppKit est lancé, après les spikes de l'étape B | decision | décision de Yanis du 2 novembre 2026 |
 | Hors App Sandbox, avec le chiffrement de l'historique comme protection principale | decision | [ADR hors App Sandbox](../memory/internal/decisions/hors-app-sandbox.md) |
 | Sparkle 2 pour les mises à jour, avec la signature Developer ID et la notarisation comme chaîne de confiance principale | decision | [spike outil de mise à jour](../backlog/spikes/outil-de-mise-a-jour.md) |
-| Le nom « CopyKit » est gardé malgré une app iPad du même nom | decision | [spike nom](../backlog/spikes/nom-copykit.md) |
-| 100 % Apple, sauf l'outil de mise à jour | decision | [brainstorm](../tasks/2026_10/2026_10_31_copykit/brainstorm.md) |
-| Gratuit, open source (MIT), financé par des dons | decision | [brainstorm](../tasks/2026_10/2026_10_31_copykit/brainstorm.md) |
-| Rien n'est envoyé sans accord, et l'app est conforme par conception (RGPD, CRA volontaire, ANSSI) | decision | [brainstorm](../tasks/2026_10/2026_10_31_copykit/brainstorm.md) |
+| Le nom définitif est « AppKit », validé par Yanis ; l'app iPad homonyme du [spike](../backlog/spikes/nom-copykit.md) concernait l'ancien nom CopyKit | decision | Yanis, 2026-11-06 |
+| 100 % Apple, sauf l'outil de mise à jour | decision | [brainstorm](../tasks/2026_10/2026_10_31_appkit/brainstorm.md) |
+| Gratuit, open source (MIT), financé par des dons | decision | [brainstorm](../tasks/2026_10/2026_10_31_appkit/brainstorm.md) |
+| Rien n'est envoyé sans accord, et l'app est conforme par conception (RGPD, CRA volontaire, ANSSI) | decision | [brainstorm](../tasks/2026_10/2026_10_31_appkit/brainstorm.md) |
 
 ## Boundaries
 
 - Addresses: un historique du presse-papiers complet et privé (V1), puis les captures (V2) et la gestion des fenêtres (V3), sur Mac Apple silicon, à partir de macOS 26.
-- Leaves out: dans la V1 (tranches 1.0 à 1.2), les captures (V2), la gestion des fenêtres (V3), le choix libre du raccourci global avant la 1.1, et l'installation par Homebrew
+- Leaves out: dans la V1 (tranches 1.0 à 1.2), les captures (V2), la gestion des fenêtres (V3) et l'installation par Homebrew
 - Leaves out: iPhone et iPad pour l'instant, Mac Intel, App Store, version payante, compte ou serveur propriétaire, statistiques sans accord, accès au contenu des copies par quiconque d'autre que l'utilisateur.
 
 ## Success
 
 Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans compromis sur la vie privée ni la sobriété.
 
-- Pour Yanis : CopyKit remplace Paste au quotidien, et tous ses tests passent.
-- Indicateur de valeur : le nombre de copies de CopyKit qui vérifient leurs mises à jour chaque semaine (utilisateurs actifs hebdomadaires estimés, sans aucune donnée personnelle). Il montre que les gens **gardent** l'app.
+- Pour Yanis : AppKit remplace Paste au quotidien, et tous ses tests passent.
+- Indicateur de valeur : le nombre de copies d'AppKit qui vérifient leurs mises à jour chaque semaine (utilisateurs actifs hebdomadaires estimés, sans aucune donnée personnelle). Il montre que les gens **gardent** l'app.
 - Garde-fous : les lignes rouges tiennent (CPU au repos ≤ 0,1 %, mémoire ≤ 80 Mo, aucun élément exclu gardé), et aucun incident de confidentialité.
 
 ## Validation and Feedback
@@ -83,7 +83,7 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 ## Product View
 
-| | Spotlight | Maccy | Paste | Raycast | **CopyKit** |
+| | Spotlight | Maccy | Paste | Raycast | **AppKit** |
 | --- | --- | --- | --- | --- | --- |
 | Prix | gratuit | gratuit | 2,49 $/mois, 29,99 $/an ou à vie | gratuit (historique) | **gratuit** |
 | Code ouvert | non | oui (MIT) | non | non | **oui (MIT)** |
@@ -95,4 +95,4 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 ## Open Decisions
 
-- Avant la première release publique : la marque « CopyKit » dans les bases de l'EUIPO, de l'INPI et de l'USPTO, le statut d'EdDSA dans le guide 2026 de l'ANSSI, et une relecture juridique du Cyber Resilience Act.
+- Avant la première release publique : le statut d'EdDSA dans le guide 2026 de l'ANSSI, et une relecture juridique du Cyber Resilience Act.

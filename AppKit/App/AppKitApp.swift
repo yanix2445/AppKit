@@ -1,6 +1,6 @@
 //
-//  CopyKitApp.swift
-//  CopyKit
+//  AppKitApp.swift
+//  AppKit
 //
 //  Created by Yanis HARRAT on 31/10/2026.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct CopyKitApp: App {
+struct AppKitApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,

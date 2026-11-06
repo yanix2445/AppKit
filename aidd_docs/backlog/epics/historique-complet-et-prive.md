@@ -1,14 +1,14 @@
 ---
 type: epic
 status: proposed
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
-goal: aidd_docs/product/copykit.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
+goal: aidd_docs/product/appkit.md
 order: 1
 ---
 
 # Epic: Historique complet et privé
 
-Avec CopyKit 1.0, un utilisateur de Mac ne perd plus jamais une copie : il la
+Avec AppKit 1.0, un utilisateur de Mac ne perd plus jamais une copie : il la
 retrouve et la recolle en un instant, sans que rien de confidentiel ne soit gardé.
 
 ## Context and Value
@@ -37,9 +37,10 @@ copies du presse-papiers universel lisibles.
 - Includes: la confidentialité complète (marqueurs, apps exclues, catégories exclues, pause de la capture) et le retour visuel et sonore
 - Includes: le chiffrement de l'historique et la gestion de sa clé
 - Includes: le bandeau de l'historique en bas de l'écran, l'icône dans la barre de menus, le raccourci global et le lancement à l'ouverture de session
+- Includes: les raccourcis personnalisables dans les Réglages, avec la détection des conflits
 - Includes: l'onboarding, les Réglages et la page « Permissions »
 - Includes: les budgets de sobriété et de réactivité
-- Excludes: les pinboards, le nom personnalisé d'une copie, le collage multiple et les raccourcis configurables (epic 3, tranche 1.1)
+- Excludes: les pinboards, le nom personnalisé d'une copie et le collage multiple (epic 3, tranche 1.1)
 - Excludes: la synchronisation iCloud entre Mac (epic 4, tranche 1.2)
 - Excludes: le téléchargement, l'installation et les mises à jour (epic 2)
 - Excludes: les captures (V2) et la gestion des fenêtres (V3)
@@ -47,7 +48,7 @@ copies du presse-papiers universel lisibles.
 
 ## Success Evidence
 
-Yanis utilise CopyKit 1.0 quatre semaines d'affilée sans revenir à Paste, et
+Yanis utilise AppKit 1.0 quatre semaines d'affilée sans revenir à Paste, et
 5 utilisateurs débutants l'installent et s'en servent sans aide grâce à
 l'onboarding. Les tests de performance automatiques tiennent les budgets du
 brainstorm (CPU au repos ≤ 0,1 %, mémoire ≤ 80 Mo, historique visible ≤ 100 ms
@@ -60,10 +61,10 @@ sur le disque, et qu'aucune copie n'y est écrite en clair.
 
 | Item | Kind | Handling |
 | --- | --- | --- |
-| Durée de conservation et limite de stockage par défaut | decision | tranché : 1 mois de conservation et 1 Go par défaut, limite réglable jusqu'à 10 Go ([brainstorm](../../tasks/2026_10/2026_10_31_copykit/brainstorm.md)) |
+| Durée de conservation et limite de stockage par défaut | decision | tranché : 1 mois de conservation et 1 Go par défaut, limite réglable jusqu'à 10 Go ([brainstorm](../../tasks/2026_10/2026_10_31_appkit/brainstorm.md)) |
 | Hors App Sandbox, chiffrement comme protection principale | decision | [ADR hors App Sandbox](../../memory/internal/decisions/hors-app-sandbox.md) |
 | Lecture du presse-papiers sans alerte | dependency | [spike résolu](../spikes/alerte-confidentialite-presse-papiers.md) ; une future activation de l'alerte par Apple reste à surveiller |
 | Copies du presse-papiers universel | dependency | [spike résolu](../spikes/presse-papiers-universel.md) |
 | Index de recherche chiffré | dependency | [spike résolu](../spikes/chiffrement-et-recherche.md) |
 | Ce que Time Machine restaure de la clé | spike | [gardé pour plus tard](../spikes/time-machine-et-trousseau.md) ; il ne change que le message après une restauration |
-| Des débutants adopteront CopyKit s'il est simple par défaut | assumption | vérifiée par les 5 testeurs débutants |
+| Des débutants adopteront AppKit s'il est simple par défaut | assumption | vérifiée par les 5 testeurs débutants |

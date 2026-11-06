@@ -12,22 +12,22 @@
 			containerPortal = 090DD1903095904F00CD928A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 090DD1973095904F00CD928A;
-			remoteInfo = CopyKit;
+			remoteInfo = AppKit;
 		};
 		090DD1B23095905300CD928A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 090DD1903095904F00CD928A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 090DD1973095904F00CD928A;
-			remoteInfo = CopyKit;
+			remoteInfo = AppKit;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		06B65629EE4A89B1C31E4384 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
-		090DD1983095904F00CD928A /* CopyKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CopyKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		090DD1A73095905300CD928A /* CopyKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		090DD1B13095905300CD928A /* CopyKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		090DD1983095904F00CD928A /* AppKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		090DD1A73095905300CD928A /* AppKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		090DD1B13095905300CD928A /* AppKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1689DCCCC4EB3E457E134C51 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		4496EC6516EF41657E3E6FF7 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		53A9EE6999BDF6DCDCC2DC04 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -35,19 +35,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		090DD19A3095904F00CD928A /* CopyKit */ = {
+		090DD19A3095904F00CD928A /* AppKit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CopyKit;
+			path = AppKit;
 			sourceTree = "<group>";
 		};
-		090DD1AA3095905300CD928A /* CopyKitTests */ = {
+		090DD1AA3095905300CD928A /* AppKitTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CopyKitTests;
+			path = AppKitTests;
 			sourceTree = "<group>";
 		};
-		090DD1B43095905300CD928A /* CopyKitUITests */ = {
+		090DD1B43095905300CD928A /* AppKitUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CopyKitUITests;
+			path = AppKitUITests;
 			sourceTree = "<group>";
 		};
 		1C301A38BE0ACB967F0A8862 /* aidd_docs */ = {
@@ -85,9 +85,9 @@
 				C947792184B02EAE55E8BCFE /* .gitignore */,
 				06B65629EE4A89B1C31E4384 /* AGENTS.md */,
 				1C301A38BE0ACB967F0A8862 /* aidd_docs */,
-				090DD19A3095904F00CD928A /* CopyKit */,
-				090DD1AA3095905300CD928A /* CopyKitTests */,
-				090DD1B43095905300CD928A /* CopyKitUITests */,
+				090DD19A3095904F00CD928A /* AppKit */,
+				090DD1AA3095905300CD928A /* AppKitTests */,
+				090DD1B43095905300CD928A /* AppKitUITests */,
 				090DD1993095904F00CD928A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 		090DD1993095904F00CD928A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				090DD1983095904F00CD928A /* CopyKit.app */,
-				090DD1A73095905300CD928A /* CopyKitTests.xctest */,
-				090DD1B13095905300CD928A /* CopyKitUITests.xctest */,
+				090DD1983095904F00CD928A /* AppKit.app */,
+				090DD1A73095905300CD928A /* AppKitTests.xctest */,
+				090DD1B13095905300CD928A /* AppKitUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,9 +105,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		090DD1973095904F00CD928A /* CopyKit */ = {
+		090DD1973095904F00CD928A /* AppKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 090DD1B93095905300CD928A /* Build configuration list for PBXNativeTarget "CopyKit" */;
+			buildConfigurationList = 090DD1B93095905300CD928A /* Build configuration list for PBXNativeTarget "AppKit" */;
 			buildPhases = (
 				090DD1943095904F00CD928A /* Sources */,
 				090DD1953095904F00CD928A /* Frameworks */,
@@ -116,16 +116,16 @@
 			buildRules = (
 			);
 			fileSystemSynchronizedGroups = (
-				090DD19A3095904F00CD928A /* CopyKit */,
+				090DD19A3095904F00CD928A /* AppKit */,
 			);
-			name = CopyKit;
-			productName = CopyKit;
-			productReference = 090DD1983095904F00CD928A /* CopyKit.app */;
+			name = AppKit;
+			productName = AppKit;
+			productReference = 090DD1983095904F00CD928A /* AppKit.app */;
 			productType = "com.apple.product-type.application";
 		};
-		090DD1A63095905300CD928A /* CopyKitTests */ = {
+		090DD1A63095905300CD928A /* AppKitTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 090DD1BC3095905300CD928A /* Build configuration list for PBXNativeTarget "CopyKitTests" */;
+			buildConfigurationList = 090DD1BC3095905300CD928A /* Build configuration list for PBXNativeTarget "AppKitTests" */;
 			buildPhases = (
 				090DD1A33095905300CD928A /* Sources */,
 				090DD1A43095905300CD928A /* Frameworks */,
@@ -137,16 +137,16 @@
 				090DD1A93095905300CD928A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				090DD1AA3095905300CD928A /* CopyKitTests */,
+				090DD1AA3095905300CD928A /* AppKitTests */,
 			);
-			name = CopyKitTests;
-			productName = CopyKitTests;
-			productReference = 090DD1A73095905300CD928A /* CopyKitTests.xctest */;
+			name = AppKitTests;
+			productName = AppKitTests;
+			productReference = 090DD1A73095905300CD928A /* AppKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		090DD1B03095905300CD928A /* CopyKitUITests */ = {
+		090DD1B03095905300CD928A /* AppKitUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 090DD1BF3095905300CD928A /* Build configuration list for PBXNativeTarget "CopyKitUITests" */;
+			buildConfigurationList = 090DD1BF3095905300CD928A /* Build configuration list for PBXNativeTarget "AppKitUITests" */;
 			buildPhases = (
 				090DD1AD3095905300CD928A /* Sources */,
 				090DD1AE3095905300CD928A /* Frameworks */,
@@ -158,11 +158,11 @@
 				090DD1B33095905300CD928A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				090DD1B43095905300CD928A /* CopyKitUITests */,
+				090DD1B43095905300CD928A /* AppKitUITests */,
 			);
-			name = CopyKitUITests;
-			productName = CopyKitUITests;
-			productReference = 090DD1B13095905300CD928A /* CopyKitUITests.xctest */;
+			name = AppKitUITests;
+			productName = AppKitUITests;
+			productReference = 090DD1B13095905300CD928A /* AppKitUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -188,7 +188,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 090DD1933095904F00CD928A /* Build configuration list for PBXProject "CopyKit" */;
+			buildConfigurationList = 090DD1933095904F00CD928A /* Build configuration list for PBXProject "AppKit" */;
 			developmentRegion = fr;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -203,9 +203,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				090DD1973095904F00CD928A /* CopyKit */,
-				090DD1A63095905300CD928A /* CopyKitTests */,
-				090DD1B03095905300CD928A /* CopyKitUITests */,
+				090DD1973095904F00CD928A /* AppKit */,
+				090DD1A63095905300CD928A /* AppKitTests */,
+				090DD1B03095905300CD928A /* AppKitUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -249,18 +249,18 @@
 /* Begin PBXTargetDependency section */
 		090DD1A93095905300CD928A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 090DD1973095904F00CD928A /* CopyKit */;
+			target = 090DD1973095904F00CD928A /* AppKit */;
 			targetProxy = 090DD1A83095905300CD928A /* PBXContainerItemProxy */;
 		};
 		090DD1B33095905300CD928A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 090DD1973095904F00CD928A /* CopyKit */;
+			target = 090DD1973095904F00CD928A /* AppKit */;
 			targetProxy = 090DD1B23095905300CD928A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		090DD1B73095905300CD928A /* Debug configuration for PBXProject "CopyKit" */ = {
+		090DD1B73095905300CD928A /* Debug configuration for PBXProject "AppKit" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -327,7 +327,7 @@
 			};
 			name = Debug;
 		};
-		090DD1B83095905300CD928A /* Release configuration for PBXProject "CopyKit" */ = {
+		090DD1B83095905300CD928A /* Release configuration for PBXProject "AppKit" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -386,12 +386,12 @@
 			};
 			name = Release;
 		};
-		090DD1BA3095905300CD928A /* Debug configuration for PBXNativeTarget "CopyKit" */ = {
+		090DD1BA3095905300CD928A /* Debug configuration for PBXNativeTarget "AppKit" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = CopyKit/CopyKit.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AppKit/AppKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -411,7 +411,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.CopyKit";
+				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.AppKit";
+				PRODUCT_MODULE_NAME = AppKitMain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -423,12 +424,12 @@
 			};
 			name = Debug;
 		};
-		090DD1BB3095905300CD928A /* Release configuration for PBXNativeTarget "CopyKit" */ = {
+		090DD1BB3095905300CD928A /* Release configuration for PBXNativeTarget "AppKit" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = CopyKit/CopyKit.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AppKit/AppKit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -448,7 +449,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.CopyKit";
+				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.AppKit";
+				PRODUCT_MODULE_NAME = AppKitMain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -460,7 +462,7 @@
 			};
 			name = Release;
 		};
-		090DD1BD3095905300CD928A /* Debug configuration for PBXNativeTarget "CopyKitTests" */ = {
+		090DD1BD3095905300CD928A /* Debug configuration for PBXNativeTarget "AppKitTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -471,18 +473,18 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.CopyKitTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.AppKitTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CopyKit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CopyKit";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AppKit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AppKit";
 			};
 			name = Debug;
 		};
-		090DD1BE3095905300CD928A /* Release configuration for PBXNativeTarget "CopyKitTests" */ = {
+		090DD1BE3095905300CD928A /* Release configuration for PBXNativeTarget "AppKitTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -493,18 +495,18 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.CopyKitTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.AppKitTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CopyKit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CopyKit";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AppKit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AppKit";
 			};
 			name = Release;
 		};
-		090DD1C03095905300CD928A /* Debug configuration for PBXNativeTarget "CopyKitUITests" */ = {
+		090DD1C03095905300CD928A /* Debug configuration for PBXNativeTarget "AppKitUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -514,18 +516,18 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.CopyKitUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.AppKitUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TEST_TARGET_NAME = CopyKit;
+				TEST_TARGET_NAME = AppKit;
 			};
 			name = Debug;
 		};
-		090DD1C13095905300CD928A /* Release configuration for PBXNativeTarget "CopyKitUITests" */ = {
+		090DD1C13095905300CD928A /* Release configuration for PBXNativeTarget "AppKitUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -535,49 +537,49 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.CopyKitUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "yanis-harrat.AppKitUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TEST_TARGET_NAME = CopyKit;
+				TEST_TARGET_NAME = AppKit;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		090DD1933095904F00CD928A /* Build configuration list for PBXProject "CopyKit" */ = {
+		090DD1933095904F00CD928A /* Build configuration list for PBXProject "AppKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				090DD1B73095905300CD928A /* Debug configuration for PBXProject "CopyKit" */,
-				090DD1B83095905300CD928A /* Release configuration for PBXProject "CopyKit" */,
+				090DD1B73095905300CD928A /* Debug configuration for PBXProject "AppKit" */,
+				090DD1B83095905300CD928A /* Release configuration for PBXProject "AppKit" */,
 			);
 			defaultConfigurationName = Release;
 		};
-		090DD1B93095905300CD928A /* Build configuration list for PBXNativeTarget "CopyKit" */ = {
+		090DD1B93095905300CD928A /* Build configuration list for PBXNativeTarget "AppKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				090DD1BA3095905300CD928A /* Debug configuration for PBXNativeTarget "CopyKit" */,
-				090DD1BB3095905300CD928A /* Release configuration for PBXNativeTarget "CopyKit" */,
+				090DD1BA3095905300CD928A /* Debug configuration for PBXNativeTarget "AppKit" */,
+				090DD1BB3095905300CD928A /* Release configuration for PBXNativeTarget "AppKit" */,
 			);
 			defaultConfigurationName = Release;
 		};
-		090DD1BC3095905300CD928A /* Build configuration list for PBXNativeTarget "CopyKitTests" */ = {
+		090DD1BC3095905300CD928A /* Build configuration list for PBXNativeTarget "AppKitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				090DD1BD3095905300CD928A /* Debug configuration for PBXNativeTarget "CopyKitTests" */,
-				090DD1BE3095905300CD928A /* Release configuration for PBXNativeTarget "CopyKitTests" */,
+				090DD1BD3095905300CD928A /* Debug configuration for PBXNativeTarget "AppKitTests" */,
+				090DD1BE3095905300CD928A /* Release configuration for PBXNativeTarget "AppKitTests" */,
 			);
 			defaultConfigurationName = Release;
 		};
-		090DD1BF3095905300CD928A /* Build configuration list for PBXNativeTarget "CopyKitUITests" */ = {
+		090DD1BF3095905300CD928A /* Build configuration list for PBXNativeTarget "AppKitUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				090DD1C03095905300CD928A /* Debug configuration for PBXNativeTarget "CopyKitUITests" */,
-				090DD1C13095905300CD928A /* Release configuration for PBXNativeTarget "CopyKitUITests" */,
+				090DD1C03095905300CD928A /* Debug configuration for PBXNativeTarget "AppKitUITests" */,
+				090DD1C13095905300CD928A /* Release configuration for PBXNativeTarget "AppKitUITests" */,
 			);
 			defaultConfigurationName = Release;
 		};

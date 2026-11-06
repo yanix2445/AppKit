@@ -7,11 +7,11 @@ depends_on:
 order: 8
 ---
 
-# Story: Savoir combien de copies de CopyKit tournent
+# Story: Savoir combien de copies d'AppKit tournent
 
-**As** Yanis, mainteneur de CopyKit
-**I want** compter, sans rien savoir des personnes, combien de copies de CopyKit vérifient leurs mises à jour
-**So that** je sache si les gens gardent CopyKit, sans trahir leur vie privée
+**As** Yanis, mainteneur d'AppKit
+**I want** compter, sans rien savoir des personnes, combien de copies d'AppKit vérifient leurs mises à jour
+**So that** je sache si les gens gardent AppKit, sans trahir leur vie privée
 
 ## Acceptance
 

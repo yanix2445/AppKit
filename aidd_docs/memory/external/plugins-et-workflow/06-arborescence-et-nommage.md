@@ -6,9 +6,11 @@
 [ADR 0001](../../internal/decisions/architecture-mv-feature-core.md). Elle applique l'architecture retenue : **MV à la manière d'Apple,
 rangé par feature, avec un cœur métier isolé** (Clean Architecture légère).
 
-> Les features citées (`History`, `QuickPanel`, `MenuBar`, `Settings`,
-> `Permissions`) et les types (`Clip…`) sont des **exemples** pour montrer
-> les règles. Les vraies features sortiront du brief et du backlog.
+> Les features citées (`HistoryStrip`, `MenuBar`, `Settings`, `Permissions`,
+> `Onboarding`, `Updates`) sortent du backlog de la V1. Les types (`Clip…`)
+> restent des **exemples** pour montrer les règles. Mis à jour le 2026-11-03
+> après le challenge de l'architecture et
+> l'[ADR historique chiffré](../../internal/decisions/historique-chiffre-en-memoire.md).
 
 ---
 
@@ -22,7 +24,7 @@ rangé par feature, avec un cœur métier isolé** (Clean Architecture légère)
 | **Pas de préfixe de projet** sur les types (pas de `CKHistoryView`) | les modules Swift servent déjà d'espace de noms ; les préfixes viennent d'Objective-C |
 | **Préfixe seulement pour distinguer des implémentations** d'un même protocole : `SystemPasteboardService` (la vraie), `FakePasteboardService` (pour les tests) | on voit tout de suite laquelle tourne |
 | Extensions : `Type+Sujet.swift` (`Date+Relative.swift`) | convention Apple et Swift |
-| Les **modules** portent le nom de l'app en préfixe : `CopyKitCore`, `CopyKitData`, `CopyKitSystem` | on sait à quelle app appartient un import |
+| Les **modules** portent le nom de l'app en préfixe : `AppKitCore`, `AppKitData`, `AppKitSystem` | on sait à quelle app appartient un import |
 | Dossiers au **pluriel** quand ils regroupent plusieurs choses du même genre (`Features/`, `Components/`), au **singulier** pour une feature (`History/`) | lecture naturelle |
 | Une feature reste **à plat** tant qu'elle a moins de 7 fichiers environ ; au-delà, sous-dossiers `Views/` et `Models/` à l'intérieur | pas de dossiers vides par principe |
 
@@ -32,13 +34,13 @@ rangé par feature, avec un cœur métier isolé** (Clean Architecture légère)
 
 | Suffixe | Rôle | Couche | Exemple |
 | --- | --- | --- | --- |
-| `…App` | point d'entrée `@main` | app | `CopyKitApp` |
+| `…App` | point d'entrée `@main` | app | `AppKitApp` |
 | `…View` | écran ou section d'écran SwiftUI | feature | `HistoryView`, `GeneralSettingsView` |
 | `…Row` | ligne d'une liste | feature | `HistoryRow` |
 | `…ViewModel` | objet `@Observable` qui porte la logique d'un écran, **seulement si nécessaire** | feature | `QuickPanelViewModel` |
 | `…Style` | style de contrôle SwiftUI (`ButtonStyle`, `ToggleStyle`…) | shared | `ToolbarButtonStyle` |
 | `…Record` | modèle stocké SwiftData (`@Model`) | data | `ClipRecord` |
-| `…SchemaV1`, `…MigrationPlan` | versions du schéma SwiftData et migrations | data | `CopyKitSchemaV1`, `CopyKitMigrationPlan` |
+| `…SchemaV1`, `…MigrationPlan` | versions du schéma SwiftData et migrations | data | `AppKitSchemaV1`, `AppKitMigrationPlan` |
 | *(sans suffixe)* | type métier pur (struct, enum) | core | `ClipContent`, `ClipKind` |
 | `…Policy` | règle de décision pure | core | `ClipRetentionPolicy` (combien garder, quoi ignorer) |
 | `…Matcher`, `…Formatter`, `…Parser` | calcul pur sur des données | core | `ClipMatcher` (recherche) |
@@ -46,7 +48,7 @@ rangé par feature, avec un cœur métier isolé** (Clean Architecture légère)
 | `System…Service` | implémentation réelle sur macOS | system | `SystemPasteboardService` |
 | `Fake…Service` | implémentation de test, contrôlable | testing | `FakePasteboardService` |
 | `…Error` | `enum` d'erreurs d'un module, conforme à `LocalizedError` | toutes | `PasteboardError` |
-| `…Intent`, `…Entity`, `…Shortcuts` | App Intents (Raccourcis, Spotlight) | app | `CopyClipIntent`, `ClipEntity`, `CopyKitShortcuts` |
+| `…Intent`, `…Entity`, `…Shortcuts` | App Intents (Raccourcis, Spotlight) | app | `CopyClipIntent`, `ClipEntity`, `AppKitShortcuts` |
 | `…Tests` | tests Swift Testing d'un type | tests | `ClipMatcherTests` |
 | `…UITests` | tests d'interface XCUITest d'une feature | tests | `HistoryUITests` |
 
@@ -59,37 +61,37 @@ Raccourcis) ne se confondent jamais.
 ## 3. L'arborescence complète du dépôt
 
 ```text
-CopyKit/                                   racine du dépôt git
-├── CopyKit.xcodeproj
+AppKit/                                   racine du dépôt git
+├── AppKit.xcodeproj
 ├── CLAUDE.md                              commandes de build et de test, règles pour les agents
 │
-├── CopyKit/                               CIBLE APP (dossier synchronisé Xcode)
+├── AppKit/                               CIBLE APP (dossier synchronisé Xcode)
 │   ├── App/                               démarrage et assemblage
-│   │   ├── CopyKitApp.swift               @main : scènes (fenêtre, MenuBarExtra, Settings)
+│   │   ├── AppKitApp.swift               @main : scènes MenuBarExtra et Settings, sans fenêtre principale
 │   │   ├── AppDependencies.swift          crée les services réels, une seule fois
 │   │   └── EnvironmentValues+Dependencies.swift   expose les services via @Entry
 │   │
 │   ├── Features/                          UN DOSSIER PAR FONCTIONNALITÉ
-│   │   ├── History/
-│   │   │   ├── HistoryView.swift          liste lue avec @Query (MV pur)
-│   │   │   └── HistoryRow.swift
-│   │   ├── QuickPanel/
-│   │   │   ├── QuickPanelView.swift
-│   │   │   ├── QuickPanelViewModel.swift  ici il y a de la logique : recherche, sélection, collage
-│   │   │   └── QuickPanelController.swift pont AppKit (NSPanel) si nécessaire
+│   │   ├── HistoryStrip/                  le bandeau en bas de l'écran
+│   │   │   ├── HistoryStripView.swift     lit l'historique déchiffré en mémoire (@Observable), pas @Query
+│   │   │   ├── HistoryStripViewModel.swift recherche, filtres, sélection, collage
+│   │   │   └── HistoryStripController.swift NSPanel non activant qui glisse depuis le bas de l'écran
 │   │   ├── MenuBar/
-│   │   │   └── MenuBarView.swift
+│   │   │   └── MenuBarView.swift          l'icône, la pause, les Réglages
 │   │   ├── Settings/
 │   │   │   ├── SettingsView.swift         onglets
-│   │   │   ├── GeneralSettingsView.swift
-│   │   │   └── ShortcutSettingsView.swift
-│   │   └── Permissions/
-│   │       └── PermissionsView.swift
+│   │   │   └── GeneralSettingsView.swift
+│   │   ├── Permissions/
+│   │   │   └── PermissionsView.swift
+│   │   ├── Onboarding/
+│   │   │   └── OnboardingView.swift
+│   │   └── Updates/
+│   │       └── UpdateService.swift        Sparkle, seule dépendance tierce, isolée ici
 │   │
 │   ├── Intents/                           App Intents (Raccourcis, Spotlight)
 │   │   ├── CopyClipIntent.swift
 │   │   ├── ClipEntity.swift
-│   │   └── CopyKitShortcuts.swift
+│   │   └── AppKitShortcuts.swift
 │   │
 │   ├── Shared/                            ce que plusieurs features réutilisent
 │   │   ├── Components/                    petites vues génériques
@@ -109,31 +111,31 @@ CopyKit/                                   racine du dépôt git
 │       └── Localizable.xcstrings          String Catalog
 │
 ├── Packages/                              MODULES SWIFT LOCAUX (le cœur isolé)
-│   ├── CopyKitCore/                       métier pur : aucune dépendance à SwiftUI, SwiftData, AppKit
+│   ├── AppKitCore/                       métier pur : aucune dépendance à SwiftUI, SwiftData, framework AppKit
 │   │   ├── Package.swift
-│   │   ├── Sources/CopyKitCore/
+│   │   ├── Sources/AppKitCore/
 │   │   │   └── Clip/
 │   │   │       ├── ClipContent.swift
 │   │   │       ├── ClipKind.swift
 │   │   │       ├── ClipMatcher.swift
 │   │   │       └── ClipRetentionPolicy.swift
-│   │   └── Tests/CopyKitCoreTests/
+│   │   └── Tests/AppKitCoreTests/
 │   │       ├── ClipMatcherTests.swift
 │   │       └── ClipRetentionPolicyTests.swift
 │   │
-│   ├── CopyKitData/                       stockage SwiftData ; dépend de CopyKitCore
+│   ├── AppKitData/                       stockage chiffré : SwiftData, CryptoKit, index de recherche ; dépend de AppKitCore
 │   │   ├── Package.swift
-│   │   ├── Sources/CopyKitData/
+│   │   ├── Sources/AppKitData/
 │   │   │   ├── ClipRecord.swift
-│   │   │   ├── CopyKitSchemaV1.swift
-│   │   │   ├── CopyKitMigrationPlan.swift
-│   │   │   └── ModelContainer+CopyKit.swift   création du conteneur (réel ou en mémoire)
-│   │   └── Tests/CopyKitDataTests/
+│   │   │   ├── AppKitSchemaV1.swift
+│   │   │   ├── AppKitMigrationPlan.swift
+│   │   │   └── ModelContainer+Factory.swift  création du conteneur (réel ou en mémoire)
+│   │   └── Tests/AppKitDataTests/
 │   │       └── ClipRecordTests.swift
 │   │
-│   └── CopyKitSystem/                     accès à macOS derrière des protocoles ; dépend de CopyKitCore
+│   └── AppKitSystem/                     accès à macOS derrière des protocoles ; dépend de AppKitCore
 │       ├── Package.swift
-│       ├── Sources/CopyKitSystem/
+│       ├── Sources/AppKitSystem/
 │       │   ├── Pasteboard/
 │       │   │   ├── PasteboardService.swift          protocole
 │       │   │   ├── SystemPasteboardService.swift    vraie implémentation (NSPasteboard)
@@ -144,24 +146,24 @@ CopyKit/                                   racine du dépôt git
 │       │   └── Permissions/
 │       │       ├── PermissionService.swift
 │       │       └── SystemPermissionService.swift    Accessibility
-│       ├── Sources/CopyKitSystemTesting/            implémentations de test, partagées par tous les tests
+│       ├── Sources/AppKitSystemTesting/            implémentations de test, partagées par tous les tests
 │       │   ├── FakePasteboardService.swift
 │       │   ├── FakeHotKeyService.swift
 │       │   └── FakePermissionService.swift
-│       └── Tests/CopyKitSystemTests/
+│       └── Tests/AppKitSystemTests/
 │           └── SystemPasteboardServiceTests.swift
 │
-├── CopyKitTests/                          TESTS SWIFT TESTING DE LA CIBLE APP (miroir de Features/)
+├── AppKitTests/                          TESTS SWIFT TESTING DE LA CIBLE APP (miroir de Features/)
 │   └── Features/
-│       └── QuickPanel/
-│           └── QuickPanelViewModelTests.swift
+│       └── HistoryStrip/
+│           └── HistoryStripViewModelTests.swift
 │
-├── CopyKitUITests/                        TESTS XCUITEST (un fichier par feature)
-│   ├── HistoryUITests.swift
-│   └── QuickPanelUITests.swift
+├── AppKitUITests/                        TESTS XCUITEST (un fichier par feature)
+│   ├── HistoryStripUITests.swift
+│   └── SettingsUITests.swift
 │
 ├── TestPlans/
-│   └── CopyKit.xctestplan                 unitaires + UI, clair et sombre, couverture
+│   └── AppKit.xctestplan                 unitaires + UI, clair et sombre, couverture
 │
 └── aidd_docs/                             TOUTE la documentation du projet (dossier synchronisé, sans cible)
     ├── README.md · GUIDELINES.md · CONTRIBUTING.md
@@ -184,9 +186,9 @@ prévues par AIDD. Détail des chemins :
 
 | Couche | Peut importer | Ne doit jamais importer |
 | --- | --- | --- |
-| `CopyKitCore` | Foundation | SwiftUI, SwiftData, AppKit, les autres packages |
-| `CopyKitData` | `CopyKitCore`, SwiftData | SwiftUI, AppKit, `CopyKitSystem` |
-| `CopyKitSystem` | `CopyKitCore`, AppKit, Carbon, ServiceManagement | SwiftUI, SwiftData, `CopyKitData` |
+| `AppKitCore` | Foundation | SwiftUI, SwiftData, framework AppKit, les autres packages |
+| `AppKitData` | `AppKitCore`, SwiftData, CryptoKit | SwiftUI, framework AppKit, `AppKitSystem` |
+| `AppKitSystem` | `AppKitCore`, framework AppKit, Carbon, ServiceManagement, Security, ApplicationServices, QuickLookThumbnailing, UniformTypeIdentifiers | SwiftUI, SwiftData, `AppKitData` |
 | Cible app (`Features/`, `App/`, `Intents/`) | tout ce qui précède, SwiftUI, App Intents | — |
 | Une feature | `Shared/`, les packages | **une autre feature** (on passe par `Shared/` ou un package) |
 
@@ -200,12 +202,12 @@ revue (`aidd-dev:05-review`).
 
 | Aujourd'hui | Plus tard |
 | --- | --- |
-| `CopyKit/CopyKitApp.swift` | `CopyKit/App/CopyKitApp.swift` |
-| `CopyKit/ContentView.swift` | remplacé par les vues des features |
-| `CopyKit/Item.swift` (modèle d'exemple) | remplacé par `Packages/CopyKitData/…/ClipRecord.swift` |
-| `CopyKit/Assets.xcassets` | `CopyKit/Resources/Assets.xcassets` |
+| `AppKit/AppKitApp.swift` | `AppKit/App/AppKitApp.swift` |
+| `AppKit/ContentView.swift` | remplacé par les vues des features |
+| `AppKit/Item.swift` (modèle d'exemple) | remplacé par `Packages/AppKitData/…/ClipRecord.swift` |
+| `AppKit/Assets.xcassets` | `AppKit/Resources/Assets.xcassets` |
 
-Comme `CopyKit/`, `CopyKitTests/` et `CopyKitUITests/` sont des dossiers
+Comme `AppKit/`, `AppKitTests/` et `AppKitUITests/` sont des dossiers
 synchronisés, Xcode prend les sous-dossiers en compte tout seul. Les packages
 locaux s'ajoutent une fois au projet, puis à la cible app.
 

@@ -1,16 +1,16 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: Cyber Resilience Act
 
 ## Question
 
-CopyKit, gratuit, open source et financé par des dons, est-il hors du champ du Cyber Resilience Act (règlement 2024/2847) ?
+AppKit, gratuit, open source et financé par des dons, est-il hors du champ du Cyber Resilience Act (règlement 2024/2847) ?
 
 ## Decision
 
@@ -30,7 +30,7 @@ Les obligations légales à remplir avant la première release publique.
 
 ## Outcome
 
-- Result: CopyKit est **très probablement hors du champ du CRA**, tant que trois conditions tiennent : le logiciel reste gratuit et librement disponible, les dons restent **volontaires** et ne sont jamais exigés pour utiliser l'app ou recevoir ses mises à jour, et l'app ne demande aucune donnée personnelle au-delà du nécessaire. Point de vigilance : des dons qui dépasseraient durablement les coûts du projet pourraient être vus comme une monétisation. L'application volontaire du CRA décidée dans le brainstorm reste utile : elle prépare CopyKit si le cadre changeait.
+- Result: AppKit est **très probablement hors du champ du CRA**, tant que trois conditions tiennent : le logiciel reste gratuit et librement disponible, les dons restent **volontaires** et ne sont jamais exigés pour utiliser l'app ou recevoir ses mises à jour, et l'app ne demande aucune donnée personnelle au-delà du nécessaire. Point de vigilance : des dons qui dépasseraient durablement les coûts du projet pourraient être vus comme une monétisation. L'application volontaire du CRA décidée dans le brainstorm reste utile : elle prépare AppKit si le cadre changeait.
 - Confidence: moyenne (guide de la Commission et sources secondaires concordants, texte officiel non lu directement sur EUR-Lex).
 - Remaining uncertainty: le texte exact des considérants sur EUR-Lex ; l'interprétation des dons supérieurs aux coûts.
 

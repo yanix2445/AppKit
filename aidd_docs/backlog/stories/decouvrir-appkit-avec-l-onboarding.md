@@ -7,17 +7,17 @@ depends_on:
 order: 27
 ---
 
-# Story: Découvrir CopyKit avec l'onboarding
+# Story: Découvrir AppKit avec l'onboarding
 
 **As** un utilisateur de Mac qui n'a jamais utilisé de gestionnaire de presse-papiers
 **I want** une courte présentation à la première ouverture
-**So that** je comprenne CopyKit et m'en serve tout de suite, sans rien régler
+**So that** je comprenne AppKit et m'en serve tout de suite, sans rien régler
 
 ## Acceptance
 
 - À la première ouverture, un onboarding court montre les actions clés : copier, ouvrir le bandeau avec ⇧⌘V, retrouver une copie récente, la recoller, l'épingler (XCUITest)
 - Il se relance à tout moment depuis les Réglages (XCUITest)
-- Les réglages par défaut rendent CopyKit utile dès l'installation, sans aucun réglage à faire (XCUITest)
+- Les réglages par défaut rendent AppKit utile dès l'installation, sans aucun réglage à faire (XCUITest)
 - Une explication courte apparaît à la première utilisation du collage direct, de l'épinglage, de la recherche et de la pause, puis plus jamais (XCUITest)
 - Les réglages avancés restent séparés des réglages essentiels (XCUITest)
-- Une personne qui n'a jamais utilisé de gestionnaire de presse-papiers installe CopyKit, retrouve une copie et la recolle sans aide (essai manuel)
+- Une personne qui n'a jamais utilisé de gestionnaire de presse-papiers installe AppKit, retrouve une copie et la recolle sans aide (essai manuel)

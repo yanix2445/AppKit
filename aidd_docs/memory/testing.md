@@ -15,8 +15,8 @@ How the project is tested: the layers, the tools, and the conventions. Where tes
 
 ## Conventions
 
-- `CopyKitTests/` reprend l'arborescence de `CopyKit/Features/` ; un fichier `<Type>Tests.swift` par type testé.
-- `CopyKitUITests/` : un fichier `<Feature>UITests.swift` par feature.
+- `AppKitTests/` reprend l'arborescence de `AppKit/Features/` ; un fichier `<Type>Tests.swift` par type testé.
+- `AppKitUITests/` : un fichier `<Feature>UITests.swift` par feature.
 - Les tests SwiftData utilisent un `ModelContainer` en mémoire, jamais les vraies données.
 - Un bug corrigé commence par un test qui échoue.
 
@@ -37,5 +37,5 @@ Ce qui vaut pour toute story, en plus de ses propres critères :
 
 ## Run
 
-- Unitaires : `xcodebuild -project CopyKit.xcodeproj -scheme CopyKit -destination 'platform=macOS' test -only-testing:CopyKitTests`
-- Tout : `xcodebuild -project CopyKit.xcodeproj -scheme CopyKit -destination 'platform=macOS' test`
+- Unitaires : `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test -only-testing:AppKitTests`
+- Tout : `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test`

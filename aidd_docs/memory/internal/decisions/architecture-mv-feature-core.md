@@ -2,10 +2,11 @@
 
 - Date: 2026-10-31
 - Status: Accepted
+- Superseded by: aidd_docs/memory/internal/decisions/historique-chiffre-en-memoire.md (partie stockage seulement)
 
 ## Context
 
-CopyKit est une application macOS native, conçue de zéro, avec uniquement des
+AppKit est une application macOS native, conçue de zéro, avec uniquement des
 outils et des frameworks Apple : Xcode 27.1, Swift 6.4, SwiftUI, SwiftData,
 Swift Testing, XCUITest, et aucune dépendance tierce.
 
@@ -24,19 +25,22 @@ On veut :
 ## Decision
 
 1. **Pattern de présentation : MV, à la manière d'Apple.** Les vues lisent
-   directement les modèles `@Observable`, l'environnement et `@Query`. Un
+   directement les modèles `@Observable` et l'environnement. L'historique,
+   chiffré, n'est pas lu avec `@Query` mais depuis un objet `@Observable` en
+   mémoire ([ADR historique chiffré](historique-chiffre-en-memoire.md)). Un
    objet `@Observable` suffixé `…ViewModel` n'est créé que pour un écran qui
    porte de l'état ou de la logique propre. Ce n'est pas systématique.
 2. **Organisation : par feature.** Un dossier par fonctionnalité dans
-   `CopyKit/Features/`. Ce qui est partagé va dans `CopyKit/Shared/`.
+   `AppKit/Features/`. Ce qui est partagé va dans `AppKit/Shared/`.
 3. **Modularisation : Clean Architecture légère**, avec trois packages Swift
    locaux dans `Packages/`, dont les dépendances vont toujours vers le cœur :
-   - `CopyKitCore` : types et règles métier purs, sans SwiftUI, SwiftData ni
-     AppKit ;
-   - `CopyKitData` : stockage SwiftData, dépend de `CopyKitCore` ;
-   - `CopyKitSystem` : accès à macOS derrière des protocoles, dépend de
-     `CopyKitCore`. Les implémentations de test sont dans la cible
-     `CopyKitSystemTesting`.
+   - `AppKitCore` : types et règles métier purs, sans SwiftUI, SwiftData ni
+     framework AppKit ;
+   - `AppKitData` : stockage chiffré (SwiftData, CryptoKit et l'index de
+     recherche), dépend de `AppKitCore` ;
+   - `AppKitSystem` : accès à macOS derrière des protocoles, dépend de
+     `AppKitCore`. Les implémentations de test sont dans la cible
+     `AppKitSystemTesting`.
 4. **La cible app est la racine de composition.** Elle crée les services réels
    dans `App/AppDependencies.swift` et les distribue par l'environnement.
 5. **Nommage.** En anglais, un type par fichier, et le fichier porte le nom du
@@ -48,6 +52,20 @@ On veut :
    - Le compilateur impose celles entre packages, via les dépendances de
      chaque `Package.swift`.
    - Une feature n'importe jamais une autre feature : c'est vérifié en revue.
+7. **Forme de l'app.** Une app de barre de menus, sans fenêtre principale ni
+   icône dans le Dock : `MenuBarExtra` et `Settings` en SwiftUI. Le bandeau de
+   l'historique est un `NSPanel` non activant, piloté depuis la feature
+   `HistoryStrip`, qui glisse depuis le bas de l'écran et reçoit le clavier
+   sans prendre le focus de l'app où l'on écrivait, condition du collage
+   direct.
+8. **Concurrence.** L'app est en `MainActor` par défaut. La capture,
+   l'empreinte, le chiffrement, l'index de recherche et la lecture des copies
+   venues d'un autre appareil tournent hors du fil principal.
+9. **Dépendance tierce et synchronisation.** Sparkle vit dans la seule cible
+   app, derrière un `UpdateService`, pour pouvoir y désactiver
+   l'authentification des pointeurs sans toucher au reste. La synchronisation
+   de la tranche 1.2 (`CKSyncEngine`) ira dans un package `AppKitSync`, créé
+   avec elle.
 
 L'arborescence complète, le tableau des suffixes et le tableau des imports
 font foi dans [06-arborescence-et-nommage.md](../../external/plugins-et-workflow/06-arborescence-et-nommage.md).
@@ -78,6 +96,6 @@ font foi dans [06-arborescence-et-nommage.md](../../external/plugins-et-workflow
   est déjà déplacé dans `Resources/`.
 
 **On commence petit.** On ne crée d'abord que la cible app avec `App/`, `Features/`, `Shared/` et
-`Resources/`, plus `CopyKitCore`. `CopyKitData` et `CopyKitSystem` arrivent
+`Resources/`, plus `AppKitCore`. `AppKitData` et `AppKitSystem` arrivent
 avec la première fonctionnalité qui en a besoin. On ne crée jamais de dossier
 ou de package vide.

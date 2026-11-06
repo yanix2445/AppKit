@@ -1,9 +1,9 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: iCloud pour une app Developer ID
@@ -38,6 +38,6 @@ La faisabilité de la tranche 1.2 (synchronisation iCloud entre Mac) telle qu'el
 
 ## Follow-up
 
-- Signer CopyKit avec un profil de provisionnement Developer ID qui déclare iCloud (CloudKit) et le conteneur `iCloud.<identifiant de l'app>`. Le profil vaut 18 ans, mais son expiration empêcherait l'app de se lancer : le noter dans la checklist de release.
+- Signer AppKit avec un profil de provisionnement Developer ID qui déclare iCloud (CloudKit) et le conteneur `iCloud.<identifiant de l'app>`. Le profil vaut 18 ans, mais son expiration empêcherait l'app de se lancer : le noter dans la checklist de release.
 - Faire un premier essai signé (lecture et écriture dans la base privée, un champ chiffré) au début de la tranche 1.2.
 - Mettre à jour la question ouverte correspondante du brainstorm.

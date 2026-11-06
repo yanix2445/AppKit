@@ -1,16 +1,16 @@
-# CopyKit hors App Sandbox
+# AppKit hors App Sandbox
 
 - Date: 2026-11-02
 - Status: Accepted
 
 ## Context
 
-CopyKit est distribué hors App Store, signé Developer ID et notarisé. Le
+AppKit est distribué hors App Store, signé Developer ID et notarisé. Le
 projet Xcode a été créé avec l'App Sandbox et le Hardened Runtime activés
 (`ENABLE_APP_SANDBOX = YES`, `ENABLE_HARDENED_RUNTIME = YES`).
 
 Le sandbox n'est obligatoire que sur l'App Store. Il protège l'utilisateur en
-limitant ce que l'app peut faire, mais CopyKit doit, par nature, voir tout ce
+limitant ce que l'app peut faire, mais AppKit doit, par nature, voir tout ce
 qui est copié, coller dans les autres apps et, en V3, déplacer leurs fenêtres.
 
 Le spike [sandbox](../../../backlog/spikes/sandbox.md) a vérifié chaque
@@ -28,7 +28,7 @@ d'Apple :
 
 ## Decision
 
-CopyKit est construit **hors App Sandbox** (`ENABLE_APP_SANDBOX = NO`), avec
+AppKit est construit **hors App Sandbox** (`ENABLE_APP_SANDBOX = NO`), avec
 le Hardened Runtime, la signature Developer ID et la notarisation. Le
 chiffrement de l'historique (AES-256-GCM, clé dans le Trousseau « protection
 des données ») devient la protection principale des données sur le disque.
@@ -52,7 +52,7 @@ des données ») devient la protection principale des données sur le disque.
   clé ne doit jamais apparaître en clair sur le disque, et aucune copie ne
   doit être écrite en clair, même temporairement. Ces deux points sont
   vérifiés par des tests et en revue (`aidd-dev:05-review`).
-- ⚠️ CopyKit ne pourra pas passer sur l'App Store sans une refonte.
+- ⚠️ AppKit ne pourra pas passer sur l'App Store sans une refonte.
 - ⚠️ Chaque permission se demande au moment où elle sert, avec une phrase qui
   dit ce qui ne marche pas sans elle : Accessibilité pour le collage direct
   et la gestion des fenêtres, accès aux dossiers protégés (Bureau, Documents,

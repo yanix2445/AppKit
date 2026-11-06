@@ -10,7 +10,7 @@ order: 17
 # Story: Limiter la durée de conservation
 
 **As** un utilisateur de Mac
-**I want** choisir combien de temps CopyKit garde mes copies
+**I want** choisir combien de temps AppKit garde mes copies
 **So that** mes vieilles copies ne traînent pas indéfiniment
 
 ## Acceptance

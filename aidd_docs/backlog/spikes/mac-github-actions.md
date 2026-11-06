@@ -1,16 +1,16 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: Mac de GitHub Actions
 
 ## Question
 
-Les Mac fournis par GitHub Actions proposent-ils Xcode 27.1 et macOS 27, nécessaires pour construire et tester CopyKit avec le SDK de macOS 27 ?
+Les Mac fournis par GitHub Actions proposent-ils Xcode 27.1 et macOS 27, nécessaires pour construire et tester AppKit avec le SDK de macOS 27 ?
 
 ## Decision
 

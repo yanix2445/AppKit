@@ -67,7 +67,7 @@ A. On peut très bien combiner les deux.
 ensemble.
 
 ```text
-CopyKit/
+AppKit/
   Models/      ClipItem.swift, Settings.swift, …
   Views/       HistoryView.swift, SettingsView.swift, …
   ViewModels/  HistoryViewModel.swift, …
@@ -79,8 +79,8 @@ Pour modifier une seule fonctionnalité, on touche trois dossiers.
 tout ce qui la concerne.
 
 ```text
-CopyKit/
-  App/            CopyKitApp.swift (point d'entrée, assemblage)
+AppKit/
+  App/            AppKitApp.swift (point d'entrée, assemblage)
   Features/
     History/      HistoryView.swift, HistoryRow.swift, HistoryModel.swift
     Search/       SearchField.swift, SearchModel.swift
@@ -105,10 +105,10 @@ locaux** :
 
 ```mermaid
 flowchart TD
-  App["Cible app CopyKit<br/>SwiftUI · features · assemblage"]
-  Data["CopyKitData<br/>SwiftData"]
-  System["CopyKitSystem<br/>presse-papiers, raccourci, collage"]
-  Core["CopyKitCore<br/>types et règles purs"]
+  App["Cible app AppKit<br/>SwiftUI · features · assemblage"]
+  Data["AppKitData<br/>SwiftData"]
+  System["AppKitSystem<br/>presse-papiers, raccourci, collage"]
+  Core["AppKitCore<br/>types et règles purs"]
   App --> Data
   App --> System
   App --> Core
@@ -116,11 +116,11 @@ flowchart TD
   System --> Core
 ```
 
-- Les flèches vont **toujours vers le cœur** : `CopyKitCore` ne connaît ni
-  SwiftUI, ni SwiftData, ni AppKit, donc il se teste en quelques millisecondes.
+- Les flèches vont **toujours vers le cœur** : `AppKitCore` ne connaît ni
+  SwiftUI, ni SwiftData, ni le framework AppKit, donc il se teste en quelques millisecondes.
 - Chaque accès au système passe par un **protocole** avec deux
   implémentations : la vraie et une de test.
-- On **commence petit** (la cible app + `CopyKitCore`) et on découpe quand un
+- On **commence petit** (la cible app + `AppKitCore`) et on découpe quand un
   vrai besoin apparaît. Détails dans [03 §5](03-stack-et-architecture.md#5-principes-darchitecture).
 
 La version « complète » de la Clean Architecture (use cases, entités,
@@ -129,7 +129,7 @@ taille : on n'en garde que la règle de dépendance et les protocoles.
 
 ---
 
-## 6. Recommandation pour CopyKit
+## 6. Recommandation pour AppKit
 
 **MV à la manière d'Apple + organisation par feature + cœur isolé dans des
 packages.**
@@ -139,8 +139,8 @@ packages.**
 | Vues | petites structs SwiftUI ; `@State` pour l'état purement visuel ; une vue par section (consigne Apple) |
 | Données stockées | modèles SwiftData lus avec `@Query` **dans les vues** |
 | Logique d'un écran | un objet `@Observable` par feature (par exemple `HistoryModel`) **seulement s'il y a de la logique ou de l'état à porter** ; c'est le « ViewModel » de MVVM, mais pas par réflexe |
-| Services système | derrière des protocoles dans `CopyKitSystem`, injectés par l'environnement (`@Entry`) depuis l'`App` |
-| Règles métier | fonctions et types purs dans `CopyKitCore`, testés avec Swift Testing |
+| Services système | derrière des protocoles dans `AppKitSystem`, injectés par l'environnement (`@Entry`) depuis l'`App` |
+| Règles métier | fonctions et types purs dans `AppKitCore`, testés avec Swift Testing |
 | Rangement | un dossier par feature |
 | Navigation | par l'état (`NavigationSplitView`, sélection), sans Coordinator |
 

@@ -5,7 +5,7 @@ The version-control conventions this project follows: branches, commits, and the
 ## Setup
 
 - Main branch: `main`
-- Platform: `github` (`yanix2445/Copykit`, public)
+- Platform: `github` (`yanix2445/AppKit`, public)
 - Tickets: GitHub Issues, lues avec `gh issue view <n>` ; le contenu détaillé vit aussi dans `aidd_docs/backlog/` (voir `backlog.md`)
 - Hooks: aucun hook git versionné dans le dépôt. Dans le clone local (`.git/hooks/`, non versionné) : `pre-commit` refuse tout commit sur `main`, `pre-push` refuse tout push vers `main`, `post-merge` nettoie les branches mergées après un `git pull` sur `main`. Côté Claude Code, `protect-main.sh` bloque toute édition, tout commit et tout push sur `main`
 - Protection GitHub : le ruleset « Protect main » impose une PR pour toute modification de `main`, sans approbation exigée, et interdit le force push et la suppression de `main`, sans exception, même pour le propriétaire
