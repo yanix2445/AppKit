@@ -37,6 +37,6 @@ La faisabilité du cœur d'AppKit (capter chaque copie en arrière-plan) et le p
 
 ## Follow-up
 
-- AppKit lit `NSPasteboard.general.accessBehavior` au lancement et à l'ouverture de ses Réglages : `.alwaysAllow`, il capte sans rien demander ; `.default`, l'onboarding explique pourquoi AppKit lit le presse-papiers juste avant la première lecture, pour que l'alerte, si elle apparaît, arrive au moment où l'utilisateur s'y attend ; `.ask` ou `.alwaysDeny`, AppKit explique ce qui ne marche pas et ouvre le bon réglage. La page « Permissions » des Réglages montre cet état.
+- L'app lit `NSPasteboard.general.accessBehavior` au lancement et à l'ouverture de ses Réglages : `.alwaysAllow`, il capte sans rien demander ; `.default`, l'onboarding explique pourquoi AppKit lit le presse-papiers juste avant la première lecture, pour que l'alerte, si elle apparaît, arrive au moment où l'utilisateur s'y attend ; `.ask` ou `.alwaysDeny`, AppKit explique ce qui ne marche pas et ouvre le bon réglage. La page « Permissions » des Réglages montre cet état.
 - Observé en passant, pour la règle des doublons : Chrome ajoute `org.chromium.internal.source-rfh-token` et `org.chromium.source-url`, et WebKit ajoute `com.apple.WebKit.custom-pasteboard-data`. Ce sont des candidats à la liste des formats qui varient à chaque copie. Une copie du Finder porte `public.file-url` et `com.apple.finder.noderef`. Aucune des trois copies ne portait le marqueur `org.nspasteboard.source`.
 - Mettre à jour la question ouverte correspondante du brainstorm.

@@ -129,7 +129,7 @@ AppKit/                                   racine du dépôt git
 │   │   │   ├── ClipRecord.swift
 │   │   │   ├── AppKitSchemaV1.swift
 │   │   │   ├── AppKitMigrationPlan.swift
-│   │   │   └── ModelContainer+AppKit.swift   création du conteneur (réel ou en mémoire)
+│   │   │   └── ModelContainer+Factory.swift  création du conteneur (réel ou en mémoire)
 │   │   └── Tests/AppKitDataTests/
 │   │       └── ClipRecordTests.swift
 │   │

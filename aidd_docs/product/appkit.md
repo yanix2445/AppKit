@@ -56,7 +56,7 @@ Le premier pari à valider est la V1.0 : un historique qui remplace Paste.
 | Go : AppKit est lancé, après les spikes de l'étape B | decision | décision de Yanis du 2 novembre 2026 |
 | Hors App Sandbox, avec le chiffrement de l'historique comme protection principale | decision | [ADR hors App Sandbox](../memory/internal/decisions/hors-app-sandbox.md) |
 | Sparkle 2 pour les mises à jour, avec la signature Developer ID et la notarisation comme chaîne de confiance principale | decision | [spike outil de mise à jour](../backlog/spikes/outil-de-mise-a-jour.md) |
-| Le nom « AppKit » est gardé malgré une app iPad du même nom | decision | [spike nom](../backlog/spikes/nom-copykit.md) |
+| Le nom définitif est « AppKit », validé par Yanis ; l'app iPad homonyme du [spike](../backlog/spikes/nom-copykit.md) concernait l'ancien nom CopyKit | decision | Yanis, 2026-11-06 |
 | 100 % Apple, sauf l'outil de mise à jour | decision | [brainstorm](../tasks/2026_10/2026_10_31_appkit/brainstorm.md) |
 | Gratuit, open source (MIT), financé par des dons | decision | [brainstorm](../tasks/2026_10/2026_10_31_appkit/brainstorm.md) |
 | Rien n'est envoyé sans accord, et l'app est conforme par conception (RGPD, CRA volontaire, ANSSI) | decision | [brainstorm](../tasks/2026_10/2026_10_31_appkit/brainstorm.md) |
@@ -95,4 +95,4 @@ Résultat voulu : ne jamais perdre une copie et la retrouver en un instant, sans
 
 ## Open Decisions
 
-- Avant la première release publique : la marque « AppKit » dans les bases de l'EUIPO, de l'INPI et de l'USPTO, le statut d'EdDSA dans le guide 2026 de l'ANSSI, et une relecture juridique du Cyber Resilience Act.
+- Avant la première release publique : le statut d'EdDSA dans le guide 2026 de l'ANSSI, et une relecture juridique du Cyber Resilience Act.

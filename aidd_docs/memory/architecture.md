@@ -31,6 +31,6 @@ flowchart LR
 ## Gotchas
 
 - Les packages locaux et les dossiers `Features/`, `Shared/`, `Intents/` n'existent pas encore : ils arrivent avec leur premier fichier, jamais vides.
-- L'app s'appelle AppKit, comme le framework d'Apple. Son module Swift s'appelle donc `AppKitMain` (`PRODUCT_MODULE_NAME`), et `import AppKit` désigne toujours le framework.
+- L'app s'appelle AppKit, comme le framework d'Apple. Son module Swift s'appelle donc `AppKitMain` (`PRODUCT_MODULE_NAME`), et `import AppKit` désigne toujours le framework. Aucun type ni package du projet ne s'appelle `AppKit` tout court : il masquerait le framework.
 - `project.pbxproj` se modifie par les outils MCP Xcode ; seule exception, référencer un dossier ou un fichier racine.
 - Avec Xcode ouvert, ne pas basculer git sur une ref qui n'a pas le projet : Xcode signale le workspace disparu.
