@@ -17,4 +17,4 @@ order: 2
 
 - Un clic ou la touche Entrée sur une copie met exactement ce texte dans le presse-papiers, ferme le bandeau et affiche « Copié · faites ⌘V » (Swift Testing et XCUITest)
 - Les flèches gauche et droite parcourent les copies du bandeau, Entrée choisit, Échap ferme (XCUITest)
-- Une copie remise par CopyKit remonte en tête de l'historique sans créer de seconde entrée (Swift Testing)
+- Une copie remise par AppKit remonte en tête de l'historique sans créer de seconde entrée (Swift Testing)

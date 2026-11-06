@@ -1,4 +1,4 @@
-# Workflow : construire CopyKit avec Apple + AIDD
+# Workflow : construire AppKit avec Apple + AIDD
 
 ← [Retour à l'index](README.md) · Détails : [AIDD](01-aidd-framework.md) · [Stack et architecture](03-stack-et-architecture.md) · [Plugin Apple](04-plugin-apple-xcode.md)
 

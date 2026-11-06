@@ -10,7 +10,7 @@ The fast gate.
 
 | Order | Command | Checks |
 | ----- | ------- | ------ |
-| 1 | `xcodebuild -project CopyKit.xcodeproj -scheme CopyKit -destination 'platform=macOS' test -only-testing:CopyKitTests` | build Swift 6 sans erreur, tests unitaires |
+| 1 | `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test -only-testing:AppKitTests` | build Swift 6 sans erreur, tests unitaires |
 
 ## Before push
 
@@ -18,7 +18,7 @@ The heavier gate.
 
 | Order | Command | Checks |
 | ----- | ------- | ------ |
-| 1 | `xcodebuild -project CopyKit.xcodeproj -scheme CopyKit -destination 'platform=macOS' test` | build, tests unitaires et tests d'interface XCUITest |
+| 1 | `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test` | build, tests unitaires et tests d'interface XCUITest |
 
 ## Behavior
 

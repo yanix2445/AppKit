@@ -1,6 +1,6 @@
 //
 //  Item.swift
-//  CopyKit
+//  AppKit
 //
 //  Created by Yanis HARRAT on 31/10/2026.
 //

@@ -7,7 +7,7 @@ order: 1
 
 # Story: Voir les tests tourner sur chaque PR
 
-**As** Yanis, mainteneur de CopyKit
+**As** Yanis, mainteneur d'AppKit
 **I want** que le build et les tests tournent sur GitHub pour chaque PR
 **So that** une PR qui casse quelque chose ne puisse jamais arriver sur `main`
 

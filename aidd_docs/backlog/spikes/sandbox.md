@@ -1,16 +1,16 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: App Sandbox
 
 ## Question
 
-Quelles fonctions de la V1 restent possibles si CopyKit active l'App Sandbox : lecture du presse-papiers, collage direct dans l'app active, raccourci global, lancement à l'ouverture de session, fichiers copiés depuis le Finder, Trousseau, et protection des fichiers de l'historique contre les autres apps ?
+Quelles fonctions de la V1 restent possibles si AppKit active l'App Sandbox : lecture du presse-papiers, collage direct dans l'app active, raccourci global, lancement à l'ouverture de session, fichiers copiés depuis le Finder, Trousseau, et protection des fichiers de l'historique contre les autres apps ?
 
 ## Decision
 
@@ -25,7 +25,7 @@ L'ADR sur le sandbox, et donc ce qui justifie le chiffrement de l'historique.
 
 | Attempt | Evidence | Result |
 | ------- | -------- | ------ |
-| Essai réel, macOS 27.2 : une app AppKit jetable **sandboxée** (signée ad hoc avec `com.apple.security.app-sandbox`), qui lit le presse-papiers, tente de lire les fichiers copiés et d'en créer un bookmark sécurisé | Journal de l'essai, 2 novembre 2026, et retour de Yanis | Le presse-papiers se lit sans alerte. Un PDF copié depuis le Finder déclenche une demande d'autorisation de macOS (accès au dossier où il se trouve), puis devient lisible, et un bookmark sécurisé permet de le relire plus tard. Une **photo copiée sur l'iPhone** (presse-papiers universel) est **illisible** en sandbox, et aucun bookmark n'est possible |
+| Essai réel, macOS 27.2 : une app jetable, écrite avec le framework AppKit d'Apple **sandboxée** (signée ad hoc avec `com.apple.security.app-sandbox`), qui lit le presse-papiers, tente de lire les fichiers copiés et d'en créer un bookmark sécurisé | Journal de l'essai, 2 novembre 2026, et retour de Yanis | Le presse-papiers se lit sans alerte. Un PDF copié depuis le Finder déclenche une demande d'autorisation de macOS (accès au dossier où il se trouve), puis devient lisible, et un bookmark sécurisé permet de le relire plus tard. Une **photo copiée sur l'iPhone** (presse-papiers universel) est **illisible** en sandbox, et aucun bookmark n'est possible |
 | Même photo lue hors sandbox | Essai du spike sur le presse-papiers universel | Hors sandbox, le fichier temporaire de la photo est lisible (3,4 Mo) |
 | Collage direct | [Forums Apple, gestionnaire refusé (2.4.5)](https://developer.apple.com/forums/thread/820594) | Envoyer ⌘V par `CGEvent.post` passe par l'autorisation « poster des événements » (`CGRequestPostEventAccess`), compatible avec le sandbox d'après un ingénieur d'Apple ; c'est la revue de l'App Store qui le refuse, sans objet ici |
 | Fonctions d'Accessibilité, nécessaires pour la gestion des fenêtres de la V3 | [Forums Apple, fil 836644](https://developer.apple.com/forums/thread/836644), [Blake Crosley](https://blakecrosley.com/fr/blog/window-manager-mac-app-store-sandbox) | Un ingénieur d'Apple rappelle que les API d'Accessibilité ne sont pas prises en charge en sandbox : déplacer la fenêtre d'une autre app échoue même avec l'autorisation. Aucun entitlement ne le débloque |
@@ -39,6 +39,6 @@ L'ADR sur le sandbox, et donc ce qui justifie le chiffrement de l'historique.
 
 ## Follow-up
 
-- Écrire l'ADR : CopyKit hors App Sandbox, avec le Hardened Runtime, la signature Developer ID et la notarisation, et le chiffrement de l'historique comme protection principale.
+- Écrire l'ADR : AppKit hors App Sandbox, avec le Hardened Runtime, la signature Developer ID et la notarisation, et le chiffrement de l'historique comme protection principale.
 - La demande d'autorisation d'accès aux dossiers protégés (Bureau, Documents, Téléchargements) concerne aussi une app hors sandbox quand elle lit un fichier : l'onboarding doit l'expliquer avant la première lecture d'un fichier copié (aperçu, envoi aux autres Mac).
 - Mettre à jour la question ouverte du brainstorm sur les fichiers d'une app hors sandbox.

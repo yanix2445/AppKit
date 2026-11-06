@@ -16,7 +16,7 @@ référence pour tout ce qu'il couvre.
 | --- | --- | --- | --- |
 | 1 | **`xcode-integration`** (Apple, dans Xcode 27.1) | plugin officiel : 15 skills + serveur MCP Xcode | ✅ à installer en premier |
 | 2 | Paul Hudson (Hacking with Swift) : SwiftData Pro, Swift Concurrency Pro, Swift Testing Pro | 3 plugins communautaires | ✅ à ajouter : comblent les trous d'Apple (SwiftData, concurrence) et approfondissent Swift Testing |
-| — | Paul Hudson : SwiftUI Pro | plugin communautaire | ❌ pas pour CopyKit : orienté iOS, doublon des skills SwiftUI d'Apple |
+| — | Paul Hudson : SwiftUI Pro | plugin communautaire | ❌ pas pour AppKit : orienté iOS, doublon des skills SwiftUI d'Apple |
 | 3 | Annuaire Anthropic : « SwiftUI guidance for macOS », `swift-lsp`, `liquid-glass` | plugins communautaires | ⚪ non nécessaires a priori |
 
 ---
@@ -69,7 +69,7 @@ Relevé le 2026-10-31 sur la machine (Xcode 27.1, build 27A9275) et sur le web.
 
 ### Les 15 skills Apple
 
-| Skill | Ce qu'il apporte | Utile pour CopyKit |
+| Skill | Ce qu'il apporte | Utile pour AppKit |
 | --- | --- | --- |
 | `swiftui-specialist` | Bonnes pratiques et performance SwiftUI : structure des vues, flux de données, `@Observable`, Environment, identité dans `ForEach`/`List`, animations, localisation, APIs « soft-deprecated » | ✅ indispensable |
 | `swiftui-whats-new-27` | Nouveautés SwiftUI 27 : `@State` devenu une macro (et la bonne correction des erreurs), `reorderable()`, swipe actions hors `List`, toolbar, `AsyncImage`, alertes depuis un binding optionnel | ✅ indispensable (SDK 27) |
@@ -81,7 +81,7 @@ Relevé le 2026-10-31 sur la machine (Xcode 27.1, build 27A9275) et sur le web.
 | `accessibility-dynamic-type-specialist` | Audit de la taille de texte dynamique | ⚪ surtout iOS ; utile si l'app suit la taille de texte |
 | `translation-coordinator` + `translation` | Traduire un projet via les String Catalogs (`.xcstrings`) | ✅ si l'app est multilingue |
 | `audit-xcode-security-settings` | Activer progressivement les réglages de sécurité du build (warnings, analyseur statique, Enhanced Security) | ✅ en fin de milestone |
-| `building-document-based-swiftui-applications` | Apps à documents (`DocumentGroup`, nouveau protocole `Document`) | ❌ sauf si CopyKit gère des fichiers documents |
+| `building-document-based-swiftui-applications` | Apps à documents (`DocumentGroup`, nouveau protocole `Document`) | ❌ sauf si AppKit gère des fichiers documents |
 | `device-interaction` | Vérifier l'app sur appareil ou simulateur (captures, hiérarchie d'UI, touches) | ⚪ pensé pour iOS ; à tester sur Mac |
 | `app-resizability` | Adapter une app aux fenêtres redimensionnables (iPhone Duo, Stage Manager) | ❌ surtout iOS / iPadOS |
 | `adopt-c-bounds-safety` | Extension C `-fbounds-safety` | ❌ pas de C |
@@ -134,7 +134,7 @@ Résultat vérifié :
 À savoir :
 
 - Le pont se connecte à **Xcode ouvert**. Pour l'utiliser sans fenêtre :
-  `sudo xcrun mcp-server enable` puis `xcrun mcp-server open CopyKit.xcodeproj`
+  `sudo xcrun mcp-server enable` puis `xcrun mcp-server open AppKit.xcodeproj`
   (le `sudo` te revient).
 - **Après chaque mise à jour d'Xcode**, régénérer le plugin, le recopier dans
   le marketplace local, puis `claude plugin marketplace update apple-xcode` et

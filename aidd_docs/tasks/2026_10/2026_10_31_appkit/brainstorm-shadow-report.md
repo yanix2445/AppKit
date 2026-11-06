@@ -1,12 +1,12 @@
 ---
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 generated_at: 2026-11-02
 status: clean
 ---
 
 # Shadow Areas Report
 
-Source: `aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md`
+Source: `aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md`
 Generated: `2026-11-02`
 
 Total gaps: 0 | Blocker: 0 | Major: 0 | Minor: 0

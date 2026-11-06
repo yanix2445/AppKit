@@ -81,13 +81,13 @@ aidd_docs/
 ### La mémoire projet, par capacités
 
 `02-project-memory` détecte des **capacités** et crée un fichier de mémoire
-pour chacune. Pour CopyKit, on attend :
+pour chacune. Pour AppKit, on attend :
 
 | Capacité | Pourquoi | Détection automatique ? |
 | --- | --- | --- |
 | `core` | tout projet | ✅ toujours |
 | `ecosystem` | outils externes (Xcode, plugins) | ✅ toujours |
-| `desktop` | app de bureau native | ⚠️ le signal cherche AppKit, Qt, Electron… ; SwiftUI sur macOS est à **confirmer à la main** |
+| `desktop` | app de bureau native | ⚠️ le signal cherche framework AppKit, Qt, Electron… ; SwiftUI sur macOS est à **confirmer à la main** |
 | `database` | SwiftData | ⚠️ le signal cherche un ORM ou des migrations ; à **confirmer à la main** |
 | `ui` | interface | ⚠️ le signal vise le web ; à **confirmer à la main** |
 | `backlog` | backlog local | ✅ dès que `aidd_docs/backlog/` existe |
@@ -166,7 +166,7 @@ hypothèses sont séparées ; **rien n'est écrit sans ton accord**.
 
 | Skill | Étape | Rôle | Lit |
 | --- | --- | --- | --- |
-| `00-repo-init` | — | `git init`, branche par défaut, `CONTRIBUTING.md`, remote | — *(déjà fait pour CopyKit)* |
+| `00-repo-init` | — | `git init`, branche par défaut, `CONTRIBUTING.md`, remote | — *(déjà fait pour AppKit)* |
 | `01-commit` | E, G | Commits conventionnels, un sujet par commit ; `auto`, `interactive`, `push` | **`aidd_docs/memory/vcs.md`** |
 | `02-pull-request` | **G** | PR **draft** ; base déduite du préfixe de branche ; ne commite ni ne pousse | **`aidd_docs/memory/vcs.md`** |
 | `03-release-tag` | **G** | Version semver, tag annoté, notes ; te fait tout valider | — |
@@ -188,10 +188,10 @@ hypothèses sont séparées ; **rien n'est écrit sans ton accord**.
 Installés puis **désinstallés** le 2026-10-31 : ils n'apportent rien à une app
 macOS native. Ce qui suit reste pour mémoire.
 
-| Skill | Étape | Rôle | Pour CopyKit |
+| Skill | Étape | Rôle | Pour AppKit |
 | --- | --- | --- | --- |
 | `aidd-ui:01-hello` | — | Test de chargement : confirme seulement que le plugin répond. Aucune capacité UI ou UX réelle pour l'instant | ❌ inutile tant que le plugin est en alpha |
-| `aidd-qa:01-acceptance-qa` | F | Recette d'acceptation : verrouille au plus un parcours nominal et les cas limites cités par les critères d'acceptation, les rejoue et filme chaque scénario comme preuve pour la revue. Les scénarios viennent **uniquement des critères**, jamais du code | ❌ ne pilote qu'un **navigateur** (via `playwright-cli`, un outil tiers) ; une app macOS native n'est pas testable ainsi. Pour CopyKit : XCUITest et la recette manuelle |
+| `aidd-qa:01-acceptance-qa` | F | Recette d'acceptation : verrouille au plus un parcours nominal et les cas limites cités par les critères d'acceptation, les rejoue et filme chaque scénario comme preuve pour la revue. Les scénarios viennent **uniquement des critères**, jamais du code | ❌ ne pilote qu'un **navigateur** (via `playwright-cli`, un outil tiers) ; une app macOS native n'est pas testable ainsi. Pour AppKit : XCUITest et la recette manuelle |
 | `aidd-telemetry:00-init` | T | Active ou coupe la mesure des tokens pour un dépôt, avec ton consentement explicite ; nom ou anonymat ; effacement des données | ⚪ optionnel ; exige la CLI npm `@ai-driven-dev/cli` (non installée) |
 | `aidd-telemetry:01-usage` | T | Répond à « combien de tokens a coûté telle période, tâche ou ticket », à partir de la mesure locale ; lecture seule | ⚪ seulement si la mesure est activée |
 
@@ -199,7 +199,7 @@ macOS native. Ce qui suit reste pour mémoire.
 démarrage de session, et `prompt-gate.cjs` **à chacun de tes prompts**. Ce
 dernier peut bloquer un prompt pour te demander de déclarer une tâche. D'après
 son code, il est **inerte** hors d'un dépôt où la mesure a été activée
-(`aidd telemetry on`), ce qui n'est pas le cas de CopyKit. Rien n'est envoyé
+(`aidd telemetry on`), ce qui n'est pas le cas d'AppKit. Rien n'est envoyé
 nulle part : les données restent dans `~/.config/aidd/telemetry`.
 `AIDD_TELEMETRY=0` désactive tout.
 
@@ -226,7 +226,7 @@ façon incomplète **sans aucun message d'erreur** (c'est arrivé deux fois le
 Résultat du 2026-10-31 : les 6 plugins installés sont à la dernière release
 (v5.13.0, égale à la branche `main`) et identiques au dépôt officiel.
 
-## Ce qui ne sert pas pour CopyKit
+## Ce qui ne sert pas pour AppKit
 
 | Skill | Raison |
 | --- | --- |

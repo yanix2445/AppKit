@@ -6,7 +6,7 @@
 
 ## Context
 
-CopyKit est une application macOS native, conçue de zéro, avec uniquement des
+AppKit est une application macOS native, conçue de zéro, avec uniquement des
 outils et des frameworks Apple : Xcode 27.1, Swift 6.4, SwiftUI, SwiftData,
 Swift Testing, XCUITest, et aucune dépendance tierce.
 
@@ -31,16 +31,16 @@ On veut :
    objet `@Observable` suffixé `…ViewModel` n'est créé que pour un écran qui
    porte de l'état ou de la logique propre. Ce n'est pas systématique.
 2. **Organisation : par feature.** Un dossier par fonctionnalité dans
-   `CopyKit/Features/`. Ce qui est partagé va dans `CopyKit/Shared/`.
+   `AppKit/Features/`. Ce qui est partagé va dans `AppKit/Shared/`.
 3. **Modularisation : Clean Architecture légère**, avec trois packages Swift
    locaux dans `Packages/`, dont les dépendances vont toujours vers le cœur :
-   - `CopyKitCore` : types et règles métier purs, sans SwiftUI, SwiftData ni
-     AppKit ;
-   - `CopyKitData` : stockage chiffré (SwiftData, CryptoKit et l'index de
-     recherche), dépend de `CopyKitCore` ;
-   - `CopyKitSystem` : accès à macOS derrière des protocoles, dépend de
-     `CopyKitCore`. Les implémentations de test sont dans la cible
-     `CopyKitSystemTesting`.
+   - `AppKitCore` : types et règles métier purs, sans SwiftUI, SwiftData ni
+     framework AppKit ;
+   - `AppKitData` : stockage chiffré (SwiftData, CryptoKit et l'index de
+     recherche), dépend de `AppKitCore` ;
+   - `AppKitSystem` : accès à macOS derrière des protocoles, dépend de
+     `AppKitCore`. Les implémentations de test sont dans la cible
+     `AppKitSystemTesting`.
 4. **La cible app est la racine de composition.** Elle crée les services réels
    dans `App/AppDependencies.swift` et les distribue par l'environnement.
 5. **Nommage.** En anglais, un type par fichier, et le fichier porte le nom du
@@ -64,7 +64,7 @@ On veut :
 9. **Dépendance tierce et synchronisation.** Sparkle vit dans la seule cible
    app, derrière un `UpdateService`, pour pouvoir y désactiver
    l'authentification des pointeurs sans toucher au reste. La synchronisation
-   de la tranche 1.2 (`CKSyncEngine`) ira dans un package `CopyKitSync`, créé
+   de la tranche 1.2 (`CKSyncEngine`) ira dans un package `AppKitSync`, créé
    avec elle.
 
 L'arborescence complète, le tableau des suffixes et le tableau des imports
@@ -96,6 +96,6 @@ font foi dans [06-arborescence-et-nommage.md](../../external/plugins-et-workflow
   est déjà déplacé dans `Resources/`.
 
 **On commence petit.** On ne crée d'abord que la cible app avec `App/`, `Features/`, `Shared/` et
-`Resources/`, plus `CopyKitCore`. `CopyKitData` et `CopyKitSystem` arrivent
+`Resources/`, plus `AppKitCore`. `AppKitData` et `AppKitSystem` arrivent
 avec la première fonctionnalité qui en a besoin. On ne crée jamais de dossier
 ou de package vide.

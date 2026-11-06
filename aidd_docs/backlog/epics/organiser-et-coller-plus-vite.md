@@ -1,8 +1,8 @@
 ---
 type: epic
 status: proposed
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
-goal: aidd_docs/product/copykit.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
+goal: aidd_docs/product/appkit.md
 depends_on:
   - aidd_docs/backlog/epics/historique-complet-et-prive.md
 order: 3
@@ -10,7 +10,7 @@ order: 3
 
 # Epic: Organiser et coller plus vite
 
-Avec CopyKit 1.1, l'utilisateur range ses copies utiles dans des collections et
+Avec AppKit 1.1, l'utilisateur range ses copies utiles dans des collections et
 colle ce dont il a besoin plus vite, au clavier comme à la souris.
 
 ## Context and Value
@@ -18,7 +18,7 @@ colle ce dont il a besoin plus vite, au clavier comme à la souris.
 Une fois l'historique fiable, les utilisateurs de Paste attendent de pouvoir
 garder à portée de main ce qu'ils recollent souvent (adresses, réponses types,
 bouts de code) et d'aller plus vite que copier-coller un élément à la fois.
-C'est ce qui fait de CopyKit un vrai remplaçant de Paste au quotidien, et pas
+C'est ce qui fait d'AppKit un vrai remplaçant de Paste au quotidien, et pas
 seulement un historique.
 
 ## Boundaries
@@ -32,7 +32,7 @@ seulement un historique.
 
 ## Success Evidence
 
-Yanis retrouve dans les pinboards de CopyKit ce qu'il range aujourd'hui dans
+Yanis retrouve dans les pinboards d'AppKit ce qu'il range aujourd'hui dans
 ceux de Paste, et n'utilise plus les pinboards de Paste. Les tests
 automatiques couvrent la création, la modification et la suppression des
 pinboards et le collage multiple.

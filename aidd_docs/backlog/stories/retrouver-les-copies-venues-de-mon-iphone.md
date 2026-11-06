@@ -17,6 +17,6 @@ order: 24
 
 - Une copie marquée `com.apple.is-remote-clipboard` est gardée, avec un badge qui indique qu'elle vient d'un autre appareil (Swift Testing et XCUITest)
 - Une photo arrivée comme fichier temporaire du système est gardée avec son contenu, pas par référence (Swift Testing)
-- La première lecture, qui attend le transfert depuis l'autre appareil, ne fige jamais le bandeau ni CopyKit (Swift Testing)
+- La première lecture, qui attend le transfert depuis l'autre appareil, ne fige jamais le bandeau ni AppKit (Swift Testing)
 - Les règles de confidentialité s'appliquent aussi à ces copies (Swift Testing)
 - Un texte et une photo copiés sur l'iPhone de Yanis apparaissent dans le bandeau du Mac (essai manuel)

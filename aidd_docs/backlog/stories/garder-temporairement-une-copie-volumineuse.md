@@ -19,4 +19,4 @@ order: 19
 - Elle porte le badge « Volumineux · temporaire » (XCUITest)
 - Elle est supprimée après 24 h (réglable) ou dès qu'une autre copie volumineuse arrive (Swift Testing)
 - Épinglée, elle devient permanente et sort de la limite comme tout épinglé (Swift Testing)
-- Le seuil porte sur ce que CopyKit stocke : une photo arrivée de l'iPhone compte pour son contenu, un fichier du Finder gardé par référence n'est jamais volumineux (Swift Testing)
+- Le seuil porte sur ce qu'AppKit stocke : une photo arrivée de l'iPhone compte pour son contenu, un fichier du Finder gardé par référence n'est jamais volumineux (Swift Testing)

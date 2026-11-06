@@ -1,20 +1,20 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: outil de mise à jour automatique
 
 ## Question
 
-Quel outil de mise à jour automatique CopyKit doit-il utiliser hors App Store (Sparkle ou une alternative plus moderne), et sa signature des mises à jour est-elle compatible avec les recommandations de l'ANSSI ?
+Quel outil de mise à jour automatique AppKit doit-il utiliser hors App Store (Sparkle ou une alternative plus moderne), et sa signature des mises à jour est-elle compatible avec les recommandations de l'ANSSI ?
 
 ## Decision
 
-La seule dépendance tierce autorisée de CopyKit, et la façon de signer les mises à jour.
+La seule dépendance tierce autorisée d'AppKit, et la façon de signer les mises à jour.
 
 ## Bounds
 
@@ -32,7 +32,7 @@ La seule dépendance tierce autorisée de CopyKit, et la façon de signer les mi
 
 ## Outcome
 
-- Result: garder **Sparkle 2** (2.10.x), seule option mûre et maintenue, compatible macOS 27. Ed25519 n'est pas dans la liste des signatures recommandées par l'ANSSI en 2021. La chaîne de confiance principale de CopyKit reste donc la signature de code Developer ID et la notarisation d'Apple, que Sparkle et Gatekeeper vérifient à chaque mise à jour ; la signature Ed25519 de Sparkle s'y ajoute comme seconde couche, sans en être le fondement. Un outil de mise à jour écrit sur mesure avec les API d'Apple éviterait la dépendance, mais l'ANSSI déconseille de réinventer ce genre de mécanisme.
+- Result: garder **Sparkle 2** (2.10.x), seule option mûre et maintenue, compatible macOS 27. Ed25519 n'est pas dans la liste des signatures recommandées par l'ANSSI en 2021. La chaîne de confiance principale d'AppKit reste donc la signature de code Developer ID et la notarisation d'Apple, que Sparkle et Gatekeeper vérifient à chaque mise à jour ; la signature Ed25519 de Sparkle s'y ajoute comme seconde couche, sans en être le fondement. Un outil de mise à jour écrit sur mesure avec les API d'Apple éviterait la dépendance, mais l'ANSSI déconseille de réinventer ce genre de mécanisme.
 - Confidence: bonne pour Sparkle (dépôt officiel) et pour le guide de 2021 (texte lu) ; la version 3.00 du guide des mécanismes (mars 2026) n'a pas été vérifiée sur ce point.
 - Remaining uncertainty: le statut d'EdDSA dans les guides de 2026 de l'ANSSI ; l'algorithme exact de la signature de code d'Apple.
 

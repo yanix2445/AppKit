@@ -45,8 +45,8 @@ bandeau et libéré à sa fermeture.
   schéma, stockage externe des gros blocs.
 - ⚠️ La date, la taille, la catégorie et l'état « épinglé » restent lisibles.
   Ils ne révèlent rien du contenu, mais ce choix est assumé ici.
-- ⚠️ Le chiffrement, le déchiffrement et l'index vivent dans `CopyKitData`,
-  hors du fil principal ; le Trousseau dans `CopyKitSystem`.
+- ⚠️ Le chiffrement, le déchiffrement et l'index vivent dans `AppKitData`,
+  hors du fil principal ; le Trousseau dans `AppKitSystem`.
 - ⚠️ Les vues n'utilisent pas `@Query` pour l'historique : `database.md` le dit.
 - La mémoire remonte quand le bandeau est ouvert (environ 40 Mo pour 100 000
   éléments), puis redescend à sa fermeture, ce qui tient la limite de 80 Mo au

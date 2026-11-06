@@ -10,7 +10,7 @@ order: 21
 # Story: Exclure des catégories
 
 **As** un utilisateur de Mac
-**I want** choisir des catégories de copies que CopyKit ne garde jamais
+**I want** choisir des catégories de copies qu'AppKit ne garde jamais
 **So that** l'historique ne contienne que ce qui m'est utile
 
 ## Acceptance

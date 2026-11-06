@@ -19,4 +19,4 @@ order: 10
 - Recoller l'élément colle une vraie copie des fichiers, dans le Finder comme dans une app (XCUITest)
 - Un fichier supprimé ou déplacé entre-temps s'affiche « introuvable » (Swift Testing)
 - Un fichier gardé par référence n'est jamais une copie volumineuse, quelle que soit sa taille (Swift Testing)
-- Avant la première lecture d'un fichier rangé dans un dossier protégé (Bureau, Documents, Téléchargements), CopyKit explique pourquoi macOS va demander l'accès (essai manuel)
+- Avant la première lecture d'un fichier rangé dans un dossier protégé (Bureau, Documents, Téléchargements), AppKit explique pourquoi macOS va demander l'accès (essai manuel)

@@ -33,7 +33,7 @@ Total gaps: 1 | Blocker: 0 | Major: 0 | Minor: 1
 #### Closed
 
 **[major]** How does the user pick "un autre raccourci" in 1.0, when configurable shortcuts only arrive in 1.1?
-> ouvrir-le-bandeau-au-raccourci-global.md : CopyKit le dit clairement et propose un autre raccourci
+> ouvrir-le-bandeau-au-raccourci-global.md : AppKit le dit clairement et propose un autre raccourci
 
 **[major]** Does a copy count as a "Lien" only when the whole copy is one URL, or also when a longer text contains a URL?
 > retrouver-mes-textes-enrichis-liens-et-couleurs.md : Un lien, même copié comme simple texte, s'affiche dans la catégorie Lien
@@ -48,7 +48,7 @@ Total gaps: 1 | Blocker: 0 | Major: 0 | Minor: 1
 > savoir-si-une-copie-est-gardee-ou-ecartee.md : Une copie écartée joue un son, une copie gardée en joue un autre
 
 **[minor]** Which functions get a short contextual explanation on first use?
-> decouvrir-copykit-avec-l-onboarding.md : Des explications courtes apparaissent lors des premières utilisations d'une fonction
+> decouvrir-appkit-avec-l-onboarding.md : Des explications courtes apparaissent lors des premières utilisations d'une fonction
 
 ### missing edge case
 
@@ -57,7 +57,7 @@ Total gaps: 1 | Blocker: 0 | Major: 0 | Minor: 1
 **[major]** Is a deleted copy erased from the disk immediately, or only once ⌘Z can no longer bring it back?
 > supprimer-une-copie.md : ⌘Z annule la dernière suppression tant que le bandeau reste ouvert
 
-**[minor]** Does a pause "jusqu'à réactivation" survive a restart of CopyKit or of the Mac?
+**[minor]** Does a pause "jusqu'à réactivation" survive a restart of AppKit or of the Mac?
 > mettre-la-capture-en-pause.md : 5 minutes, 1 heure, jusqu'à réactivation, ou ignorer la prochaine copie
 
 **[minor]** What does ⇧Entrée do when the Accessibility permission for direct paste is missing?
@@ -85,7 +85,7 @@ Total gaps: 1 | Blocker: 0 | Major: 0 | Minor: 1
 
 #### Closed
 
-**[major]** Which check proves that CopyKit runs on macOS 26, when the GitHub image only provides macOS 27?
+**[major]** Which check proves that AppKit runs on macOS 26, when the GitHub image only provides macOS 27?
 > voir-les-tests-tourner-sur-chaque-pr.md : Chaque PR lance le build, les tests unitaires et les tests d'interface sur l'image GitHub `xcode-27`
 
 ### missing dependency

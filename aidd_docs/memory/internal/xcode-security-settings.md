@@ -1,16 +1,16 @@
 # Xcode Security Settings
 
-Security build settings decisions for CopyKit. Audited on 2026-11-02 with Apple's `audit-xcode-security-settings` skill (Xcode 27.2, macOS 27.2). The project is 100 % Swift, with one app target and two test bundles.
+Security build settings decisions for AppKit. Audited on 2026-11-02 with Apple's `audit-xcode-security-settings` skill (Xcode 27.2, macOS 27.2). The project is 100 % Swift, with one app target and two test bundles.
 
 ## Enabled settings
 
-- `ENABLE_ENHANCED_SECURITY`: set at the project level (Debug and Release) and on the CopyKit app target. It cascades pointer authentication, security compiler warnings, stack zero-initialization, typed allocators and C++ stdlib hardening. The app now builds as `arm64e`.
-- `com.apple.security.hardened-process`: on the CopyKit app, in `CopyKit/CopyKit.entitlements`, with `enhanced-security-version-string` set to `2`.
-- `com.apple.security.hardened-process.hardened-heap`: on the CopyKit app (Memory Safety).
-- `com.apple.security.hardened-process.dyld-ro`: on the CopyKit app (Runtime Protections).
-- `com.apple.security.hardened-process.platform-restrictions-string` to `2`: on the CopyKit app (Runtime Protections).
-- `com.apple.security.hardened-process.checked-allocations` with `soft-mode`: hardware memory tagging on the CopyKit app, in soft mode (simulated crash reports, no termination). It only takes effect on Mac computers with an M5 chip or later. Disable soft mode once the simulated crash reports are reviewed and fixed.
-- `ENABLE_HARDENED_RUNTIME`: kept on the CopyKit app, required for Developer ID notarization.
+- `ENABLE_ENHANCED_SECURITY`: set at the project level (Debug and Release) and on the AppKit app target. It cascades pointer authentication, security compiler warnings, stack zero-initialization, typed allocators and C++ stdlib hardening. The app now builds as `arm64e`.
+- `com.apple.security.hardened-process`: on the AppKit app, in `AppKit/AppKit.entitlements`, with `enhanced-security-version-string` set to `2`.
+- `com.apple.security.hardened-process.hardened-heap`: on the AppKit app (Memory Safety).
+- `com.apple.security.hardened-process.dyld-ro`: on the AppKit app (Runtime Protections).
+- `com.apple.security.hardened-process.platform-restrictions-string` to `2`: on the AppKit app (Runtime Protections).
+- `com.apple.security.hardened-process.checked-allocations` with `soft-mode`: hardware memory tagging on the AppKit app, in soft mode (simulated crash reports, no termination). It only takes effect on Mac computers with an M5 chip or later. Disable soft mode once the simulated crash reports are reviewed and fixed.
+- `ENABLE_HARDENED_RUNTIME`: kept on the AppKit app, required for Developer ID notarization.
 
 ## Disabled settings
 

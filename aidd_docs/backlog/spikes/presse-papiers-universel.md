@@ -1,9 +1,9 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: copies du presse-papiers universel
@@ -14,7 +14,7 @@ Une copie arrivée d'un iPhone, d'un iPad ou d'un autre Mac par le presse-papier
 
 ## Decision
 
-Garder ou non ces copies dans l'historique de CopyKit, et comment les traiter (marqueur, app source, contenu téléchargé à la demande).
+Garder ou non ces copies dans l'historique d'AppKit, et comment les traiter (marqueur, app source, contenu téléchargé à la demande).
 
 ## Bounds
 
@@ -31,14 +31,14 @@ Garder ou non ces copies dans l'historique de CopyKit, et comment les traiter (m
 
 ## Outcome
 
-- Result: oui. Une copie du presse-papiers universel est visible et lisible par CopyKit comme n'importe quelle copie, et elle se reconnaît au marqueur `com.apple.is-remote-clipboard`. Le texte arrive avec ses formats enrichis ; une photo arrive comme un fichier rangé dans un dossier temporaire du système. La première lecture coûte le temps du transfert depuis l'autre appareil (220 ms pour un court texte).
+- Result: oui. Une copie du presse-papiers universel est visible et lisible par AppKit comme n'importe quelle copie, et elle se reconnaît au marqueur `com.apple.is-remote-clipboard`. Le texte arrive avec ses formats enrichis ; une photo arrive comme un fichier rangé dans un dossier temporaire du système. La première lecture coûte le temps du transfert depuis l'autre appareil (220 ms pour un court texte).
 - Confidence: bonne (essai réel avec un texte et une photo).
 - Remaining uncertainty: le temps de transfert d'une grosse photo ou d'une vidéo, non mesuré ; la durée de vie exacte du fichier temporaire ; le comportement depuis un iPad ou un autre Mac, non testés.
 
 ## Follow-up
 
-- CopyKit garde les copies du presse-papiers universel dans l'historique, avec un badge « depuis l'iPhone » (ou l'appareil d'origine si macOS le donne), puisque l'app source n'est pas fournie.
+- AppKit garde les copies du presse-papiers universel dans l'historique, avec un badge « depuis l'iPhone » (ou l'appareil d'origine si macOS le donne), puisque l'app source n'est pas fournie.
 - Une copie distante qui arrive comme un fichier temporaire est gardée **avec son contenu**, pas par référence : son dossier appartient au système et disparaît. Elle suit alors la règle des copies volumineuses si elle dépasse le seuil.
 - La lecture d'une copie distante se fait hors du fil principal, puisque la première lecture attend le transfert : c'est déjà la règle du traitement en arrière-plan.
-- Une copie distante ne doit pas être renvoyée par la synchronisation de CopyKit vers l'appareil qui l'a envoyée : à traiter par la règle des doublons.
+- Une copie distante ne doit pas être renvoyée par la synchronisation d'AppKit vers l'appareil qui l'a envoyée : à traiter par la règle des doublons.
 - Mettre à jour la question ouverte correspondante du brainstorm.

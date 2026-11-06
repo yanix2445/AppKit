@@ -1,9 +1,9 @@
 ---
 type: spike
 status: resolved
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: chiffrement et vitesse de recherche

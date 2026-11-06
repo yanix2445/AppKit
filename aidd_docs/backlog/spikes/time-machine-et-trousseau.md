@@ -1,16 +1,16 @@
 ---
 type: spike
 status: open
-source: aidd_docs/tasks/2026_10/2026_10_31_copykit/brainstorm.md
+source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 related_to:
-  - aidd_docs/product/copykit.md
+  - aidd_docs/product/appkit.md
 ---
 
 # Spike: Time Machine et le Trousseau
 
 ## Question
 
-Une restauration Time Machine sur macOS 26 et 27 ramène-t-elle la clé de chiffrement de CopyKit rangée dans le Trousseau « protection des données » ?
+Une restauration Time Machine sur macOS 26 et 27 ramène-t-elle la clé de chiffrement d'AppKit rangée dans le Trousseau « protection des données » ?
 
 ## Decision
 

@@ -2,13 +2,13 @@
 
 ← [Retour à l'index](README.md) · Ordre d'utilisation : [02-workflow-macos.md](02-workflow-macos.md)
 
-Ce fichier fixe le **cadre** de CopyKit : uniquement des outils et des
+Ce fichier fixe le **cadre** d'AppKit : uniquement des outils et des
 frameworks **natifs Apple et Swift**, dans leurs dernières versions, et des
 principes de conception clairs. Les décisions précises (fonctionnalités,
 découpage final, modèles de données) se prennent plus tard avec les skills, et
 chacune est tracée dans un ADR (`aidd_docs/memory/internal/decisions/`).
 
-CopyKit est **ta propre application**, conçue de zéro.
+AppKit est **ta propre application**, conçue de zéro.
 
 ---
 
@@ -85,7 +85,7 @@ Sources : [notes de version Xcode 27.1](https://developer.apple.com/tutorials/da
 | Design et ergonomie macOS | [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) d'Apple + principes du §6 |
 | SwiftData | plugin `swiftdata-pro` (Paul Hudson) + documentation Apple |
 | Concurrence Swift 6 | plugin `swift-concurrency-pro` (Paul Hudson) + documentation Swift |
-| AppKit, APIs système | [documentation Apple](https://developer.apple.com/documentation/) (consultable via le serveur MCP Xcode) ; incertitudes levées par un spike (`aidd-pm:05-spike`) |
+| framework AppKit, APIs système | [documentation Apple](https://developer.apple.com/documentation/) (consultable via le serveur MCP Xcode) ; incertitudes levées par un spike (`aidd-pm:05-spike`) |
 | Architecture | principes du §5 + `aidd-dev:04-audit`, `aidd-dev:07-refactor`, facette architecture d'`aidd-dev:03-assert` |
 | Méthode (cadrage, plan, revue, PR) | AIDD ([01](01-aidd-framework.md)) |
 
@@ -110,7 +110,7 @@ Les skills Apple sont détaillées dans [04-plugin-apple-xcode.md](04-plugin-app
 
 ### Le socle
 
-| Framework | Rôle dans CopyKit | Règles |
+| Framework | Rôle dans AppKit | Règles |
 | --- | --- | --- |
 | **Swift 6.4**, mode de langage Swift 6 | langage, concurrence stricte | zéro warning ; `@concurrent nonisolated` pour le calcul lourd ; `actor` pour l'état partagé ; pas de `@unchecked Sendable` sans commentaire |
 | **SwiftUI** | toute l'interface : fenêtres, `MenuBarExtra`, `Settings`, listes | composants système d'abord ; Liquid Glass seulement sur la couche de contrôle |
@@ -140,9 +140,9 @@ Les skills Apple sont détaillées dans [04-plugin-apple-xcode.md](04-plugin-app
 
 | Besoin probable | API Apple | Permission |
 | --- | --- | --- |
-| Surveiller le presse-papiers | AppKit `NSPasteboard.changeCount` | aucune |
+| Surveiller le presse-papiers | framework AppKit `NSPasteboard.changeCount` | aucune |
 | Raccourci global | Carbon `RegisterEventHotKey` (*) | aucune |
-| Panneau rapide qui laisse l'autre app devant | AppKit `NSPanel` `.nonactivatingPanel` | aucune |
+| Panneau rapide qui laisse l'autre app devant | framework AppKit `NSPanel` `.nonactivatingPanel` | aucune |
 | Coller dans l'app au premier plan | `NSPasteboard` + Core Graphics `CGEvent` (⌘V) | **Accessibility** |
 | Icône de menu bar | SwiftUI `MenuBarExtra` | aucune |
 | Lancer à l'ouverture de session | **ServiceManagement** `SMAppService` | accord unique |
@@ -163,10 +163,10 @@ Tous ces frameworks sont présents dans le SDK macOS 27 de la machine.
 
 ### La décision App Sandbox
 
-Le sandbox est activé aujourd'hui. Si CopyKit doit **coller dans d'autres
+Le sandbox est activé aujourd'hui. Si AppKit doit **coller dans d'autres
 apps**, il faut Accessibility + `CGEvent`, que le sandbox bloque. Il faudra
 alors le désactiver et distribuer hors Mac App Store, en app signée
-**Developer ID** et notarisée (`notarytool`, `stapler`). Si CopyKit se limite à
+**Developer ID** et notarisée (`notarytool`, `stapler`). Si AppKit se limite à
 remplir le presse-papiers sans coller à ta place, le sandbox peut rester et le
 Mac App Store reste possible. C'est une décision produit à prendre au brief,
 puis à tracer dans un ADR.
@@ -181,22 +181,22 @@ Cible app Xcode **fine**, logique dans des **packages Swift locaux** ajoutés au
 projet (testables seuls avec Swift Testing) :
 
 ```text
-CopyKit (cible app Xcode)  : SwiftUI, scènes, menus, assemblage des dépendances
+AppKit (cible app Xcode)  : SwiftUI, scènes, menus, assemblage des dépendances
    │
-   ├──> CopyKitFeatures   : un dossier par feature (vue + modèle @MainActor de la page)
+   ├──> AppKitFeatures   : un dossier par feature (vue + modèle @MainActor de la page)
    │        │
-   ├──> CopyKitSystem     : adaptateurs macOS (presse-papiers, raccourci, collage, permissions)
+   ├──> AppKitSystem     : adaptateurs macOS (presse-papiers, raccourci, collage, permissions)
    │        │
-   ├──> CopyKitData       : persistance SwiftData derrière un protocole
+   ├──> AppKitData       : persistance SwiftData derrière un protocole
    │        │
-   └──────> CopyKitCore   : types du domaine, règles pures, aucune dépendance UI
+   └──────> AppKitCore   : types du domaine, règles pures, aucune dépendance UI
 ```
 
-- Les flèches vont **toujours vers le cœur**. `CopyKitCore` ne connaît ni
-  SwiftUI, ni SwiftData, ni AppKit.
+- Les flèches vont **toujours vers le cœur**. `AppKitCore` ne connaît ni
+  SwiftUI, ni SwiftData, ni le framework AppKit.
 - La cible app est la **racine de composition** : le seul endroit qui crée les
   implémentations réelles et les injecte.
-- ✅ Validé dans l'[ADR 0001](../../internal/decisions/architecture-mv-feature-core.md) ; arborescence et nommage dans [06](06-arborescence-et-nommage.md). On commence par `CopyKitCore` + la
+- ✅ Validé dans l'[ADR 0001](../../internal/decisions/architecture-mv-feature-core.md) ; arborescence et nommage dans [06](06-arborescence-et-nommage.md). On commence par `AppKitCore` + la
   cible app, puis on découpe quand un signal le demande (5.7).
 
 ### 5.2 Des coutures avec deux implémentations

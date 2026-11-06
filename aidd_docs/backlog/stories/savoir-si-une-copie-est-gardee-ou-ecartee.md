@@ -10,7 +10,7 @@ order: 23
 # Story: Savoir si une copie est gardée ou écartée
 
 **As** un utilisateur de Mac
-**I want** un signal discret quand CopyKit garde ou écarte une copie
+**I want** un signal discret quand AppKit garde ou écarte une copie
 **So that** je sache, sans ouvrir le bandeau, si ma copie a été gardée
 
 ## Acceptance

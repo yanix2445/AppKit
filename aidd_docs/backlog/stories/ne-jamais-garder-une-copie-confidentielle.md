@@ -10,7 +10,7 @@ order: 3
 # Story: Ne jamais garder une copie confidentielle ou temporaire
 
 **As** un utilisateur de Mac
-**I want** que CopyKit ignore toute copie marquée confidentielle, temporaire ou générée automatiquement
+**I want** qu'AppKit ignore toute copie marquée confidentielle, temporaire ou générée automatiquement
 **So that** mes mots de passe et mes codes ne soient jamais gardés
 
 ## Acceptance

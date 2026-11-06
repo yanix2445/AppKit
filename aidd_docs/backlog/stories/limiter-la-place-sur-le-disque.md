@@ -11,7 +11,7 @@ order: 18
 
 **As** un utilisateur de Mac
 **I want** fixer la place maximale de mon historique et voir celle qu'il occupe
-**So that** CopyKit n'encombre jamais mon disque
+**So that** AppKit n'encombre jamais mon disque
 
 ## Acceptance
 
