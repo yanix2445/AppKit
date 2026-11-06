@@ -40,7 +40,9 @@ public actor ClipboardMonitor {
         let capture: ClipCapture?
         switch ClipClassifier.kind(of: types) {
         case .text:
-            capture = captureText()
+            capture = captureText(types: types)
+        case .color:
+            capture = captureColor()
         case .image:
             capture = captureMedia { .image($0) }
         case .pdf:
@@ -52,9 +54,17 @@ public actor ClipboardMonitor {
         return capture
     }
 
-    private func captureText() -> ClipCapture? {
+    private func captureText(types: Set<String>) -> ClipCapture? {
         guard let text = pasteboard.readText(), !text.isEmpty else { return nil }
-        return ClipCapture(clip: makeClip(content: .text(text)))
+        return ClipCapture(
+            clip: makeClip(content: ClipClassifier.content(ofText: text, types: types)),
+            formats: ClipClassifier.hasOtherFormats(than: types) ? pasteboard.readFormats() : []
+        )
+    }
+
+    private func captureColor() -> ClipCapture? {
+        guard let color = pasteboard.readColor() else { return nil }
+        return ClipCapture(clip: makeClip(content: .color(color)), formats: pasteboard.readFormats())
     }
 
     private func captureMedia(_ makeContent: (ClipMedia) -> ClipContent) -> ClipCapture? {
@@ -74,13 +84,12 @@ public actor ClipboardMonitor {
     }
 
     /// Puts a copy back on the pasteboard, without capturing it as a new one.
-    /// - Parameter formats: all the formats of an image or a PDF, which go back unchanged.
+    /// - Parameter formats: all the formats of the copy, which go back unchanged. Plain text style
+    ///   leaves them out, except for an image or a PDF, which have no text to fall back on.
     public func restore(_ clip: Clip, formats: [ClipRepresentation] = [], style: ClipPasteStyle = .original) {
-        // For now a text only holds text, so both styles write the same thing.
-        switch clip.content {
-        case .text(let text):
+        if let text = clip.content.plainText, style == .plainText || formats.isEmpty {
             lastChangeCount = pasteboard.write(text: text)
-        case .image, .pdf:
+        } else {
             lastChangeCount = pasteboard.write(formats: formats)
         }
     }

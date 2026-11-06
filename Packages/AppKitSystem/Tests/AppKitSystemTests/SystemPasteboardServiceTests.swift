@@ -42,6 +42,17 @@ struct SystemPasteboardServiceTests {
         }
     }
 
+    @Test func readsAColorInSRGB() throws {
+        let pasteboard = makePasteboard()
+        defer { pasteboard.releaseGlobally() }
+        pasteboard.clearContents()
+        pasteboard.writeObjects([NSColor(srgbRed: 1, green: 0, blue: 0, alpha: 1)])
+
+        let color = try #require(SystemPasteboardService(name: pasteboard.name).readColor())
+
+        #expect(color.text == "#FF0000")
+    }
+
     @Test func readsTheTypesOfAMarkedCopy() {
         let pasteboard = makePasteboard()
         defer { pasteboard.releaseGlobally() }

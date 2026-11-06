@@ -6,21 +6,20 @@ extension ClipContent {
 
     /// The text to search in: without case or accents, cut to the limit.
     public var searchText: String {
-        switch self {
-        case .text(let text):
-            String(
-                text.prefix(Self.searchTextLimit)
-                    .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
-            )
-        case .image, .pdf:
-            ""
-        }
+        guard let text = plainText else { return "" }
+        return String(
+            text.prefix(Self.searchTextLimit)
+                .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
+        )
     }
 
     /// Readable on disk, as the category of a copy reveals nothing of its content.
     public var kindIdentifier: String {
         switch self {
         case .text: "text"
+        case .richText: "richText"
+        case .link: "link"
+        case .color: "color"
         case .image: "image"
         case .pdf: "pdf"
         }
