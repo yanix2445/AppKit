@@ -3,6 +3,7 @@ type: story
 status: proposed
 parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 order: 10
+issue: "#50"
 ---
 
 # Story: Proposer une idée ou une contribution

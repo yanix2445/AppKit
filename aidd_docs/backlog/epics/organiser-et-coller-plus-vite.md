@@ -6,6 +6,7 @@ goal: aidd_docs/product/appkit.md
 depends_on:
   - aidd_docs/backlog/epics/historique-complet-et-prive.md
 order: 3
+issue: "#11"
 ---
 
 # Epic: Organiser et coller plus vite

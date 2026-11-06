@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/garder-mon-historique-chiffre.md
 order: 13
+issue: "#25"
 ---
 
 # Story: Chercher dans mon historique

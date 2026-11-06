@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 depends_on:
   - aidd_docs/backlog/stories/voir-les-tests-tourner-sur-chaque-pr.md
 order: 3
+issue: "#43"
 ---
 
 # Story: Publier un .dmg signé et notarisé en posant un tag

@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/retrouver-mes-images-et-mes-pdf.md
 order: 24
+issue: "#36"
 ---
 
 # Story: Retrouver les copies venues de mon iPhone

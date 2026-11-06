@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/ouvrir-le-bandeau-au-raccourci-global.md
 order: 6
+issue: "#18"
 ---
 
 # Story: Coller directement dans l'app active

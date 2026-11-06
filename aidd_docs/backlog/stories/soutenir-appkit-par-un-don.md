@@ -3,6 +3,7 @@ type: story
 status: proposed
 parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 order: 12
+issue: "#52"
 ---
 
 # Story: Soutenir AppKit par un don

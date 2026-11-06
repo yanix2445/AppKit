@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/garder-mon-historique-chiffre.md
 order: 25
+issue: "#37"
 ---
 
 # Story: Lancer AppKit à l'ouverture de session

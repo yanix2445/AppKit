@@ -3,6 +3,7 @@ type: story
 status: proposed
 parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 order: 9
+issue: "#49"
 ---
 
 # Story: Signaler une faille en privé

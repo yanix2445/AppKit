@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/epingler-et-desepingler.md
 order: 17
+issue: "#29"
 ---
 
 # Story: Limiter la durée de conservation

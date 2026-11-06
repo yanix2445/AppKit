@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/garder-mon-historique-chiffre.md
 order: 11
+issue: "#23"
 ---
 
 # Story: Retrouver les copies au format privé d'une app

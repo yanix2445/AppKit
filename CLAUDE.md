@@ -99,6 +99,9 @@ Read only task-relevant context and linked memory files; complete required reads
 
 <!-- read on demand, not auto-loaded -->
 - aidd_docs/memory/internal/decisions/architecture-mv-feature-core.md
+- aidd_docs/memory/internal/decisions/historique-chiffre-en-memoire.md
+- aidd_docs/memory/internal/decisions/hors-app-sandbox.md
+- aidd_docs/memory/internal/xcode-security-settings.md
 - aidd_docs/memory/external/plugins-et-workflow/01-aidd-framework.md
 - aidd_docs/memory/external/plugins-et-workflow/02-workflow-macos.md
 - aidd_docs/memory/external/plugins-et-workflow/03-stack-et-architecture.md

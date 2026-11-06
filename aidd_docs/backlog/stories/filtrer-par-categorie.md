@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/chercher-dans-mon-historique.md
 order: 14
+issue: "#26"
 ---
 
 # Story: Filtrer par catégorie

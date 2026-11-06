@@ -3,6 +3,7 @@ type: story
 status: proposed
 parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 order: 1
+issue: "#13"
 ---
 
 # Story: Voir mes dernières copies de texte dans le bandeau

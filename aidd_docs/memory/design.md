@@ -9,8 +9,16 @@ The visual language: the design system, tokens, and UI conventions. What it look
 
 ## Tokens
 
-- Aujourd'hui, seule la couleur d'accent existe : `AppKit/Resources/Assets.xcassets/AccentColor.colorset`.
+- Les maquettes font foi : fichier Figma [Appkit](https://www.figma.com/design/KXcvgnvBbi7VGSL9WmoiSh/Appkit), pages Icon, Composant et Ecrant, chaque écran en clair et en sombre.
+- Les tokens y sont des variables Figma, en deux modes (Clair, Sombre) : `color/*`, `space/*` (2, 4, 8, 12, 16, 24) et `radius/*` (contrôle 8, menu 12, carte 14, groupe 20, bandeau 32).
+- En code, ils deviennent `AppKit/Shared/Design/` (`Spacing`, `CornerRadius`, `AppColor`, `Motion`), créés avec leur premier usage.
+- Les maquettes sont composées en Inter faute de SF Pro dans Figma : l'app utilise les polices système.
 - Aucune valeur brute (couleur, rayon, espacement, durée) dans les vues : chaque valeur passe par un token Swift partagé.
+
+## Components
+
+- Le bandeau : un panneau en bas de l'écran, en matériau translucide, avec une barre d'outils (recherche, filtres de catégorie, aide clavier) au-dessus d'une rangée de cartes.
+- La carte : 196 × 176, avec l'en-tête (type, date, icône de l'app source), l'aperçu du contenu et une ligne de métadonnées.
 
 ## Voice
 

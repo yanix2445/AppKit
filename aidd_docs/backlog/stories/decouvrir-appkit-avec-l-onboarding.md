@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/voir-et-regler-mes-permissions.md
 order: 27
+issue: "#39"
 ---
 
 # Story: Découvrir AppKit avec l'onboarding

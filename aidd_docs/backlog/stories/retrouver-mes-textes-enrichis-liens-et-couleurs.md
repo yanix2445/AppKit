@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/garder-mon-historique-chiffre.md
 order: 9
+issue: "#21"
 ---
 
 # Story: Retrouver mes textes enrichis, mes liens et mes couleurs

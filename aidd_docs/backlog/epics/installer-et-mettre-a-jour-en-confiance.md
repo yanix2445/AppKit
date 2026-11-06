@@ -4,6 +4,7 @@ status: proposed
 source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 goal: aidd_docs/product/appkit.md
 order: 2
+issue: "#10"
 ---
 
 # Epic: Installer et mettre à jour AppKit en confiance

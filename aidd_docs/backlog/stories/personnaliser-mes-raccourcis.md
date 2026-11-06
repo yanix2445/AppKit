@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/ouvrir-le-bandeau-au-raccourci-global.md
 order: 28
+issue: "#40"
 ---
 
 # Story: Personnaliser mes raccourcis

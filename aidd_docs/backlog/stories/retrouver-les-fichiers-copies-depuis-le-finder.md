@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/garder-mon-historique-chiffre.md
 order: 10
+issue: "#22"
 ---
 
 # Story: Retrouver les fichiers copiés depuis le Finder

@@ -3,6 +3,7 @@ type: story
 status: proposed
 parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 order: 1
+issue: "#41"
 ---
 
 # Story: Voir les tests tourner sur chaque PR
