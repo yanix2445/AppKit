@@ -8,7 +8,7 @@ The data store: its type, the main entities, and the conventions. The macro mode
 
 ## Main entities
 
-- `ClipRecord` (schéma `AppKitSchemaV1`) : une copie stockée.
+- `ClipRecord` (schéma `AppKitSchemaV2`, migré depuis `AppKitSchemaV1`) : une copie stockée. Les formats et la vignette d'une image ou d'un PDF sont des blocs chiffrés à part, lus seulement à la demande : l'historique en mémoire n'en garde que les détails.
 
 ## Conventions
 

@@ -1,5 +1,6 @@
 import AppKit
 import AppKitCore
+import Foundation
 import SwiftUI
 
 /// Opens and closes the strip at the bottom of the screen, over the Dock.
@@ -7,6 +8,7 @@ import SwiftUI
 final class HistoryStripController {
     private let viewModel: HistoryStripViewModel
     private let appearanceProvider = SourceAppAppearanceProvider()
+    private let thumbnailProvider: ClipThumbnailProvider
     private lazy var panel = makePanel()
     private var clickMonitor: Any?
     private var activationObserver: NSObjectProtocol?
@@ -15,8 +17,13 @@ final class HistoryStripController {
     private(set) var isOpen = false
 
     /// - Parameter onChoose: called with the copy the user picks; the strip then closes.
-    init(history: ClipHistory, onChoose: @escaping (Clip, ClipPasteStyle) -> Void) {
+    init(
+        history: ClipHistory,
+        loadThumbnail: @escaping (Clip.ID) async -> Data? = { _ in nil },
+        onChoose: @escaping (Clip, ClipPasteStyle) -> Void
+    ) {
         viewModel = HistoryStripViewModel(history: history, onChoose: onChoose)
+        thumbnailProvider = ClipThumbnailProvider(load: loadThumbnail)
     }
 
     /// The shortcut that opens the strip, which the empty strip mentions.
@@ -66,6 +73,7 @@ final class HistoryStripController {
     func close() {
         guard isOpen else { return }
         isOpen = false
+        thumbnailProvider.releaseAll()
         if let clickMonitor {
             NSEvent.removeMonitor(clickMonitor)
             self.clickMonitor = nil
@@ -120,6 +128,7 @@ final class HistoryStripController {
             rootView: HistoryStripView(
                 viewModel: viewModel,
                 appearanceProvider: appearanceProvider,
+                thumbnailProvider: thumbnailProvider,
                 close: { [weak self] in self?.close() }
             )
         )

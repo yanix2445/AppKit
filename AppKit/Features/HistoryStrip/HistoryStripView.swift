@@ -5,6 +5,7 @@ import SwiftUI
 struct HistoryStripView: View {
     let viewModel: HistoryStripViewModel
     let appearanceProvider: SourceAppAppearanceProvider
+    let thumbnailProvider: ClipThumbnailProvider
     let close: () -> Void
 
     @FocusState private var isFocused: Bool
@@ -42,7 +43,8 @@ struct HistoryStripView: View {
                             ClipCardView(
                                 clip: clip,
                                 isSelected: clip.id == viewModel.selectedClipID,
-                                appearance: appearanceProvider.appearance(forBundleIdentifier: clip.source?.bundleIdentifier)
+                                appearance: appearanceProvider.appearance(forBundleIdentifier: clip.source?.bundleIdentifier),
+                                thumbnailProvider: thumbnailProvider
                             )
                             .id(clip.id)
                             .onTapGesture { viewModel.choose(clip.id) }

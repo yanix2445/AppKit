@@ -40,5 +40,3 @@ public enum AppKitSchemaV1: VersionedSchema {
         }
     }
 }
-
-public typealias ClipRecord = AppKitSchemaV1.ClipRecord

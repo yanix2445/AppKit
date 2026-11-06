@@ -44,7 +44,10 @@ public actor ClipStore {
         return ClipStoreSnapshot(clips: clips, unreadableCount: unreadableCount)
     }
 
-    public func insert(_ clip: Clip) throws {
+    /// - Parameters:
+    ///   - formats: all the formats of an image or a PDF.
+    ///   - thumbnail: its preview, sealed apart so that showing it never opens the original.
+    public func insert(_ clip: Clip, formats: [ClipRepresentation] = [], thumbnail: Data? = nil) throws {
         let cipher = try requireCipher()
         let payload = try JSONEncoder().encode(ClipPayload(clip: clip))
         let searchText = Data(clip.content.searchText.utf8)
@@ -52,18 +55,45 @@ public actor ClipStore {
             ClipRecord(
                 uid: clip.id,
                 capturedAt: clip.capturedAt,
-                byteCount: payload.count,
+                byteCount: clip.content.media?.byteCount ?? payload.count,
                 kind: clip.content.kindIdentifier,
                 sealedPayload: try cipher.seal(payload, for: clip.id),
-                sealedSearchText: try cipher.seal(searchText, for: clip.id)
+                sealedSearchText: try cipher.seal(searchText, for: clip.id),
+                sealedFormats: formats.isEmpty ? nil : try cipher.seal(Self.encode(formats), for: clip.id),
+                sealedThumbnail: try thumbnail.map { try cipher.seal($0, for: clip.id) }
             )
         )
         try saveOrRollBack()
     }
 
+    public func formats(of id: Clip.ID) throws -> [ClipRepresentation] {
+        let cipher = try requireCipher()
+        guard let sealed = try record(id)?.sealedFormats else { return [] }
+        return try PropertyListDecoder().decode(
+            [ClipRepresentation].self,
+            from: try cipher.open(sealed, for: id)
+        )
+    }
+
+    public func thumbnail(of id: Clip.ID) throws -> Data? {
+        let cipher = try requireCipher()
+        guard let sealed = try record(id)?.sealedThumbnail else { return nil }
+        return try cipher.open(sealed, for: id)
+    }
+
+    private func record(_ id: Clip.ID) throws -> ClipRecord? {
+        try modelContext.fetch(FetchDescriptor<ClipRecord>(predicate: #Predicate { $0.uid == id })).first
+    }
+
+    /// A binary property list holds the bytes as they are, unlike JSON.
+    private static func encode(_ formats: [ClipRepresentation]) throws -> Data {
+        let encoder = PropertyListEncoder()
+        encoder.outputFormat = .binary
+        return try encoder.encode(formats)
+    }
+
     public func promote(_ id: Clip.ID, at date: Date) throws {
-        let descriptor = FetchDescriptor<ClipRecord>(predicate: #Predicate { $0.uid == id })
-        guard let record = try modelContext.fetch(descriptor).first else { return }
+        guard let record = try record(id) else { return }
         record.capturedAt = date
         try saveOrRollBack()
     }

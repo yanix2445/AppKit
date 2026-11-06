@@ -15,6 +15,10 @@ final class HistoryLifecycle {
     private let store: ClipStore
     private let keyService: any EncryptionKeyService
     private let diskSpace: any DiskSpaceService
+    private let thumbnails: any ClipThumbnailService
+    /// The formats of copies still on their way to the disk, ready to be pasted at once.
+    private var pendingFormats: [Clip.ID: [ClipRepresentation]] = [:]
+    private var processingTasks: [Clip.ID: Task<Void, Never>] = [:]
 
     var onStateChange: ((HistoryLifecycleState) -> Void)?
 
@@ -28,12 +32,14 @@ final class HistoryLifecycle {
         history: ClipHistory,
         store: ClipStore,
         keyService: any EncryptionKeyService,
-        diskSpace: any DiskSpaceService
+        diskSpace: any DiskSpaceService,
+        thumbnails: any ClipThumbnailService
     ) {
         self.history = history
         self.store = store
         self.keyService = keyService
         self.diskSpace = diskSpace
+        self.thumbnails = thumbnails
     }
 
     /// Opens the history. Called at launch, and again by Retry.
@@ -77,19 +83,71 @@ final class HistoryLifecycle {
         }
     }
 
-    func capture(_ clip: Clip) async {
+    /// Shows a copy at once. An image or a PDF is then processed behind the scenes, so that a slow
+    /// one never holds up the next copies.
+    func capture(_ capture: ClipCapture) async {
         guard state.capturesCopies else { return }
         guard hasRoom else {
             state = .diskFull
             return
         }
+        let clip = capture.clip
         history.insert(clip)
+        guard !capture.formats.isEmpty else {
+            await store(clip, formats: [], thumbnail: nil)
+            return
+        }
+        pendingFormats[clip.id] = capture.formats
+        processingTasks[clip.id] = Task {
+            await process(clip.id, formats: capture.formats)
+            pendingFormats[clip.id] = nil
+            processingTasks[clip.id] = nil
+        }
+    }
+
+    /// Waits for every image and PDF being processed.
+    func finishProcessing() async {
+        for task in processingTasks.values {
+            await task.value
+        }
+    }
+
+    private func process(_ id: Clip.ID, formats: [ClipRepresentation]) async {
+        let thumbnail = await thumbnails.makeThumbnail(from: formats)
+        // Read again: the copy may have moved or gone in the meantime.
+        guard let clip = history.clip(withID: id), var media = clip.content.media else { return }
+        media.pixelWidth = thumbnail.pixelWidth
+        media.pixelHeight = thumbnail.pixelHeight
+        media.pageCount = thumbnail.pageCount
+        media.hasThumbnail = thumbnail.imageData != nil
+        media.isProcessing = false
+        let processed = Clip(
+            id: clip.id,
+            content: clip.content.replacingMedia(with: media),
+            source: clip.source,
+            capturedAt: clip.capturedAt
+        )
+        await store(processed, formats: formats, thumbnail: thumbnail.imageData)
+        history.update(processed)
+    }
+
+    private func store(_ clip: Clip, formats: [ClipRepresentation], thumbnail: Data?) async {
         do {
-            try await store.insert(clip)
+            try await store.insert(clip, formats: formats, thumbnail: thumbnail)
         } catch {
             history.remove(clip.id)
             state = hasRoom && !Self.isOutOfSpace(error) ? .keyUnavailable : .diskFull
         }
+    }
+
+    /// The formats to put back on the pasteboard, available even while a copy is being processed.
+    func formats(of id: Clip.ID) async -> [ClipRepresentation] {
+        if let pending = pendingFormats[id] { return pending }
+        return (try? await store.formats(of: id)) ?? []
+    }
+
+    func thumbnail(of id: Clip.ID) async -> Data? {
+        try? await store.thumbnail(of: id)
     }
 
     func promote(_ clip: Clip) async {
