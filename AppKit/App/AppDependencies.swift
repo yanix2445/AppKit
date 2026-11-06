@@ -8,6 +8,8 @@ import SwiftData
 /// Creates the real services once, and feeds the history from the pasteboard.
 final class AppDependencies {
     let lifecycle: HistoryLifecycle
+    let directPasteService: any DirectPasteService
+    let directPasteDefaults: UserDefaults
     private let monitor: ClipboardMonitor
     private var captureTask: Task<Void, Never>?
     private var retryTask: Task<Void, Never>?
@@ -16,6 +18,8 @@ final class AppDependencies {
 
     init() throws {
         let location = AppDependencies.makeLocation()
+        directPasteService = location.directPasteService
+        directPasteDefaults = location.directPasteDefaults
         monitor = ClipboardMonitor(
             pasteboard: SystemPasteboardService(name: location.pasteboardName),
             frontmostApp: SystemFrontmostAppService(),
@@ -37,6 +41,8 @@ final class AppDependencies {
         let storeURL: URL
         let keyService: any EncryptionKeyService
         let pasteboardName: NSPasteboard.Name
+        let directPasteService: any DirectPasteService
+        let directPasteDefaults: UserDefaults
     }
 
     private static func makeLocation() -> Location {
@@ -45,7 +51,9 @@ final class AppDependencies {
             return Location(
                 storeURL: environment.storeURL,
                 keyService: environment.keyService,
-                pasteboardName: NSPasteboard.Name(environment.pasteboardName)
+                pasteboardName: NSPasteboard.Name(environment.pasteboardName),
+                directPasteService: environment.directPasteService,
+                directPasteDefaults: environment.directPasteDefaults
             )
         }
         #endif
@@ -53,7 +61,9 @@ final class AppDependencies {
         return Location(
             storeURL: directory.appending(path: "History.store"),
             keyService: SystemEncryptionKeyService(service: "yanis-harrat.AppKit.history"),
-            pasteboardName: .general
+            pasteboardName: .general,
+            directPasteService: SystemDirectPasteService(),
+            directPasteDefaults: .standard
         )
     }
 

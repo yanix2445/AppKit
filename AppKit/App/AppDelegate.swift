@@ -12,6 +12,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let recovery = HistoryRecoveryAlertPresenter()
     private let hotKeyConflict = HotKeyConflictAlertPresenter()
     private var globalHotKey: GlobalHotKeyController?
+    private let directPasteAlert = DirectPasteAlertPresenter()
+    private var directPaste: DirectPasteCoordinator?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         #if DEBUG
@@ -22,6 +24,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         self.dependencies = dependencies
+        directPaste = DirectPasteCoordinator(
+            service: dependencies.directPasteService,
+            defaults: dependencies.directPasteDefaults,
+            askToOpenSettings: { [directPasteAlert] in directPasteAlert.askToOpenSettings() }
+        )
 
         let historyStrip = HistoryStripController(history: dependencies.history) { [weak self] clip in
             self?.restore(clip)
@@ -76,10 +83,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func restore(_ clip: Clip) {
-        historyStrip?.close()
+        historyStrip?.closeImmediately()
         Task {
             await dependencies?.restore(clip)
-            copiedMessage.show()
+            switch await directPaste?.deliver() {
+            case .copied(let offersEnabling):
+                let directPaste = self.directPaste
+                copiedMessage.show(onEnableDirectPaste: offersEnabling ? { directPaste?.enable() } : nil)
+            case .pasted, nil:
+                break
+            }
         }
     }
 }

@@ -1,27 +1,6 @@
 {
   "sourceLanguage": "fr",
   "strings": {
-    "%1$@, %2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@"
-          }
-        }
-      }
-    },
-    "%1$@, %2$@, %3$@, %4$@": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@, %3$@, %4$@"
-          }
-        }
-      }
-    },
     "%@ est déjà utilisé par une autre app": {
       "localizations": {
         "en": {
@@ -32,12 +11,32 @@
         }
       }
     },
+    "%@, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@"
+          }
+        }
+      }
+    },
     "%@, %@, %@, %@": {
       "localizations": {
-        "fr": {
+        "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@, %2$@, %3$@, %4$@"
+            "state": "translated",
+            "value": "%@, %@, %@, %@"
+          }
+        }
+      }
+    },
+    "Activer le collage direct": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Direct Paste"
           }
         }
       }
@@ -88,6 +87,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "No copies yet"
+          }
+        }
+      }
+    },
+    "Autoriser le collage direct": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Direct Paste"
           }
         }
       }
@@ -192,17 +201,6 @@
         }
       }
     },
-    "Fermer": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Close"
-          }
-        }
-      }
-    },
     "Garder les copies générées automatiquement": {
       "localizations": {
         "en": {
@@ -293,6 +291,16 @@
         }
       }
     },
+    "Ouvrir les Réglages": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        }
+      }
+    },
     "Ouvrir l’historique": {
       "localizations": {
         "en": {
@@ -309,6 +317,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Later"
+          }
+        }
+      }
+    },
+    "Pour coller directement dans l’app que vous utilisez, AppKit a besoin de la permission Accessibilité. Sans elle, l’élément sera simplement copié et vous ferez ⌘V.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To paste directly into the app you’re using, AppKit needs the Accessibility permission. Without it, the item is simply copied and you press ⌘V."
           }
         }
       }
@@ -349,6 +367,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings"
+          }
+        }
+      }
+    },
+    "Réglages Système › Confidentialité et sécurité › Accessibilité": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System Settings › Privacy & Security › Accessibility"
           }
         }
       }

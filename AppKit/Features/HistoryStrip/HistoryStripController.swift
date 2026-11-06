@@ -77,6 +77,13 @@ final class HistoryStripController {
         }
     }
 
+    /// Leaves the screen at once, so that the keyboard goes back to the app for the paste.
+    func closeImmediately() {
+        guard isOpen else { return }
+        close()
+        panel.orderOut(nil)
+    }
+
     private var screenUnderMouse: NSScreen? {
         NSScreen.screens.first { $0.frame.contains(NSEvent.mouseLocation) } ?? NSScreen.main
     }

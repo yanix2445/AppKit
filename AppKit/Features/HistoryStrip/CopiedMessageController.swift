@@ -4,14 +4,23 @@ import SwiftUI
 /// Shows the brief message for a moment, above the place the strip occupied, without taking focus.
 @MainActor
 final class CopiedMessageController {
-    private lazy var panel = makePanel()
+    private let panel = CopiedMessageController.makePanel()
     private var hideTask: Task<Void, Never>?
 
-    func show() {
+    /// - Parameter onEnableDirectPaste: when given, the message offers to enable direct paste.
+    func show(onEnableDirectPaste: (() -> Void)? = nil) {
         guard let screen = NSScreen.screens.first(where: { $0.frame.contains(NSEvent.mouseLocation) }) ?? NSScreen.main else {
             return
         }
         hideTask?.cancel()
+        panel.contentView = NSHostingView(
+            rootView: CopiedMessageView(onEnableDirectPaste: onEnableDirectPaste.map { action in
+                { [weak self] in
+                    action()
+                    self?.hide()
+                }
+            })
+        )
         panel.setFrame(
             NSRect(
                 x: screen.frame.midX - StripMetrics.briefMessageWidth / 2,
@@ -26,7 +35,7 @@ final class CopiedMessageController {
         AccessibilityNotification.Announcement(String(localized: "Copié · faites ⌘V")).post()
 
         hideTask = Task { [weak self] in
-            try? await Task.sleep(for: Motion.briefMessageDuration)
+            try? await Task.sleep(for: onEnableDirectPaste == nil ? Motion.briefMessageDuration : Motion.actionableMessageDuration)
             guard !Task.isCancelled else { return }
             self?.hide()
         }
@@ -45,7 +54,7 @@ final class CopiedMessageController {
         }
     }
 
-    private func makePanel() -> NSPanel {
+    private static func makePanel() -> NSPanel {
         let panel = NSPanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -57,10 +66,8 @@ final class CopiedMessageController {
         panel.backgroundColor = .clear
         panel.hasShadow = true
         panel.hidesOnDeactivate = false
-        panel.ignoresMouseEvents = true
         panel.isReleasedWhenClosed = false
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
-        panel.contentView = NSHostingView(rootView: CopiedMessageView())
         return panel
     }
 }

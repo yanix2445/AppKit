@@ -19,7 +19,7 @@ How the project is tested: the layers, the tools, and the conventions. Where tes
 - `AppKitUITests/` : un fichier `<Feature>UITests.swift` par feature.
 - Les tests SwiftData utilisent un `ModelContainer` en mémoire, jamais les vraies données.
 - Un bug corrigé commence par un test qui échoue.
-- Les tests d'interface lancent l'app avec `APPKIT_UI_TEST_ID` : en Debug, elle prend alors un historique, une clé et un presse-papiers jetables, jamais les vrais : ainsi, une copie ou un travail en cours sur le Mac ne fausse pas les tests, et les tests ne touchent pas au presse-papiers de l'utilisateur. Hébergeant des tests unitaires, elle n'ouvre rien.
+- Les tests d'interface lancent l'app avec `APPKIT_UI_TEST_ID` : en Debug, elle prend alors un historique, une clé, un presse-papiers et un collage direct jetables, jamais les vrais : ainsi, une copie ou un travail en cours sur le Mac ne fausse pas les tests, et les tests ne touchent pas au presse-papiers de l'utilisateur. Hébergeant des tests unitaires, elle n'ouvre rien.
 - La vraie clé du Trousseau se teste dans `AppKitTests`, seule cible signée pour l'atteindre ; `swift test` ne le peut pas.
 
 ## Performance
