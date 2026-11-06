@@ -42,6 +42,26 @@
         }
       }
     },
+    "Celles qu’une app crée seule, sans que vous ayez copié quoi que ce soit.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Those an app creates by itself, without you copying anything."
+          }
+        }
+      }
+    },
+    "Confidentialité": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy"
+          }
+        }
+      }
+    },
     "Copié · faites": {
       "localizations": {
         "en": {
@@ -73,12 +93,42 @@
         }
       }
     },
+    "Garder les copies générées automatiquement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep automatically generated copies"
+          }
+        }
+      }
+    },
     "Historique des copies": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Copy history"
+          }
+        }
+      }
+    },
+    "Jamais gardés, et jamais écrits sur le disque, même temporairement.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never kept, and never written to disk, even temporarily."
+          }
+        }
+      }
+    },
+    "Mots de passe et copies confidentielles": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwords and confidential copies"
           }
         }
       }
@@ -99,6 +149,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quit AppKit"
+          }
+        }
+      }
+    },
+    "Réglages": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Réglages…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings…"
           }
         }
       }

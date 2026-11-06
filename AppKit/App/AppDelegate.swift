@@ -7,13 +7,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var historyStrip: HistoryStripController?
     private var statusItem: StatusItemController?
     private let copiedMessage = CopiedMessageController()
+    private let settings = SettingsWindowController()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let historyStrip = HistoryStripController(history: dependencies.history) { [weak self] clip in
             self?.restore(clip)
         }
         self.historyStrip = historyStrip
-        statusItem = StatusItemController { historyStrip.toggle() }
+        statusItem = StatusItemController(
+            onPrimaryClick: { historyStrip.toggle() },
+            onOpenSettings: { [weak self] in self?.settings.show() }
+        )
         dependencies.startCapture()
     }
 

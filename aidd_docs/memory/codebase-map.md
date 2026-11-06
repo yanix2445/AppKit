@@ -13,7 +13,7 @@ flowchart TD
 
 ## Areas
 
-- `AppKit/`: la cible app ; `App/` (démarrage et assemblage), `Features/` (`HistoryStrip`, `MenuBar`), `Shared/` (tokens de design, extensions), `Resources/` (assets, String Catalog).
+- `AppKit/`: la cible app ; `App/` (démarrage et assemblage), `Features/` (`HistoryStrip`, `MenuBar`, `Settings`), `Shared/` (tokens de design, extensions), `Resources/` (assets, String Catalog).
 - `Packages/`: le cœur isolé ; `AppKitCore` (types et historique en mémoire), `AppKitSystem` (presse-papiers et app au premier plan, derrière des protocoles).
 - `AppKitTests/`: tests unitaires et d'intégration Swift Testing.
 - `AppKitUITests/`: tests d'interface XCUITest.

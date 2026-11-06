@@ -63,7 +63,7 @@ l'IDE.
 ```text
 AppKit/
   App/                      point d'entrée et assemblage
-  Features/                 HistoryStrip, MenuBar
+  Features/                 HistoryStrip, MenuBar, Settings
   Shared/                   tokens de design, extensions
   Resources/                assets, String Catalog
 AppKitTests/               tests Swift Testing
