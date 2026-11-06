@@ -7,14 +7,14 @@ flowchart TD
   Root["AppKit/ (dépôt)"] --> App["AppKit/ · cible app"]
   Root --> Tests["AppKitTests/ · Swift Testing"]
   Root --> UITests["AppKitUITests/ · XCUITest"]
-  Root --> Packages["Packages/ · AppKitCore, AppKitSystem"]
+  Root --> Packages["Packages/ · AppKitCore, AppKitData, AppKitSystem"]
   Root --> Aidd["aidd_docs/ · toute la documentation"]
 ```
 
 ## Areas
 
-- `AppKit/`: la cible app ; `App/` (démarrage et assemblage), `Features/` (`HistoryStrip`, `MenuBar`, `Settings`), `Shared/` (tokens de design, extensions), `Resources/` (assets, String Catalog).
-- `Packages/`: le cœur isolé ; `AppKitCore` (types et historique en mémoire), `AppKitSystem` (presse-papiers et app au premier plan, derrière des protocoles).
+- `AppKit/`: la cible app ; `App/` (démarrage et assemblage), `Features/` (`HistoryStrip`, `HistoryRecovery`, `MenuBar`, `Settings`), `Shared/` (tokens de design, extensions), `Resources/` (assets, String Catalog).
+- `Packages/`: le cœur isolé ; `AppKitCore` (types et historique en mémoire), `AppKitData` (stockage chiffré), `AppKitSystem` (presse-papiers, Trousseau, place sur le disque, derrière des protocoles).
 - `AppKitTests/`: tests unitaires et d'intégration Swift Testing.
 - `AppKitUITests/`: tests d'interface XCUITest.
 - `aidd_docs/`: toute la documentation : mémoire, décisions (`memory/internal/decisions/`), guide des plugins et du workflow (`memory/external/plugins-et-workflow/`), brief, backlog, plans.

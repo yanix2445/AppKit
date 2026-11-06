@@ -8,6 +8,7 @@ public actor ClipboardMonitor {
     private let policy: ClipboardPollingPolicy
     private let capturePolicy: @Sendable () -> ClipCapturePolicy
     private var lastChangeCount: Int
+    private var isPaused = false
 
     public init(
         pasteboard: any PasteboardService,
@@ -30,6 +31,9 @@ public actor ClipboardMonitor {
         guard changeCount != lastChangeCount else { return nil }
         lastChangeCount = changeCount
 
+        // During a pause, a copy is passed over without being read.
+        guard !isPaused else { return nil }
+
         guard capturePolicy().allows(types: pasteboard.readTypes()),
               let text = pasteboard.readText(),
               !text.isEmpty
@@ -43,6 +47,10 @@ public actor ClipboardMonitor {
             source: frontmostApp.frontmostApp(),
             capturedAt: .now
         )
+    }
+
+    public func setPaused(_ isPaused: Bool) {
+        self.isPaused = isPaused
     }
 
     /// Puts a copy back on the pasteboard, without capturing it as a new one.

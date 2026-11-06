@@ -22,6 +22,16 @@
         }
       }
     },
+    "Annuler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
     "App inconnue": {
       "localizations": {
         "en": {
@@ -32,12 +42,62 @@
         }
       }
     },
+    "AppKit n’a rien effacé. La clé est rangée dans le Trousseau de ce Mac : elle a peut-être été supprimée, ou pas encore restaurée.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AppKit has erased nothing. The key is kept in this Mac’s keychain: it may have been deleted, or not restored yet."
+          }
+        }
+      }
+    },
+    "Aucune copie n’est écrite en clair.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No copy is written in clear."
+          }
+        }
+      }
+    },
     "Aucune copie pour l’instant": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No copies yet"
+          }
+        }
+      }
+    },
+    "Capture en pause · clé inaccessible": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture paused · key unavailable"
+          }
+        }
+      }
+    },
+    "Capture en pause · clé introuvable": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture paused · key not found"
+          }
+        }
+      }
+    },
+    "Capture en pause · disque plein": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture paused · disk full"
           }
         }
       }
@@ -78,6 +138,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copied · press ⌘V"
+          }
+        }
+      }
+    },
+    "En attendant, la capture est en pause : aucune copie n’est écrite en clair.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meanwhile, capture is paused: no copy is written in clear."
           }
         }
       }
@@ -123,6 +193,36 @@
         }
       }
     },
+    "La capture reprendra seule dès que la clé sera accessible. Aucune copie n’est écrite en clair.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture will resume by itself once the key is available. No copy is written in clear."
+          }
+        }
+      }
+    },
+    "La capture reprendra seule dès qu’il y aura de la place. Aucune copie n’est écrite à moitié.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture will resume by itself once there is room. No copy is written by halves."
+          }
+        }
+      }
+    },
+    "Libérer de la place…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free Up Space…"
+          }
+        }
+      }
+    },
     "Mots de passe et copies confidentielles": {
       "localizations": {
         "en": {
@@ -153,6 +253,26 @@
         }
       }
     },
+    "Repartir à zéro…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Over…"
+          }
+        }
+      }
+    },
+    "Réessayer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
+          }
+        }
+      }
+    },
     "Réglages": {
       "localizations": {
         "en": {
@@ -169,6 +289,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings…"
+          }
+        }
+      }
+    },
+    "Sans sa clé, cet historique ne peut plus être lu. Sa suppression est définitive, même si la clé réapparaît ensuite.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without its key, this history can no longer be read. Deleting it is permanent, even if the key turns up later."
+          }
+        }
+      }
+    },
+    "Supprimer tout l’historique, épinglés compris ?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the entire history, pinned items included?"
           }
         }
       }
@@ -219,6 +359,26 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "Tout supprimer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete All"
+          }
+        }
+      }
+    },
+    "Votre historique est chiffré avec une clé introuvable sur ce Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your history is encrypted with a key that can’t be found on this Mac"
           }
         }
       }

@@ -108,6 +108,20 @@ struct ClipboardMonitorTests {
         #expect(await monitor.poll()?.content == .text("généré"))
     }
 
+    @Test func aCopyDuringAPauseIsNeverReadNorCapturedLater() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        await monitor.setPaused(true)
+        pasteboard.copy(text: "pendant la pause")
+        #expect(await monitor.poll() == nil)
+        #expect(pasteboard.readCount == 0)
+
+        await monitor.setPaused(false)
+        #expect(await monitor.poll() == nil)
+        pasteboard.copy(text: "après la pause")
+        #expect(await monitor.poll()?.content == .text("après la pause"))
+    }
+
     @Test func thePollingStreamDeliversACopy() async throws {
         let pasteboard = FakePasteboardService()
         let monitor = makeMonitor(

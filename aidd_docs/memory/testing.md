@@ -19,6 +19,8 @@ How the project is tested: the layers, the tools, and the conventions. Where tes
 - `AppKitUITests/` : un fichier `<Feature>UITests.swift` par feature.
 - Les tests SwiftData utilisent un `ModelContainer` en mémoire, jamais les vraies données.
 - Un bug corrigé commence par un test qui échoue.
+- Les tests d'interface lancent l'app avec `APPKIT_UI_TEST_ID` : en Debug, elle prend alors un historique et une clé jetables, jamais les vrais. Hébergeant des tests unitaires, elle n'ouvre rien.
+- La vraie clé du Trousseau se teste dans `AppKitTests`, seule cible signée pour l'atteindre ; `swift test` ne le peut pas.
 
 ## Performance
 
@@ -39,4 +41,4 @@ Ce qui vaut pour toute story, en plus de ses propres critères :
 
 - Unitaires : `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test -only-testing:AppKitTests`
 - Tout : `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test`
-- Packages, que le schéma AppKit ne lance pas : `swift test --package-path Packages/AppKitCore` et `swift test --package-path Packages/AppKitSystem`
+- Packages, que le schéma AppKit ne lance pas : `swift test --package-path Packages/AppKitCore`, `Packages/AppKitSystem` et `Packages/AppKitData`

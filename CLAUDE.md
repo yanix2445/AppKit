@@ -52,6 +52,7 @@ xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS
 # Tests des packages, que le schéma AppKit ne lance pas
 swift test --package-path Packages/AppKitCore
 swift test --package-path Packages/AppKitSystem
+swift test --package-path Packages/AppKitData
 ```
 
 Quand Xcode est ouvert, les outils MCP Xcode (`BuildProject`, `RunAllTests`,
@@ -68,11 +69,11 @@ AppKit/
   Resources/                assets, String Catalog
 AppKitTests/               tests Swift Testing
 AppKitUITests/             tests XCUITest
-Packages/                   AppKitCore, AppKitSystem
+Packages/                   AppKitCore, AppKitData, AppKitSystem
 aidd_docs/                  toute la documentation (dossier synchronisé, sans cible)
 ```
 
-`AppKitData` et `Intents/` apparaîtront avec leur premier fichier.
+`Intents/` apparaîtra avec leur premier fichier.
 
 ## Documentation
 
