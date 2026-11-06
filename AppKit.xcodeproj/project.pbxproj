@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A10C0012F00000000000005 /* AppKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0A10C0012F00000000000003 /* AppKitCore */; };
 		0A10C0012F00000000000006 /* AppKitSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 0A10C0012F00000000000004 /* AppKitSystem */; };
+		0A10C0012F00000000000009 /* AppKitData in Frameworks */ = {isa = PBXBuildFile; productRef = 0A10C0012F00000000000008 /* AppKitData */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				0A10C0012F00000000000005 /* AppKitCore in Frameworks */,
+				0A10C0012F00000000000009 /* AppKitData in Frameworks */,
 				0A10C0012F00000000000006 /* AppKitSystem in Frameworks */,
 			);
 		};
@@ -128,6 +130,7 @@
 			name = AppKit;
 			packageProductDependencies = (
 				0A10C0012F00000000000003 /* AppKitCore */,
+				0A10C0012F00000000000008 /* AppKitData */,
 				0A10C0012F00000000000004 /* AppKitSystem */,
 			);
 			productName = AppKit;
@@ -211,6 +214,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				0A10C0012F00000000000001 /* XCLocalSwiftPackageReference "Packages/AppKitCore" */,
+				0A10C0012F00000000000007 /* XCLocalSwiftPackageReference "Packages/AppKitData" */,
 				0A10C0012F00000000000002 /* XCLocalSwiftPackageReference "Packages/AppKitSystem" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -611,6 +615,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/AppKitSystem;
 		};
+		0A10C0012F00000000000007 /* XCLocalSwiftPackageReference "Packages/AppKitData" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/AppKitData;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -621,6 +629,10 @@
 		0A10C0012F00000000000004 /* AppKitSystem */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppKitSystem;
+		};
+		0A10C0012F00000000000008 /* AppKitData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppKitData;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,11 +1,13 @@
+import AppKit
 import AppKitCore
+import AppKitData
 import AppKitSystem
 import Foundation
+import SwiftData
 
 /// Creates the real services once, and feeds the history from the pasteboard.
-@MainActor
 final class AppDependencies {
-    let history = ClipHistory()
+    let lifecycle: HistoryLifecycle
     private let monitor = ClipboardMonitor(
         pasteboard: SystemPasteboardService(),
         frontmostApp: SystemFrontmostAppService(),
@@ -16,17 +18,70 @@ final class AppDependencies {
         }
     )
     private var captureTask: Task<Void, Never>?
+    private var retryTask: Task<Void, Never>?
+
+    var history: ClipHistory { lifecycle.history }
+
+    init() throws {
+        let location = AppDependencies.makeLocation()
+        lifecycle = HistoryLifecycle(
+            history: ClipHistory(),
+            store: ClipStore(modelContainer: try .history(at: location.storeURL)),
+            keyService: location.keyService,
+            diskSpace: SystemDiskSpaceService(url: location.storeURL.deletingLastPathComponent())
+        )
+    }
+
+    private struct Location {
+        let storeURL: URL
+        let keyService: any EncryptionKeyService
+    }
+
+    private static func makeLocation() -> Location {
+        #if DEBUG
+        if let environment = UITestEnvironment.current {
+            return Location(storeURL: environment.storeURL, keyService: environment.keyService)
+        }
+        #endif
+        let directory = URL.applicationSupportDirectory.appending(path: "AppKit", directoryHint: .isDirectory)
+        return Location(
+            storeURL: directory.appending(path: "History.store"),
+            keyService: SystemEncryptionKeyService(service: "yanis-harrat.AppKit.history")
+        )
+    }
 
     /// Puts a copy back on the pasteboard and moves it to the top of the history.
     func restore(_ clip: Clip) async {
         await monitor.restore(clip)
-        history.promote(clip.id, at: .now)
+        await lifecycle.promote(clip)
     }
 
-    func startCapture() {
-        captureTask = Task { [history, monitor] in
+    func start(onStateChange: @escaping (HistoryLifecycleState) -> Void) {
+        lifecycle.onStateChange = { [weak self] state in
+            self?.apply(state)
+            onStateChange(state)
+        }
+        captureTask = Task { [lifecycle, monitor] in
+            await monitor.setPaused(true)
+            await lifecycle.open()
             for await clip in await monitor.clips() {
-                history.insert(clip)
+                await lifecycle.capture(clip)
+            }
+        }
+    }
+
+    private func apply(_ state: HistoryLifecycleState) {
+        Task { [monitor] in
+            await monitor.setPaused(!state.capturesCopies)
+        }
+        retryTask?.cancel()
+        retryTask = nil
+        guard state.retriesByItself else { return }
+        retryTask = Task { [lifecycle] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(30), tolerance: .seconds(5))
+                guard !Task.isCancelled else { return }
+                await lifecycle.resumeIfPossible()
             }
         }
     }

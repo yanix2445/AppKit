@@ -6,4 +6,13 @@ struct ClipContentTests {
     func countsLines(text: String, expected: Int) {
         #expect(ClipContent.text(text).lineCount == expected)
     }
+
+    @Test func theSearchTextIgnoresCaseAndAccents() {
+        #expect(ClipContent.text("Réunion FACTURÉE").searchText == "reunion facturee")
+    }
+
+    @Test func theSearchTextIsCutToTheLimit() {
+        let text = String(repeating: "a", count: ClipContent.searchTextLimit + 10)
+        #expect(ClipContent.text(text).searchText.count == ClipContent.searchTextLimit)
+    }
 }

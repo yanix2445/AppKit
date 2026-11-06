@@ -12,7 +12,11 @@ The macro technical shape: the stack, how the pieces fit, and the decisions behi
 
 ```mermaid
 flowchart LR
-  Monitor["ClipboardMonitor<br/>AppKitSystem"] -->|"clips"| History["ClipHistory<br/>AppKitCore, en mémoire"]
+  Monitor["ClipboardMonitor<br/>AppKitSystem"]
+  History["ClipHistory<br/>AppKitCore, en mémoire"]
+  Monitor -->|"clips"| Lifecycle["HistoryLifecycle<br/>ouvre, met en pause"]
+  Lifecycle --> Store[("ClipStore, AppKitData<br/>SwiftData chiffré")]
+  Lifecycle --> History
   History --> Views["Bandeau SwiftUI<br/>dans un NSPanel"]
 ```
 
@@ -30,7 +34,7 @@ flowchart LR
 
 ## Gotchas
 
-- `AppKitData` et `Intents/` n'existent pas encore : ils arrivent avec leur premier fichier, jamais vides.
+- `Intents/` n'existe pas encore : il arrive avec son premier fichier, jamais vide.
 - Les packages locaux se compilent en `arm64e` grâce à `iOSPackagesShouldBuildARM64e` dans `WorkspaceSettings.xcsettings` : sans cette clé, l'app, en `arm64e`, ne les trouve pas. Avec Xcode 27.1, c'est bien la clé `iOS` qui agit aussi sur macOS.
 - L'app s'appelle AppKit, comme le framework d'Apple. Son module Swift s'appelle donc `AppKitMain` (`PRODUCT_MODULE_NAME`), et `import AppKit` désigne toujours le framework. Aucun type ni package du projet ne s'appelle `AppKit` tout court : il masquerait le framework.
 - `project.pbxproj` se modifie par les outils MCP Xcode ; seule exception, référencer un dossier ou un fichier racine.

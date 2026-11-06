@@ -13,6 +13,14 @@ public final class ClipHistory {
         clips.insert(clip, at: 0)
     }
 
+    public func replaceAll(with clips: [Clip]) {
+        self.clips = clips
+    }
+
+    public func remove(_ id: Clip.ID) {
+        clips.removeAll { $0.id == id }
+    }
+
     /// Moves a copy back to the top with a new date, keeping a single entry.
     public func promote(_ id: Clip.ID, at date: Date) {
         guard let index = clips.firstIndex(where: { $0.id == id }) else { return }

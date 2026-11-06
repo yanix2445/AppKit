@@ -19,7 +19,13 @@ final class HistoryStripUITests: XCTestCase {
                 NSPasteboard.general.setString(savedText, forType: .string)
             }
         }
+        useFreshHistory()
         app.launch()
+    }
+
+    /// Each launch can use its own history, away from the real one and the real keychain.
+    @MainActor private func useFreshHistory() {
+        app.launchEnvironment["APPKIT_UI_TEST_ID"] = UUID().uuidString
     }
 
     @MainActor private func copy(_ text: String) {
@@ -148,6 +154,49 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
     }
 
+    @MainActor func testCopiesSurviveARelaunchInTheSameOrder() {
+        launchApp()
+        copyAndWait("ancien")
+        copyAndWait("récent")
+        // Same history as the launch before.
+        app.terminate()
+        app.launch()
+
+        openStrip()
+        waitForCards(2)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("récent"))
+        XCTAssertTrue(cards.element(boundBy: 1).label.contains("ancien"))
+    }
+
+    @MainActor func testAMissingKeyErasesNothingUntilConfirmed() {
+        launchApp()
+        copyAndWait("gardé")
+        app.terminate()
+        app.launchEnvironment["APPKIT_UI_TEST_DELETE_KEY"] = "1"
+        app.launch()
+
+        let retry = app.buttons["Réessayer"]
+        let startOver = app.buttons["Repartir à zéro…"]
+        XCTAssertTrue(retry.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Votre historique est chiffré avec une clé introuvable sur ce Mac"].exists)
+
+        retry.click()
+        XCTAssertTrue(retry.waitForExistence(timeout: 5))
+
+        startOver.click()
+        XCTAssertTrue(app.staticTexts["Supprimer tout l’historique, épinglés compris ?"].waitForExistence(timeout: 5))
+        app.buttons["Annuler"].click()
+        XCTAssertTrue(retry.waitForExistence(timeout: 5))
+
+        startOver.click()
+        let deleteAll = app.buttons["Tout supprimer"]
+        XCTAssertTrue(deleteAll.waitForExistence(timeout: 5))
+        deleteAll.click()
+
+        openStrip()
+        XCTAssertTrue(app.descendants(matching: .any)["history.empty"].waitForExistence(timeout: 5))
+    }
+
     @MainActor private func pasteboardText() -> String? {
         NSPasteboard.general.string(forType: .string)
     }
@@ -199,6 +248,7 @@ final class HistoryStripUITests: XCTestCase {
         ]
         for (style, arguments) in appearances {
             app.terminate()
+            useFreshHistory()
             app.launchArguments = arguments
             app.launch()
             openStrip()

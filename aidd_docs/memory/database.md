@@ -4,11 +4,11 @@ The data store: its type, the main entities, and the conventions. The macro mode
 
 ## Setup
 
-- SwiftData, qui arrive avec la story « Garder mon historique après un redémarrage, chiffré » ; pour l'instant, l'historique ne vit qu'en mémoire (`ClipHistory`).
+- SwiftData, dans `Application Support/AppKit/History.store`, créé par `ModelContainer.history(at:)` dans `AppKitData`.
 
 ## Main entities
 
-- Aucun modèle stocké pour l'instant.
+- `ClipRecord` (schéma `AppKitSchemaV1`) : une copie stockée.
 
 ## Conventions
 

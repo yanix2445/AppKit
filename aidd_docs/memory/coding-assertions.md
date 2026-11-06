@@ -13,6 +13,7 @@ The fast gate.
 | 1 | `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test -only-testing:AppKitTests` | build Swift 6 sans erreur, tests unitaires |
 | 2 | `swift test --package-path Packages/AppKitCore` | tests du cœur |
 | 3 | `swift test --package-path Packages/AppKitSystem` | tests de l'accès à macOS |
+| 4 | `swift test --package-path Packages/AppKitData` | tests du stockage chiffré |
 
 ## Before push
 

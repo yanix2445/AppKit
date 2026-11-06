@@ -1,0 +1,89 @@
+import AppKitCore
+import Foundation
+import SwiftData
+
+/// Reads and writes sealed copies, away from the main thread. Each write is one transaction:
+/// it lands whole or not at all.
+@ModelActor
+public actor ClipStore {
+    private var cipher: ClipCipher?
+
+    public func unlock(with cipher: ClipCipher) {
+        self.cipher = cipher
+    }
+
+    /// Readable without the key, to tell an empty history from one whose key is missing.
+    public func hasRecords() throws -> Bool {
+        try modelContext.fetchCount(FetchDescriptor<ClipRecord>()) > 0
+    }
+
+    public func load() throws -> ClipStoreSnapshot {
+        let cipher = try requireCipher()
+        let descriptor = FetchDescriptor<ClipRecord>(
+            sortBy: [SortDescriptor(\.capturedAt, order: .reverse)]
+        )
+        var clips: [Clip] = []
+        var unreadableCount = 0
+        let decoder = JSONDecoder()
+        for record in try modelContext.fetch(descriptor) {
+            do {
+                let data = try cipher.open(record.sealedPayload, for: record.uid)
+                let payload = try decoder.decode(ClipPayload.self, from: data)
+                clips.append(
+                    Clip(
+                        id: record.uid,
+                        content: payload.content,
+                        source: payload.source,
+                        capturedAt: record.capturedAt
+                    )
+                )
+            } catch {
+                unreadableCount += 1
+            }
+        }
+        return ClipStoreSnapshot(clips: clips, unreadableCount: unreadableCount)
+    }
+
+    public func insert(_ clip: Clip) throws {
+        let cipher = try requireCipher()
+        let payload = try JSONEncoder().encode(ClipPayload(clip: clip))
+        let searchText = Data(clip.content.searchText.utf8)
+        modelContext.insert(
+            ClipRecord(
+                uid: clip.id,
+                capturedAt: clip.capturedAt,
+                byteCount: payload.count,
+                kind: clip.content.kindIdentifier,
+                sealedPayload: try cipher.seal(payload, for: clip.id),
+                sealedSearchText: try cipher.seal(searchText, for: clip.id)
+            )
+        )
+        try saveOrRollBack()
+    }
+
+    public func promote(_ id: Clip.ID, at date: Date) throws {
+        let descriptor = FetchDescriptor<ClipRecord>(predicate: #Predicate { $0.uid == id })
+        guard let record = try modelContext.fetch(descriptor).first else { return }
+        record.capturedAt = date
+        try saveOrRollBack()
+    }
+
+    public func deleteAll() throws {
+        try modelContext.delete(model: ClipRecord.self)
+        try saveOrRollBack()
+    }
+
+    private func requireCipher() throws -> ClipCipher {
+        guard let cipher else { throw ClipStoreError.locked }
+        return cipher
+    }
+
+    private func saveOrRollBack() throws {
+        do {
+            try modelContext.save()
+        } catch {
+            modelContext.rollback()
+            throw error
+        }
+    }
+}
