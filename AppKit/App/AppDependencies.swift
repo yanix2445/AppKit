@@ -33,7 +33,8 @@ final class AppDependencies {
             history: ClipHistory(),
             store: ClipStore(modelContainer: try .history(at: location.storeURL)),
             keyService: location.keyService,
-            diskSpace: SystemDiskSpaceService(url: location.storeURL.deletingLastPathComponent())
+            diskSpace: SystemDiskSpaceService(url: location.storeURL.deletingLastPathComponent()),
+            thumbnails: SystemClipThumbnailService()
         )
     }
 
@@ -69,7 +70,7 @@ final class AppDependencies {
 
     /// Puts a copy back on the pasteboard and moves it to the top of the history.
     func restore(_ clip: Clip, style: ClipPasteStyle) async {
-        await monitor.restore(clip, style: style)
+        await monitor.restore(clip, formats: await lifecycle.formats(of: clip.id), style: style)
         await lifecycle.promote(clip)
     }
 
@@ -81,8 +82,8 @@ final class AppDependencies {
         captureTask = Task { [lifecycle, monitor] in
             await monitor.setPaused(true)
             await lifecycle.open()
-            for await clip in await monitor.clips() {
-                await lifecycle.capture(clip)
+            for await capture in await monitor.captures() {
+                await lifecycle.capture(capture)
             }
         }
     }

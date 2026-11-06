@@ -1,9 +1,15 @@
-/// Read access to a pasteboard.
+import AppKitCore
+
+/// Read and write access to a pasteboard.
 public protocol PasteboardService: Sendable {
     var changeCount: Int { get }
     func readTypes() -> Set<String>
     func readText() -> String?
+    /// Every format of the copy, byte for byte.
+    func readFormats() -> [ClipRepresentation]
 
     /// Replaces the content with this text, and returns the new change count.
     func write(text: String) -> Int
+    /// Replaces the content with these formats, and returns the new change count.
+    func write(formats: [ClipRepresentation]) -> Int
 }

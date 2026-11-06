@@ -1,5 +1,5 @@
 import AppKitCore
-import AppKitData
+@testable import AppKitData
 import Foundation
 import SwiftData
 import Testing
@@ -130,6 +130,72 @@ struct ClipStoreTests {
         let snapshot = try await makeStore(at: directory).load()
         #expect(snapshot.clips == [saved])
         #expect(snapshot.unreadableCount == 0)
+    }
+
+    @Test func anImageComesBackByteForByteWithItsThumbnail() async throws {
+        let directory = try makeDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let formats = [
+            ClipRepresentation(type: "public.png", data: Data((0...255).map(UInt8.init))),
+            ClipRepresentation(type: "public.tiff", data: Data(repeating: 7, count: 2_000_000)),
+        ]
+        let media = ClipMedia(byteCount: 2_000_256, pixelWidth: 10, pixelHeight: 20, hasThumbnail: true)
+        let image = Clip(content: .image(media), source: nil, capturedAt: .now)
+        try await makeStore(at: directory).insert(image, formats: formats, thumbnail: Data([1, 2, 3]))
+
+        let store = try await makeStore(at: directory)
+
+        #expect(try await store.formats(of: image.id) == formats)
+        #expect(try await store.thumbnail(of: image.id) == Data([1, 2, 3]))
+        #expect(try await store.load().clips.first?.content == .image(media))
+    }
+
+    @Test func noFileContainsAnImageInClear() async throws {
+        let directory = try makeDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let witness = Data("signature-de-image-témoin".utf8)
+        let image = Clip(content: .image(ClipMedia(byteCount: witness.count)), source: nil, capturedAt: .now)
+        try await makeStore(at: directory).insert(
+            image,
+            formats: [ClipRepresentation(type: "public.png", data: witness)],
+            thumbnail: witness
+        )
+
+        let enumerator = try #require(FileManager.default.enumerator(at: directory, includingPropertiesForKeys: nil))
+        let files = enumerator.allObjects.compactMap { $0 as? URL }.filter { !$0.hasDirectoryPath }
+        for url in files {
+            #expect(try Data(contentsOf: url).range(of: witness) == nil, "\(url.lastPathComponent)")
+        }
+    }
+
+    @Test func aHistoryFromTheFirstVersionOpensAndKeepsItsCopies() async throws {
+        let directory = try makeDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appending(path: "History.store")
+
+        // Written as the first version did, through its own schema.
+        let cipher = try ClipCipher(keyData: Self.keyA)
+        let old = clip("ancienne version")
+        do {
+            let container = try ModelContainer(
+                for: Schema(versionedSchema: AppKitSchemaV1.self),
+                configurations: ModelConfiguration(url: url)
+            )
+            let context = ModelContext(container)
+            context.insert(
+                AppKitSchemaV1.ClipRecord(
+                    uid: old.id,
+                    capturedAt: old.capturedAt,
+                    byteCount: 1,
+                    kind: "text",
+                    sealedPayload: try cipher.seal(JSONEncoder().encode(ClipPayload(clip: old)), for: old.id),
+                    sealedSearchText: try cipher.seal(Data("ancienne version".utf8), for: old.id)
+                )
+            )
+            try context.save()
+        }
+
+        #expect(try await makeStore(at: directory).load().clips == [old])
     }
 
     @Test func deletingEverythingEmptiesTheStore() async throws {

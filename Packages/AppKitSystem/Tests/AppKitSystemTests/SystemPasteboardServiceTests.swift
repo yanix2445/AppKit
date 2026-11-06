@@ -1,10 +1,16 @@
 import AppKit
+import AppKitCore
 import AppKitSystem
 import Testing
 
 struct SystemPasteboardServiceTests {
+    /// `withUniqueName()` can hand out a released name again while other tests run in parallel.
+    private func makePasteboard() -> NSPasteboard {
+        NSPasteboard(name: NSPasteboard.Name("AppKitSystemTests.\(UUID().uuidString)"))
+    }
+
     @Test func readsAPasteboardWithoutTouchingTheGeneralOne() {
-        let pasteboard = NSPasteboard.withUniqueName()
+        let pasteboard = makePasteboard()
         defer { pasteboard.releaseGlobally() }
         let service = SystemPasteboardService(name: pasteboard.name)
         let before = service.changeCount
@@ -16,8 +22,28 @@ struct SystemPasteboardServiceTests {
         #expect(service.readText() == "bonjour")
     }
 
+    @Test func formatsComeBackByteForByte() {
+        let pasteboard = makePasteboard()
+        defer { pasteboard.releaseGlobally() }
+        let service = SystemPasteboardService(name: pasteboard.name)
+        let formats = [
+            ClipRepresentation(type: "public.png", data: Data((0...255).map(UInt8.init))),
+            ClipRepresentation(type: "com.exemple.prive", data: Data([0, 1, 2])),
+        ]
+
+        let count = service.write(formats: formats)
+
+        #expect(count == pasteboard.changeCount)
+        let read = service.readFormats()
+        #expect(read.count == 2)
+        #expect(Set(read.map(\.type)) == Set(formats.map(\.type)))
+        for format in formats {
+            #expect(read.first { $0.type == format.type }?.data == format.data)
+        }
+    }
+
     @Test func readsTheTypesOfAMarkedCopy() {
-        let pasteboard = NSPasteboard.withUniqueName()
+        let pasteboard = makePasteboard()
         defer { pasteboard.releaseGlobally() }
         let marker = NSPasteboard.PasteboardType("org.nspasteboard.ConcealedType")
         pasteboard.declareTypes([.string, marker], owner: nil)
@@ -30,7 +56,7 @@ struct SystemPasteboardServiceTests {
     }
 
     @Test func writingReplacesTheContentAndReturnsTheNewCount() {
-        let pasteboard = NSPasteboard.withUniqueName()
+        let pasteboard = makePasteboard()
         defer { pasteboard.releaseGlobally() }
         let service = SystemPasteboardService(name: pasteboard.name)
         pasteboard.clearContents()

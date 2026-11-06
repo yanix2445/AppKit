@@ -1,3 +1,4 @@
+import AppKitCore
 import AppKitSystem
 import Synchronization
 
@@ -7,6 +8,7 @@ public final class FakePasteboardService: PasteboardService {
         var changeCount = 0
         var text: String?
         var types: Set<String> = []
+        var formats: [ClipRepresentation] = []
         var readCount = 0
         var replacementDuringRead: (text: String, types: Set<String>)?
     }
@@ -37,6 +39,28 @@ public final class FakePasteboardService: PasteboardService {
         }
     }
 
+    public func readFormats() -> [ClipRepresentation] {
+        state.withLock {
+            $0.readCount += 1
+            return $0.formats
+        }
+    }
+
+    public func write(formats: [ClipRepresentation]) -> Int {
+        state.withLock {
+            $0.changeCount += 1
+            $0.text = nil
+            $0.formats = formats
+            $0.types = Set(formats.map(\.type))
+            return $0.changeCount
+        }
+    }
+
+    /// Simulates a copy of an image or a PDF.
+    public func copy(formats: [ClipRepresentation]) {
+        _ = write(formats: formats)
+    }
+
     /// How many times the content was read.
     public var readCount: Int {
         state.withLock { $0.readCount }
@@ -52,6 +76,7 @@ public final class FakePasteboardService: PasteboardService {
             $0.changeCount += 1
             $0.text = text
             $0.types = []
+            $0.formats = []
             return $0.changeCount
         }
     }

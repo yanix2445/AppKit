@@ -241,6 +241,36 @@
         }
       }
     },
+    "Image": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image"
+          }
+        }
+      }
+    },
+    "Image · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image · %@"
+          }
+        }
+      }
+    },
+    "Image · %lld × %lld px": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image · %1$lld × %2$lld px"
+          }
+        }
+      }
+    },
     "Jamais gardés, et jamais écrits sur le disque, même temporairement.": {
       "localizations": {
         "en": {
@@ -327,6 +357,66 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open History"
+          }
+        }
+      }
+    },
+    "PDF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF"
+          }
+        }
+      }
+    },
+    "PDF · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF · %@"
+          }
+        }
+      }
+    },
+    "PDF · %@ · %lld pages": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "PDF · %@ · %lld page"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "PDF · %@ · %lld pages"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "PDF · %@ · %lld page"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "PDF · %@ · %lld pages"
+                }
+              }
+            }
           }
         }
       }

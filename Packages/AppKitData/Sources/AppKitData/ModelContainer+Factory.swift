@@ -18,7 +18,7 @@ extension ModelContainer {
 
     private static func make(_ configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
-            for: Schema(versionedSchema: AppKitSchemaV1.self),
+            for: Schema(versionedSchema: AppKitSchemaV2.self),
             migrationPlan: AppKitMigrationPlan.self,
             configurations: configuration
         )

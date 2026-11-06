@@ -17,6 +17,16 @@ public final class ClipHistory {
         self.clips = clips
     }
 
+    /// Puts a newer state of a copy in place of the old one, at the same position.
+    public func update(_ clip: Clip) {
+        guard let index = clips.firstIndex(where: { $0.id == clip.id }) else { return }
+        clips[index] = clip
+    }
+
+    public func clip(withID id: Clip.ID) -> Clip? {
+        clips.first { $0.id == id }
+    }
+
     public func remove(_ id: Clip.ID) {
         clips.removeAll { $0.id == id }
     }

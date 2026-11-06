@@ -1,4 +1,5 @@
 import AppKit
+import AppKitCore
 
 /// Reads a real pasteboard. It keeps the name rather than the object, which is not `Sendable`.
 public struct SystemPasteboardService: PasteboardService {
@@ -24,6 +25,24 @@ public struct SystemPasteboardService: PasteboardService {
 
     public func readText() -> String? {
         NSPasteboard(name: name).string(forType: .string)
+    }
+
+    public func readFormats() -> [ClipRepresentation] {
+        guard let item = NSPasteboard(name: name).pasteboardItems?.first else { return [] }
+        return item.types.compactMap { type in
+            item.data(forType: type).map { ClipRepresentation(type: type.rawValue, data: $0) }
+        }
+    }
+
+    public func write(formats: [ClipRepresentation]) -> Int {
+        let pasteboard = NSPasteboard(name: name)
+        pasteboard.clearContents()
+        let item = NSPasteboardItem()
+        for format in formats {
+            item.setData(format.data, forType: NSPasteboard.PasteboardType(format.type))
+        }
+        pasteboard.writeObjects([item])
+        return pasteboard.changeCount
     }
 
     public func write(text: String) -> Int {

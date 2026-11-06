@@ -12,6 +12,8 @@ extension ClipContent {
                 text.prefix(Self.searchTextLimit)
                     .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
             )
+        case .image, .pdf:
+            ""
         }
     }
 
@@ -19,6 +21,8 @@ extension ClipContent {
     public var kindIdentifier: String {
         switch self {
         case .text: "text"
+        case .image: "image"
+        case .pdf: "pdf"
         }
     }
 }

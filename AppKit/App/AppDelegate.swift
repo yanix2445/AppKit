@@ -30,7 +30,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             askToOpenSettings: { [directPasteAlert] in directPasteAlert.askToOpenSettings() }
         )
 
-        let historyStrip = HistoryStripController(history: dependencies.history) { [weak self] clip, style in
+        let lifecycle = dependencies.lifecycle
+        let historyStrip = HistoryStripController(
+            history: dependencies.history,
+            loadThumbnail: { await lifecycle.thumbnail(of: $0) }
+        ) { [weak self] clip, style in
             self?.restore(clip, style: style)
         }
         self.historyStrip = historyStrip

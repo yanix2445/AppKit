@@ -55,22 +55,40 @@ private final class FakeDiskSpaceService: DiskSpaceService {
     }
 }
 
+private struct StubThumbnailService: ClipThumbnailService {
+    var delay: Duration = .zero
+
+    func makeThumbnail(from formats: [ClipRepresentation]) async -> ClipThumbnail {
+        try? await Task.sleep(for: delay)
+        return ClipThumbnail(imageData: Data([1]), pixelWidth: 10, pixelHeight: 20)
+    }
+}
+
 @MainActor
 struct HistoryLifecycleTests {
     private let keyService = FakeEncryptionKeyService()
     private let disk = FakeDiskSpaceService()
+    private var thumbnails: any ClipThumbnailService = StubThumbnailService()
 
     private func makeLifecycle(store: ClipStore? = nil) throws -> HistoryLifecycle {
         HistoryLifecycle(
             history: ClipHistory(),
             store: try store ?? ClipStore(modelContainer: .inMemoryHistory()),
             keyService: keyService,
-            diskSpace: disk
+            diskSpace: disk,
+            thumbnails: thumbnails
         )
     }
 
-    private func clip(_ text: String) -> Clip {
-        Clip(content: .text(text), source: nil, capturedAt: .now)
+    private func clip(_ text: String) -> ClipCapture {
+        ClipCapture(clip: Clip(content: .text(text), source: nil, capturedAt: .now))
+    }
+
+    private func image(formats: [ClipRepresentation]) -> ClipCapture {
+        ClipCapture(
+            clip: Clip(content: .image(ClipMedia(byteCount: 3, isProcessing: true)), source: nil, capturedAt: .now),
+            formats: formats
+        )
     }
 
     @Test func aFirstLaunchCreatesAKeyAndCaptures() async throws {
@@ -90,7 +108,7 @@ struct HistoryLifecycleTests {
         let second = try makeLifecycle(store: store)
         await second.open()
 
-        #expect(second.history.clips.map(\.id) == [saved.id])
+        #expect(second.history.clips.map(\.id) == [saved.clip.id])
     }
 
     @Test func aMissingKeyErasesNothingAndCreatesNoKey() async throws {
@@ -199,5 +217,39 @@ struct HistoryLifecycleTests {
         lifecycle.onStateChange = { states.append($0) }
         await lifecycle.open()
         #expect(states == [.ready])
+    }
+
+    @Test mutating func aSlowImageShowsAtOnceAndPastesWhileProcessing() async throws {
+        thumbnails = StubThumbnailService(delay: .seconds(1))
+        let lifecycle = try makeLifecycle()
+        await lifecycle.open()
+        let formats = [ClipRepresentation(type: "public.png", data: Data([1, 2, 3]))]
+        let capture = image(formats: formats)
+
+        let elapsed = await ContinuousClock().measure {
+            await lifecycle.capture(capture)
+        }
+
+        #expect(elapsed < .milliseconds(50), "\(elapsed)")
+        #expect(lifecycle.history.clips.first?.content.media?.isProcessing == true)
+        #expect(await lifecycle.formats(of: capture.clip.id) == formats)
+    }
+
+    @Test func aProcessedImageGetsItsDetailsAndStaysOnDisk() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let lifecycle = try makeLifecycle(store: store)
+        await lifecycle.open()
+        let formats = [ClipRepresentation(type: "public.png", data: Data([1, 2, 3]))]
+        let capture = image(formats: formats)
+
+        await lifecycle.capture(capture)
+        await lifecycle.finishProcessing()
+
+        let media = try #require(lifecycle.history.clips.first?.content.media)
+        #expect(!media.isProcessing)
+        #expect(media.hasThumbnail)
+        #expect(media.pixelWidth == 10)
+        #expect(await lifecycle.formats(of: capture.clip.id) == formats)
+        #expect(await lifecycle.thumbnail(of: capture.clip.id) == Data([1]))
     }
 }
