@@ -27,6 +27,19 @@ public struct SystemPasteboardService: PasteboardService {
         NSPasteboard(name: name).string(forType: .string)
     }
 
+    public func readColor() -> ClipColor? {
+        let pasteboard = NSPasteboard(name: name)
+        guard let colors = pasteboard.readObjects(forClasses: [NSColor.self]) as? [NSColor],
+              let color = colors.first?.usingColorSpace(.sRGB)
+        else { return nil }
+        return ClipColor(
+            red: Double(color.redComponent),
+            green: Double(color.greenComponent),
+            blue: Double(color.blueComponent),
+            alpha: Double(color.alphaComponent)
+        )
+    }
+
     public func readFormats() -> [ClipRepresentation] {
         guard let item = NSPasteboard(name: name).pasteboardItems?.first else { return [] }
         return item.types.compactMap { type in

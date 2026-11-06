@@ -198,6 +198,23 @@ struct ClipStoreTests {
         #expect(try await makeStore(at: directory).load().clips == [old])
     }
 
+    @Test(arguments: [
+        ClipContent.richText("Bonjour"),
+        .link("https://apple.com"),
+        .color(ClipColor(red: 1, green: 0.5, blue: 0, alpha: 0.5, text: "rgba(255, 128, 0, 0.5)")),
+    ])
+    func eachKindComesBackAsItWas(content: ClipContent) async throws {
+        let store = ClipStore(modelContainer: try .inMemoryHistory())
+        await store.unlock(with: try ClipCipher(keyData: Self.keyA))
+        let saved = Clip(content: content, source: nil, capturedAt: .now)
+        let formats = [ClipRepresentation(type: "public.rtf", data: Data([1, 2]))]
+
+        try await store.insert(saved, formats: formats)
+
+        #expect(try await store.load().clips.first?.content == content)
+        #expect(try await store.formats(of: saved.id) == formats)
+    }
+
     @Test func deletingEverythingEmptiesTheStore() async throws {
         let store = ClipStore(modelContainer: try .inMemoryHistory())
         await store.unlock(with: try ClipCipher(keyData: Self.keyA))

@@ -113,6 +113,11 @@ final class HistoryLifecycle {
     }
 
     private func process(_ id: Clip.ID, formats: [ClipRepresentation]) async {
+        if let clip = history.clip(withID: id), clip.content.media == nil {
+            // A text has its formats to keep, but no preview to make.
+            await store(clip, formats: formats, thumbnail: nil)
+            return
+        }
         let thumbnail = await thumbnails.makeThumbnail(from: formats)
         // Read again: the copy may have moved or gone in the meantime.
         guard let clip = history.clip(withID: id), var media = clip.content.media else { return }

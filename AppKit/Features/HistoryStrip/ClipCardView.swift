@@ -1,4 +1,5 @@
 import AppKitCore
+import Foundation
 import SwiftUI
 
 /// One copy in the strip.
@@ -11,6 +12,9 @@ struct ClipCardView: View {
     private var title: String {
         switch clip.content {
         case .text: String(localized: "Texte brut")
+        case .richText: String(localized: "Texte enrichi")
+        case .link: String(localized: "Lien")
+        case .color: String(localized: "Couleur")
         case .image: String(localized: "Image")
         case .pdf: String(localized: "PDF")
         }
@@ -20,6 +24,14 @@ struct ClipCardView: View {
         switch clip.content {
         case .text:
             return String(localized: "Texte brut · \(clip.content.lineCount) lignes")
+        case .richText:
+            return String(localized: "Texte enrichi · \(clip.content.lineCount) lignes")
+        case .link:
+            return String(localized: "Lien")
+        case .color(let color):
+            return color.text.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("#")
+                ? String(localized: "Couleur · HEX")
+                : String(localized: "Couleur")
         case .image(let media):
             if let width = media.pixelWidth, let height = media.pixelHeight {
                 return String(localized: "Image · \(width) × \(height) px")
@@ -44,7 +56,8 @@ struct ClipCardView: View {
     /// What VoiceOver reads of the content, which an image does not have in words.
     private var spokenContent: String {
         switch clip.content {
-        case .text(let text): String(text.prefix(StripMetrics.previewCharacterLimit))
+        case .text(let text), .richText(let text), .link(let text): String(text.prefix(StripMetrics.previewCharacterLimit))
+        case .color(let color): color.text
         case .image, .pdf: title
         }
     }
@@ -82,16 +95,25 @@ struct ClipCardView: View {
         }
     }
 
+    private func textPreview(_ text: String) -> some View {
+        Text(verbatim: String(text.prefix(StripMetrics.previewCharacterLimit)))
+            .font(.body)
+            .lineLimit(StripMetrics.previewLineLimit)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.horizontal, Spacing.medium)
+            .padding(.top, Spacing.small)
+    }
+
     @ViewBuilder
     private var content: some View {
         switch clip.content {
-        case .text(let text):
-            Text(verbatim: String(text.prefix(StripMetrics.previewCharacterLimit)))
-                .font(.body)
-                .lineLimit(StripMetrics.previewLineLimit)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .padding(.horizontal, Spacing.medium)
-                .padding(.top, Spacing.small)
+        case .text(let text), .richText(let text):
+            textPreview(text)
+        case .link(let address):
+            textPreview(address.trimmingCharacters(in: .whitespacesAndNewlines))
+                .foregroundStyle(Color.accentColor)
+        case .color(let color):
+            ClipColorPreviewView(color: color)
         case .image(let media):
             ClipMediaPreviewView(id: clip.id, media: media, symbolName: "photo", contentMode: .fill, thumbnailProvider: thumbnailProvider)
         case .pdf(let media):

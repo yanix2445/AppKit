@@ -5,6 +5,8 @@ public protocol PasteboardService: Sendable {
     var changeCount: Int { get }
     func readTypes() -> Set<String>
     func readText() -> String?
+    /// The color on the pasteboard, in sRGB.
+    func readColor() -> ClipColor?
     /// Every format of the copy, byte for byte.
     func readFormats() -> [ClipRepresentation]
 

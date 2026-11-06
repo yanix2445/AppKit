@@ -201,6 +201,26 @@
         }
       }
     },
+    "Couleur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color"
+          }
+        }
+      }
+    },
+    "Couleur · HEX": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color · HEX"
+          }
+        }
+      }
+    },
     "Déjà pris": {
       "localizations": {
         "en": {
@@ -327,6 +347,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Free Up Space…"
+          }
+        }
+      }
+    },
+    "Lien": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link"
           }
         }
       }
@@ -564,6 +594,56 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "Texte brut · %lld lignes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Texte enrichi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rich text"
+          }
+        }
+      }
+    },
+    "Texte enrichi · %lld lignes": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Rich text · %lld line"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Rich text · %lld lines"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Texte enrichi · %lld ligne"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Texte enrichi · %lld lignes"
                 }
               }
             }

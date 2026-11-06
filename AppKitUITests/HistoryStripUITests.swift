@@ -365,6 +365,59 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertEqual(pasteboard.data(forType: NSPasteboard.PasteboardType("public.png")), png)
     }
 
+    @MainActor private func copyRichText(_ text: String) throws -> Data {
+        let attributed = NSAttributedString(
+            string: text,
+            attributes: [.font: NSFont.boldSystemFont(ofSize: 18), .foregroundColor: NSColor.systemRed]
+        )
+        let rtf = try XCTUnwrap(attributed.rtf(from: NSRange(location: 0, length: attributed.length)))
+        pasteboard.clearContents()
+        pasteboard.setString(text, forType: .string)
+        pasteboard.setData(rtf, forType: .rtf)
+        Thread.sleep(forTimeInterval: 1)
+        return rtf
+    }
+
+    @MainActor func testARichTextKeepsItsFormatsUnlessAskedForPlainText() throws {
+        launchApp()
+        let rtf = try copyRichText("Texte en gras")
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("Texte enrichi"), cards.element(boundBy: 0).label)
+
+        strip.typeKey(.return, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(pasteboard.data(forType: .rtf), rtf)
+
+        openStrip()
+        waitForCards(1)
+        strip.typeKey(.return, modifierFlags: .shift)
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertNil(pasteboard.data(forType: .rtf))
+        XCTAssertEqual(pasteboardText(), "Texte en gras")
+    }
+
+    @MainActor func testLinksAndColorsAreRecognized() {
+        launchApp()
+        copyAndWait("  https://www.apple.com/fr/ ")
+        copyAndWait("#FF5733")
+        pasteboard.clearContents()
+        pasteboard.writeObjects([NSColor(srgbRed: 0.2, green: 0.5, blue: 0.9, alpha: 1)])
+        Thread.sleep(forTimeInterval: 1)
+        openStrip()
+        waitForCards(3)
+
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("Couleur"), cards.element(boundBy: 0).label)
+        XCTAssertTrue(cards.element(boundBy: 1).label.contains("#FF5733"), cards.element(boundBy: 1).label)
+        XCTAssertTrue(cards.element(boundBy: 2).label.contains("Lien"), cards.element(boundBy: 2).label)
+        attachScreenshot(named: "Lien et couleurs")
+
+        strip.typeKey(.rightArrow, modifierFlags: [])
+        strip.typeKey(.return, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(pasteboardText(), "#FF5733")
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }

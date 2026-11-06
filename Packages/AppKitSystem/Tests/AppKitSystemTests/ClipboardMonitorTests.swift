@@ -176,6 +176,71 @@ struct ClipboardMonitorTests {
         #expect(await monitor.poll() == nil)
     }
 
+    @Test func aRichTextIsCapturedAndComesBackWithItsFormats() async throws {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        let formats = [
+            ClipRepresentation(type: "public.utf8-plain-text", data: Data("Bonjour".utf8)),
+            ClipRepresentation(type: "public.rtf", data: Data("{\\rtf1 Bonjour}".utf8)),
+        ]
+        pasteboard.copy(text: "Bonjour", formats: formats)
+
+        let capture = try #require(await monitor.poll())
+        #expect(capture.clip.content == .richText("Bonjour"))
+        #expect(capture.formats == formats)
+
+        await monitor.restore(capture.clip, formats: capture.formats)
+        #expect(pasteboard.readFormats() == formats)
+        #expect(await monitor.poll() == nil)
+    }
+
+    @Test func plainTextStyleLeavesTheFormatsOut() async throws {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        let formats = [ClipRepresentation(type: "public.rtf", data: Data("{\\rtf1 Bonjour}".utf8))]
+        let clip = Clip(content: .richText("Bonjour"), source: source, capturedAt: .now)
+
+        await monitor.restore(clip, formats: formats, style: .plainText)
+
+        #expect(pasteboard.readText() == "Bonjour")
+        #expect(pasteboard.readFormats().isEmpty)
+        #expect(clip.content == .richText("Bonjour"))
+    }
+
+    @Test func aPlainTextHasNoFormatsToRead() async throws {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.copy(text: "Bonjour", types: ["public.utf8-plain-text"])
+        #expect(try #require(await monitor.poll()).formats.isEmpty)
+    }
+
+    @Test func aColorWrittenInTextComesBackAsText() async throws {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.copy(text: "rgb(255, 87, 51)")
+
+        let capture = try #require(await monitor.poll())
+        guard case .color(let color) = capture.clip.content else {
+            Issue.record("Une couleur était attendue.")
+            return
+        }
+        #expect(color.text == "rgb(255, 87, 51)")
+
+        await monitor.restore(capture.clip)
+        #expect(pasteboard.readText() == "rgb(255, 87, 51)")
+    }
+
+    @Test func aPickedColorIsCapturedWithItsFormats() async throws {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.copy(color: ClipColor(red: 1, green: 0, blue: 0))
+
+        let capture = try #require(await monitor.poll())
+
+        #expect(capture.clip.content == .color(ClipColor(red: 1, green: 0, blue: 0)))
+        #expect(capture.formats.count == 1)
+    }
+
     @Test func thePollingStreamDeliversACopy() async throws {
         let pasteboard = FakePasteboardService()
         let monitor = makeMonitor(

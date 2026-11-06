@@ -1,5 +1,6 @@
 import AppKitCore
 import AppKitSystem
+import Foundation
 import Synchronization
 
 /// A pasteboard the tests write to.
@@ -9,6 +10,7 @@ public final class FakePasteboardService: PasteboardService {
         var text: String?
         var types: Set<String> = []
         var formats: [ClipRepresentation] = []
+        var color: ClipColor?
         var readCount = 0
         var replacementDuringRead: (text: String, types: Set<String>)?
     }
@@ -36,6 +38,31 @@ public final class FakePasteboardService: PasteboardService {
                 $0.types = replacement.types
             }
             return text
+        }
+    }
+
+    public func readColor() -> ClipColor? {
+        state.withLock { $0.color }
+    }
+
+    /// Simulates a copy from a color picker.
+    public func copy(color: ClipColor) {
+        state.withLock {
+            $0.changeCount += 1
+            $0.text = nil
+            $0.color = color
+            $0.types = [ClipClassifier.colorType]
+            $0.formats = [ClipRepresentation(type: ClipClassifier.colorType, data: Data([1]))]
+        }
+    }
+
+    /// Simulates a copy with its text and other formats.
+    public func copy(text: String, formats: [ClipRepresentation]) {
+        state.withLock {
+            $0.changeCount += 1
+            $0.text = text
+            $0.formats = formats
+            $0.types = Set(formats.map(\.type)).union([ClipClassifier.plainTextType])
         }
     }
 
