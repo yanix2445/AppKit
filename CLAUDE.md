@@ -48,6 +48,10 @@ xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS
 
 # Tous les tests, y compris l'interface (XCUITest)
 xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test
+
+# Tests des packages, que le schéma AppKit ne lance pas
+swift test --package-path Packages/AppKitCore
+swift test --package-path Packages/AppKitSystem
 ```
 
 Quand Xcode est ouvert, les outils MCP Xcode (`BuildProject`, `RunAllTests`,
@@ -58,17 +62,17 @@ l'IDE.
 
 ```text
 AppKit/
-  App/AppKitApp.swift      point d'entrée
-  Resources/Assets.xcassets
-  ContentView.swift         modèle du template, à remplacer par la première feature
-  Item.swift                modèle du template, à remplacer par la première feature
+  App/                      point d'entrée et assemblage
+  Features/                 HistoryStrip, MenuBar
+  Shared/                   tokens de design, extensions
+  Resources/                assets, String Catalog
 AppKitTests/               tests Swift Testing
 AppKitUITests/             tests XCUITest
+Packages/                   AppKitCore, AppKitSystem
 aidd_docs/                  toute la documentation (dossier synchronisé, sans cible)
 ```
 
-`Features/`, `Shared/`, `Intents/` et `Packages/` apparaîtront avec leur premier
-fichier.
+`AppKitData` et `Intents/` apparaîtront avec leur premier fichier.
 
 ## Documentation
 

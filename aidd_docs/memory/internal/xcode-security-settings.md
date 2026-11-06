@@ -4,6 +4,7 @@ Security build settings decisions for AppKit. Audited on 2026-11-02 with Apple's
 
 ## Enabled settings
 
+- `iOSPackagesShouldBuildARM64e` and `macOSPackagesShouldBuildARM64e` in `WorkspaceSettings.xcsettings`: local Swift packages do not follow the app to `arm64e` on their own. In Xcode 27.1 only the `iOS` key has an effect, on macOS as well; the `macOS` key from Apple's guide alone leaves them in `arm64`.
 - `ENABLE_ENHANCED_SECURITY`: set at the project level (Debug and Release) and on the AppKit app target. It cascades pointer authentication, security compiler warnings, stack zero-initialization, typed allocators and C++ stdlib hardening. The app now builds as `arm64e`.
 - `com.apple.security.hardened-process`: on the AppKit app, in `AppKit/AppKit.entitlements`, with `enhanced-security-version-string` set to `2`.
 - `com.apple.security.hardened-process.hardened-heap`: on the AppKit app (Memory Safety).

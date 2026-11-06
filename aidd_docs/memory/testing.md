@@ -39,3 +39,4 @@ Ce qui vaut pour toute story, en plus de ses propres critères :
 
 - Unitaires : `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test -only-testing:AppKitTests`
 - Tout : `xcodebuild -project AppKit.xcodeproj -scheme AppKit -destination 'platform=macOS' test`
+- Packages, que le schéma AppKit ne lance pas : `swift test --package-path Packages/AppKitCore` et `swift test --package-path Packages/AppKitSystem`

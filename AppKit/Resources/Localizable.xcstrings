@@ -1,0 +1,146 @@
+{
+  "sourceLanguage": "fr",
+  "strings": {
+    "%1$@, %2$@, %3$@, %4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "App inconnue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown app"
+          }
+        }
+      }
+    },
+    "Aucune copie pour l’instant": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No copies yet"
+          }
+        }
+      }
+    },
+    "Fermer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Historique des copies": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy history"
+          }
+        }
+      }
+    },
+    "Ouvrir l’historique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open History"
+          }
+        }
+      }
+    },
+    "Quitter AppKit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit AppKit"
+          }
+        }
+      }
+    },
+    "Texte brut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plain text"
+          }
+        }
+      }
+    },
+    "Texte brut · %lld lignes": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plain text · %lld line"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plain text · %lld lines"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Texte brut · %lld ligne"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Texte brut · %lld lignes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pour copier": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to copy"
+          }
+        }
+      }
+    },
+    "À l’instant": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just now"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

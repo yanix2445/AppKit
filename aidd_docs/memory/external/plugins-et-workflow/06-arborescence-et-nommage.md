@@ -67,7 +67,7 @@ AppKit/                                   racine du dépôt git
 │
 ├── AppKit/                               CIBLE APP (dossier synchronisé Xcode)
 │   ├── App/                               démarrage et assemblage
-│   │   ├── AppKitApp.swift               @main : scènes MenuBarExtra et Settings, sans fenêtre principale
+│   │   ├── AppKitApp.swift               @main : scène Settings, sans fenêtre principale
 │   │   ├── AppDependencies.swift          crée les services réels, une seule fois
 │   │   └── EnvironmentValues+Dependencies.swift   expose les services via @Entry
 │   │
@@ -77,7 +77,7 @@ AppKit/                                   racine du dépôt git
 │   │   │   ├── HistoryStripViewModel.swift recherche, filtres, sélection, collage
 │   │   │   └── HistoryStripController.swift NSPanel non activant qui glisse depuis le bas de l'écran
 │   │   ├── MenuBar/
-│   │   │   └── MenuBarView.swift          l'icône, la pause, les Réglages
+│   │   │   └── StatusItemController.swift l'icône, la pause, les Réglages
 │   │   ├── Settings/
 │   │   │   ├── SettingsView.swift         onglets
 │   │   │   └── GeneralSettingsView.swift

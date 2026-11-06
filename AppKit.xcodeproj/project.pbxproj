@@ -6,6 +6,11 @@
 	objectVersion = 110;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0A10C0012F00000000000005 /* AppKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0A10C0012F00000000000003 /* AppKitCore */; };
+		0A10C0012F00000000000006 /* AppKitSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 0A10C0012F00000000000004 /* AppKitSystem */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		090DD1A83095905300CD928A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -61,6 +66,8 @@
 		090DD1953095904F00CD928A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				0A10C0012F00000000000005 /* AppKitCore in Frameworks */,
+				0A10C0012F00000000000006 /* AppKitSystem in Frameworks */,
 			);
 		};
 		090DD1A43095905300CD928A /* Frameworks */ = {
@@ -119,6 +126,10 @@
 				090DD19A3095904F00CD928A /* AppKit */,
 			);
 			name = AppKit;
+			packageProductDependencies = (
+				0A10C0012F00000000000003 /* AppKitCore */,
+				0A10C0012F00000000000004 /* AppKitSystem */,
+			);
 			productName = AppKit;
 			productReference = 090DD1983095904F00CD928A /* AppKit.app */;
 			productType = "com.apple.product-type.application";
@@ -198,6 +209,10 @@
 			);
 			mainGroup = 090DD18F3095904F00CD928A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0A10C0012F00000000000001 /* XCLocalSwiftPackageReference "Packages/AppKitCore" */,
+				0A10C0012F00000000000002 /* XCLocalSwiftPackageReference "Packages/AppKitSystem" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 090DD1993095904F00CD928A /* Products */;
 			projectDirPath = "";
@@ -404,6 +419,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -442,6 +458,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -584,6 +601,28 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		0A10C0012F00000000000001 /* XCLocalSwiftPackageReference "Packages/AppKitCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/AppKitCore;
+		};
+		0A10C0012F00000000000002 /* XCLocalSwiftPackageReference "Packages/AppKitSystem" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/AppKitSystem;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0A10C0012F00000000000003 /* AppKitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppKitCore;
+		};
+		0A10C0012F00000000000004 /* AppKitSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppKitSystem;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 090DD1903095904F00CD928A /* Project object */;
 	validationLevel = 1;

@@ -4,11 +4,11 @@ The data store: its type, the main entities, and the conventions. The macro mode
 
 ## Setup
 
-- SwiftData ; le `ModelContainer` est créé dans `AppKit/App/AppKitApp.swift` et injecté avec `.modelContainer`.
+- SwiftData, qui arrive avec la story « Garder mon historique après un redémarrage, chiffré » ; pour l'instant, l'historique ne vit qu'en mémoire (`ClipHistory`).
 
 ## Main entities
 
-- Seul existe le modèle d'exemple `Item` du template Xcode ; les vrais modèles arrivent avec la première story.
+- Aucun modèle stocké pour l'instant.
 
 ## Conventions
 
