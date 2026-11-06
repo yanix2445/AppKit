@@ -13,8 +13,9 @@ final class HistoryStripController {
 
     private(set) var isOpen = false
 
-    init(history: ClipHistory) {
-        viewModel = HistoryStripViewModel(history: history)
+    /// - Parameter onChoose: called with the copy the user picks; the strip then closes.
+    init(history: ClipHistory, onChoose: @escaping (Clip) -> Void) {
+        viewModel = HistoryStripViewModel(history: history, onChoose: onChoose)
     }
 
     func toggle() {
@@ -60,8 +61,10 @@ final class HistoryStripController {
             NotificationCenter.default.removeObserver(resignKeyObserver)
             self.resignKeyObserver = nil
         }
-        animate(to: hiddenFrame(from: panel.frame)) { [panel] in
-            panel.orderOut(nil)
+        animate(to: hiddenFrame(from: panel.frame)) { [weak self] in
+            // The strip may have been reopened during the slide.
+            guard let self, !self.isOpen else { return }
+            self.panel.orderOut(nil)
         }
     }
 

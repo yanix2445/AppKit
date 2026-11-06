@@ -49,6 +49,25 @@ struct ClipboardMonitorTests {
         #expect(await monitor.poll() == nil)
     }
 
+    @Test func restoringPutsTheExactTextBackWithoutANewCapture() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        let text = "  deux lignes\n et des espaces  "
+
+        await monitor.restore(Clip(content: .text(text), source: source, capturedAt: .now))
+
+        #expect(pasteboard.readText() == text)
+        #expect(await monitor.poll() == nil)
+    }
+
+    @Test func aCopyAfterARestoreIsStillCaptured() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        await monitor.restore(Clip(content: .text("remis"), source: source, capturedAt: .now))
+        pasteboard.copy(text: "nouveau")
+        #expect(await monitor.poll()?.content == .text("nouveau"))
+    }
+
     @Test func thePollingStreamDeliversACopy() async throws {
         let pasteboard = FakePasteboardService()
         let monitor = makeMonitor(

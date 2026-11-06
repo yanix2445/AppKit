@@ -10,5 +10,8 @@ enum StripMetrics {
     static let sourceIconSize: CGFloat = 24
     static let selectionRingWidth: CGFloat = 3
     static let previewLineLimit = 6
+    static let briefMessageWidth: CGFloat = 336
+    static let briefMessageHeight: CGFloat = 40
+    static let briefMessageBottomOffset: CGFloat = 94
     static let previewCharacterLimit = 600
 }

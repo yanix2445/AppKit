@@ -47,7 +47,10 @@ final class HistoryStripUITests: XCTestCase {
 
     @MainActor private func waitForCards(_ count: Int) {
         let done = expectation(for: NSPredicate(format: "count == %d", count), evaluatedWith: cards)
-        wait(for: [done], timeout: 5)
+        if XCTWaiter.wait(for: [done], timeout: 5) != .completed {
+            let labels = cards.allElementsBoundByIndex.map(\.label)
+            XCTFail("Attendu \(count) cartes, trouvé \(labels.count) : \(labels)")
+        }
     }
 
     /// Leaves time for the half-second polling to see the copy.
@@ -89,13 +92,55 @@ final class HistoryStripUITests: XCTestCase {
         copyAndWait("b")
         openStrip()
         waitForCards(2)
-        cards.element(boundBy: 1).click()
+        strip.typeKey(.rightArrow, modifierFlags: [])
         XCTAssertTrue(cards.element(boundBy: 1).isSelected)
 
         copy("c")
         waitForCards(3)
         XCTAssertTrue(cards.element(boundBy: 2).isSelected)
         XCTAssertFalse(cards.element(boundBy: 0).isSelected)
+    }
+
+    @MainActor private func pasteboardText() -> String? {
+        NSPasteboard.general.string(forType: .string)
+    }
+
+    @MainActor func testClickingACopyPutsItBackAndMovesItToTheTop() {
+        launchApp()
+        copyAndWait("texte  exact\navec deux lignes")
+        copyAndWait("plus récent")
+        openStrip()
+        waitForCards(2)
+
+        cards.element(boundBy: 1).click()
+
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["history.copiedMessage"].waitForExistence(timeout: 5))
+        XCTAssertEqual(pasteboardText(), "texte  exact\navec deux lignes")
+
+        // Long enough for the polling to see the pasteboard change, if it were going to.
+        Thread.sleep(forTimeInterval: 1)
+        openStrip()
+        waitForCards(2)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("texte  exact"))
+    }
+
+    @MainActor func testArrowsAndEnterChooseACopy() {
+        launchApp()
+        copyAndWait("ancien")
+        copyAndWait("récent")
+        openStrip()
+        waitForCards(2)
+
+        strip.typeKey(.rightArrow, modifierFlags: [])
+        XCTAssertTrue(cards.element(boundBy: 1).isSelected)
+        strip.typeKey(.leftArrow, modifierFlags: [])
+        XCTAssertTrue(cards.element(boundBy: 0).isSelected)
+        strip.typeKey(.rightArrow, modifierFlags: [])
+        strip.typeKey(.return, modifierFlags: [])
+
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(pasteboardText(), "ancien")
     }
 
     /// Attaches the strip to the test report, in light and dark mode.
@@ -119,6 +164,10 @@ final class HistoryStripUITests: XCTestCase {
             openStrip()
             waitForCards(2)
             attachScreenshot(named: "Copies \(style)")
+
+            cards.element(boundBy: 0).click()
+            XCTAssertTrue(app.descendants(matching: .any)["history.copiedMessage"].waitForExistence(timeout: 5))
+            attachScreenshot(named: "Message \(style)")
         }
     }
 

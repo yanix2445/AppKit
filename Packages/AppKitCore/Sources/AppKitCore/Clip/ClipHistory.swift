@@ -1,3 +1,4 @@
+import Foundation
 import Observation
 
 /// The copies of this session, newest first. It lives in memory only.
@@ -10,5 +11,15 @@ public final class ClipHistory {
 
     public func insert(_ clip: Clip) {
         clips.insert(clip, at: 0)
+    }
+
+    /// Moves a copy back to the top with a new date, keeping a single entry.
+    public func promote(_ id: Clip.ID, at date: Date) {
+        guard let index = clips.firstIndex(where: { $0.id == id }) else { return }
+        let clip = clips.remove(at: index)
+        clips.insert(
+            Clip(id: clip.id, content: clip.content, source: clip.source, capturedAt: date),
+            at: 0
+        )
     }
 }

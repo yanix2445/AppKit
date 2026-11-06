@@ -15,4 +15,11 @@ public struct SystemPasteboardService: PasteboardService {
     public func readText() -> String? {
         NSPasteboard(name: name).string(forType: .string)
     }
+
+    public func write(text: String) -> Int {
+        let pasteboard = NSPasteboard(name: name)
+        pasteboard.clearContents()
+        pasteboard.setString(text, forType: .string)
+        return pasteboard.changeCount
+    }
 }
