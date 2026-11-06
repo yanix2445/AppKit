@@ -1,6 +1,16 @@
 {
   "sourceLanguage": "fr",
   "strings": {
+    "%1$@, %2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@"
+          }
+        }
+      }
+    },
     "%1$@, %2$@, %3$@, %4$@": {
       "extractionState": "stale",
       "localizations": {
@@ -8,6 +18,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@ est déjà utilisé par une autre app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is already used by another app"
           }
         }
       }
@@ -112,6 +132,16 @@
         }
       }
     },
+    "Choisissez un autre raccourci pour ouvrir l’historique.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another shortcut to open the history."
+          }
+        }
+      }
+    },
     "Confidentialité": {
       "localizations": {
         "en": {
@@ -138,6 +168,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copied · press ⌘V"
+          }
+        }
+      }
+    },
+    "Déjà pris": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taken"
           }
         }
       }
@@ -213,6 +253,26 @@
         }
       }
     },
+    "Le bandeau reste accessible par l’icône de la barre de menus.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The strip stays available from the menu bar icon."
+          }
+        }
+      }
+    },
+    "Libre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available"
+          }
+        }
+      }
+    },
     "Libérer de la place…": {
       "localizations": {
         "en": {
@@ -239,6 +299,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open History"
+          }
+        }
+      }
+    },
+    "Plus tard": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
           }
         }
       }
@@ -373,6 +443,16 @@
         }
       }
     },
+    "Utiliser %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use %@"
+          }
+        }
+      }
+    },
     "Votre historique est chiffré avec une clé introuvable sur ce Mac": {
       "localizations": {
         "en": {
@@ -389,6 +469,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "to copy"
+          }
+        }
+      }
+    },
+    "pour rouvrir ce bandeau": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to reopen this strip"
           }
         }
       }

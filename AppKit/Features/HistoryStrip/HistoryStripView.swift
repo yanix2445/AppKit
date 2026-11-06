@@ -33,7 +33,7 @@ struct HistoryStripView: View {
     @ViewBuilder
     private var content: some View {
         if viewModel.history.clips.isEmpty {
-            EmptyHistoryView()
+            EmptyHistoryView(openHotKey: viewModel.openHotKey)
         } else {
             ScrollViewReader { proxy in
                 ScrollView(.horizontal) {

@@ -8,6 +8,7 @@ import SwiftUI
 final class HistoryStripViewModel {
     let history: ClipHistory
     private(set) var selectedClipID: Clip.ID?
+    var openHotKey: HotKeyCombination?
     private let onChoose: (Clip) -> Void
 
     init(history: ClipHistory, onChoose: @escaping (Clip) -> Void = { _ in }) {
