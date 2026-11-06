@@ -20,8 +20,8 @@ struct HistoryStripView: View {
             .onAppear { isFocused = true }
             .onMoveCommand { viewModel.moveSelection($0) }
             .onExitCommand(perform: close)
-            .onKeyPress(.return) {
-                viewModel.chooseSelection()
+            .onKeyPress(keys: [.return]) { press in
+                viewModel.chooseSelection(style: press.modifiers.contains(.shift) ? .plainText : .original)
                 return .handled
             }
             .onChange(of: viewModel.history.clips.first?.id) { viewModel.historyDidChange() }
@@ -47,6 +47,12 @@ struct HistoryStripView: View {
                             .id(clip.id)
                             .onTapGesture { viewModel.choose(clip.id) }
                             .accessibilityAction { viewModel.choose(clip.id) }
+                            .contextMenu {
+                                Button("Coller") { viewModel.choose(clip.id) }
+                                    .keyboardShortcut(.return, modifiers: [])
+                                Button("Coller en texte brut") { viewModel.choose(clip.id, style: .plainText) }
+                                    .keyboardShortcut(.return, modifiers: .shift)
+                            }
                         }
                     }
                     .padding(.horizontal, Spacing.medium)

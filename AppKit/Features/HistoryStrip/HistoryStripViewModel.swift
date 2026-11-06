@@ -9,9 +9,9 @@ final class HistoryStripViewModel {
     let history: ClipHistory
     private(set) var selectedClipID: Clip.ID?
     var openHotKey: HotKeyCombination?
-    private let onChoose: (Clip) -> Void
+    private let onChoose: (Clip, ClipPasteStyle) -> Void
 
-    init(history: ClipHistory, onChoose: @escaping (Clip) -> Void = { _ in }) {
+    init(history: ClipHistory, onChoose: @escaping (Clip, ClipPasteStyle) -> Void = { _, _ in }) {
         self.history = history
         self.onChoose = onChoose
     }
@@ -28,15 +28,15 @@ final class HistoryStripViewModel {
         }
     }
 
-    func choose(_ id: Clip.ID) {
+    func choose(_ id: Clip.ID, style: ClipPasteStyle = .original) {
         guard let clip = history.clips.first(where: { $0.id == id }) else { return }
         selectedClipID = id
-        onChoose(clip)
+        onChoose(clip, style)
     }
 
-    func chooseSelection() {
+    func chooseSelection(style: ClipPasteStyle = .original) {
         if let selectedClipID {
-            choose(selectedClipID)
+            choose(selectedClipID, style: style)
         }
     }
 

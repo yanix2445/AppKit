@@ -59,7 +59,7 @@ struct HistoryStripViewModelTests {
         history.insert(clip("a"))
         history.insert(clip("b"))
         var chosen: [Clip] = []
-        let viewModel = HistoryStripViewModel(history: history) { chosen.append($0) }
+        let viewModel = HistoryStripViewModel(history: history) { clip, _ in chosen.append(clip) }
 
         viewModel.choose(history.clips[1].id)
 
@@ -70,7 +70,7 @@ struct HistoryStripViewModelTests {
         let history = ClipHistory()
         history.insert(clip("a"))
         var chosen: [Clip] = []
-        let viewModel = HistoryStripViewModel(history: history) { chosen.append($0) }
+        let viewModel = HistoryStripViewModel(history: history) { clip, _ in chosen.append(clip) }
 
         viewModel.chooseSelection()
         #expect(chosen.isEmpty)
@@ -78,5 +78,19 @@ struct HistoryStripViewModelTests {
         viewModel.prepareForPresentation()
         viewModel.chooseSelection()
         #expect(chosen.map(\.content) == [.text("a")])
+    }
+
+    @Test func shiftEnterAsksForPlainTextAndLeavesTheHistoryAsItIs() {
+        let history = ClipHistory()
+        history.insert(clip("a"))
+        var styles: [ClipPasteStyle] = []
+        let viewModel = HistoryStripViewModel(history: history) { _, style in styles.append(style) }
+        viewModel.prepareForPresentation()
+        let before = history.clips
+
+        viewModel.chooseSelection(style: .plainText)
+
+        #expect(styles == [.plainText])
+        #expect(history.clips == before)
     }
 }

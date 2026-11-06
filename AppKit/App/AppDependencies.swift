@@ -68,8 +68,8 @@ final class AppDependencies {
     }
 
     /// Puts a copy back on the pasteboard and moves it to the top of the history.
-    func restore(_ clip: Clip) async {
-        await monitor.restore(clip)
+    func restore(_ clip: Clip, style: ClipPasteStyle) async {
+        await monitor.restore(clip, style: style)
         await lifecycle.promote(clip)
     }
 

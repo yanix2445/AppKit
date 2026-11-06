@@ -30,8 +30,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             askToOpenSettings: { [directPasteAlert] in directPasteAlert.askToOpenSettings() }
         )
 
-        let historyStrip = HistoryStripController(history: dependencies.history) { [weak self] clip in
-            self?.restore(clip)
+        let historyStrip = HistoryStripController(history: dependencies.history) { [weak self] clip, style in
+            self?.restore(clip, style: style)
         }
         self.historyStrip = historyStrip
         statusItem = StatusItemController(
@@ -82,10 +82,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func restore(_ clip: Clip) {
+    private func restore(_ clip: Clip, style: ClipPasteStyle) {
         historyStrip?.closeImmediately()
         Task {
-            await dependencies?.restore(clip)
+            await dependencies?.restore(clip, style: style)
             switch await directPaste?.deliver() {
             case .copied(let offersEnabling):
                 let directPaste = self.directPaste

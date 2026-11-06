@@ -39,6 +39,10 @@ struct SystemPasteboardServiceTests {
         let count = service.write(text: "après")
 
         #expect(count == pasteboard.changeCount)
+        // Text alone: no format that would carry a font, a color or a link.
+        let types = pasteboard.types ?? []
+        #expect(types.contains(.string))
+        #expect(!types.contains(.rtf) && !types.contains(.html) && !types.contains(.URL))
         #expect(service.readText() == "après")
     }
 }

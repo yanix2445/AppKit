@@ -151,6 +151,26 @@
         }
       }
     },
+    "Coller": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste"
+          }
+        }
+      }
+    },
+    "Coller en texte brut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste as Plain Text"
+          }
+        }
+      }
+    },
     "Confidentialité": {
       "localizations": {
         "en": {

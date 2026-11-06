@@ -60,6 +60,19 @@ struct ClipboardMonitorTests {
         #expect(await monitor.poll() == nil)
     }
 
+    @Test func restoringAsPlainTextWritesTheTextAloneAndLeavesTheCopyAsItIs() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        let clip = Clip(content: .text("sans mise en forme"), source: source, capturedAt: .now)
+
+        await monitor.restore(clip, style: .plainText)
+
+        #expect(pasteboard.readText() == "sans mise en forme")
+        #expect(pasteboard.readTypes().isEmpty)
+        #expect(clip.content == .text("sans mise en forme"))
+        #expect(await monitor.poll() == nil)
+    }
+
     @Test func aCopyAfterARestoreIsStillCaptured() async {
         let pasteboard = FakePasteboardService()
         let monitor = makeMonitor(pasteboard)
