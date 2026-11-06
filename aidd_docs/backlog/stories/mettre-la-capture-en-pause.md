@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/garder-mon-historique-chiffre.md
 order: 22
+issue: "#34"
 ---
 
 # Story: Mettre la capture en pause

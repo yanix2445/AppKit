@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 depends_on:
   - aidd_docs/backlog/stories/recevoir-les-mises-a-jour-automatiquement.md
 order: 8
+issue: "#48"
 ---
 
 # Story: Savoir combien de copies d'AppKit tournent

@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/retrouver-mes-textes-enrichis-liens-et-couleurs.md
 order: 12
+issue: "#24"
 ---
 
 # Story: Ne pas avoir de doublons

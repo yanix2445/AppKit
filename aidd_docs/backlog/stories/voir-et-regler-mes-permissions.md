@@ -6,6 +6,7 @@ depends_on:
   - aidd_docs/backlog/stories/coller-directement-dans-l-app-active.md
   - aidd_docs/backlog/stories/lancer-appkit-a-l-ouverture-de-session.md
 order: 26
+issue: "#38"
 ---
 
 # Story: Voir et régler mes permissions

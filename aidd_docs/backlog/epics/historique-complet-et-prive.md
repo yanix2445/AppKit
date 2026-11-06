@@ -4,6 +4,7 @@ status: proposed
 source: aidd_docs/tasks/2026_10/2026_10_31_appkit/brainstorm.md
 goal: aidd_docs/product/appkit.md
 order: 1
+issue: "#9"
 ---
 
 # Epic: Historique complet et privé

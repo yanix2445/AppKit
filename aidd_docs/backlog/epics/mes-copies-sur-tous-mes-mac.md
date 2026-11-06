@@ -6,6 +6,7 @@ goal: aidd_docs/product/appkit.md
 depends_on:
   - aidd_docs/backlog/epics/historique-complet-et-prive.md
 order: 4
+issue: "#12"
 ---
 
 # Epic: Mes copies sur tous mes Mac

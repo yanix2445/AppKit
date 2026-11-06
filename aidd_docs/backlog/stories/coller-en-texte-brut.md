@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/coller-directement-dans-l-app-active.md
 order: 7
+issue: "#19"
 ---
 
 # Story: Coller en texte brut

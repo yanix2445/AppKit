@@ -34,6 +34,9 @@ Refreshed automatically by the memory hook. Do not edit by hand.
 Read on demand:
 
 - [internal/decisions/architecture-mv-feature-core.md](internal/decisions/architecture-mv-feature-core.md)
+- [internal/decisions/historique-chiffre-en-memoire.md](internal/decisions/historique-chiffre-en-memoire.md)
+- [internal/decisions/hors-app-sandbox.md](internal/decisions/hors-app-sandbox.md)
+- [internal/xcode-security-settings.md](internal/xcode-security-settings.md)
 - [external/plugins-et-workflow/01-aidd-framework.md](external/plugins-et-workflow/01-aidd-framework.md)
 - [external/plugins-et-workflow/02-workflow-macos.md](external/plugins-et-workflow/02-workflow-macos.md)
 - [external/plugins-et-workflow/03-stack-et-architecture.md](external/plugins-et-workflow/03-stack-et-architecture.md)

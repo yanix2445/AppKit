@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/ne-jamais-garder-une-copie-confidentielle.md
 order: 4
+issue: "#16"
 ---
 
 # Story: Garder mon historique après un redémarrage, chiffré

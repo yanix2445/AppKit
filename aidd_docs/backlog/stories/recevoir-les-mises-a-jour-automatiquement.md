@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 depends_on:
   - aidd_docs/backlog/stories/publier-un-dmg-signe-en-posant-un-tag.md
 order: 5
+issue: "#45"
 ---
 
 # Story: Recevoir les mises à jour automatiquement

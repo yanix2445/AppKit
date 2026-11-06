@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/voir-mes-dernieres-copies-de-texte.md
 order: 3
+issue: "#15"
 ---
 
 # Story: Ne jamais garder une copie confidentielle ou temporaire

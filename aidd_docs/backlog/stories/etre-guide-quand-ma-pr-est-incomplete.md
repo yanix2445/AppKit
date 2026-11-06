@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 depends_on:
   - aidd_docs/backlog/stories/proposer-une-idee-ou-une-contribution.md
 order: 11
+issue: "#51"
 ---
 
 # Story: Être guidé quand ma PR est incomplète

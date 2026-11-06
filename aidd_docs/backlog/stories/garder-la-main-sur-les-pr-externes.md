@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/installer-et-mettre-a-jour-en-confiance.md
 depends_on:
   - aidd_docs/backlog/stories/voir-les-tests-tourner-sur-chaque-pr.md
 order: 2
+issue: "#42"
 ---
 
 # Story: Garder la main sur les PR externes

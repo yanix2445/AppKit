@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/filtrer-par-categorie.md
 order: 21
+issue: "#33"
 ---
 
 # Story: Exclure des catégories

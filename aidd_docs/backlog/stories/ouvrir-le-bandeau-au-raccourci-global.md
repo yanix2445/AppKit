@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/recoller-une-copie-de-texte.md
 order: 5
+issue: "#17"
 ---
 
 # Story: Ouvrir le bandeau avec le raccourci global

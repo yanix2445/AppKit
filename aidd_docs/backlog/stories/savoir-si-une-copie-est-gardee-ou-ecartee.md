@@ -5,6 +5,7 @@ parent: aidd_docs/backlog/epics/historique-complet-et-prive.md
 depends_on:
   - aidd_docs/backlog/stories/exclure-des-apps.md
 order: 23
+issue: "#35"
 ---
 
 # Story: Savoir si une copie est gardée ou écartée
