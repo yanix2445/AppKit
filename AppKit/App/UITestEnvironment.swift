@@ -8,9 +8,14 @@ struct UITestEnvironment {
     let keyService: any EncryptionKeyService
     /// Tests copy here rather than on the general pasteboard, which belongs to the user.
     let pasteboardName: String
+    /// Never the real permission: tests must not paste into whatever app is in front.
+    let directPasteService: any DirectPasteService
+    let directPasteDefaults: UserDefaults
 
     static let identifierVariable = "APPKIT_UI_TEST_ID"
     static let deleteKeyVariable = "APPKIT_UI_TEST_DELETE_KEY"
+    static let trustedVariable = "APPKIT_UI_TEST_TRUSTED"
+    static let explainVariable = "APPKIT_UI_TEST_EXPLAIN"
 
     static var current: UITestEnvironment? {
         let environment = ProcessInfo.processInfo.environment
@@ -21,10 +26,15 @@ struct UITestEnvironment {
         if environment[deleteKeyVariable] != nil {
             try? FileManager.default.removeItem(at: keyURL)
         }
+        let defaults = UserDefaults(suiteName: "appkit.uitest.\(identifier)") ?? .standard
+        // The explanation of the permission would stop every test that chooses a copy.
+        defaults.set(environment[explainVariable] == nil, forKey: DirectPasteCoordinator.explanationSeenKey)
         return UITestEnvironment(
             storeURL: directory.appending(path: "History.store"),
             keyService: FileKeyService(url: keyURL),
-            pasteboardName: "appkit.uitest.\(identifier)"
+            pasteboardName: "appkit.uitest.\(identifier)",
+            directPasteService: FakeDirectPasteService(isTrusted: environment[trustedVariable] != nil),
+            directPasteDefaults: defaults
         )
     }
 
@@ -32,6 +42,18 @@ struct UITestEnvironment {
     static var isHostingUnitTests: Bool {
         let environment = ProcessInfo.processInfo.environment
         return environment["XCTestConfigurationFilePath"] != nil && environment[identifierVariable] == nil
+    }
+
+    private final class FakeDirectPasteService: DirectPasteService {
+        let isTrusted: Bool
+
+        init(isTrusted: Bool) {
+            self.isTrusted = isTrusted
+        }
+
+        func focusedTarget() -> DirectPasteTarget { .editable }
+        func postPaste() {}
+        func openAccessibilitySettings() {}
     }
 
     private struct FileKeyService: EncryptionKeyService {

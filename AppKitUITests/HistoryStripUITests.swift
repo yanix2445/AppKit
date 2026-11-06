@@ -231,6 +231,54 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertEqual(pasteboardText(), "récent")
     }
 
+    @MainActor private var copiedMessage: XCUIElement {
+        app.descendants(matching: .any)["history.copiedMessage"]
+    }
+
+    @MainActor func testWithoutThePermissionTheMessageOffersDirectPaste() {
+        launchApp()
+        copyAndWait("texte")
+        openStrip()
+        waitForCards(1)
+        cards.element(boundBy: 0).click()
+
+        XCTAssertTrue(copiedMessage.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["history.enableDirectPaste"].exists)
+    }
+
+    @MainActor func testTheFirstChoiceExplainsThePermissionOnce() {
+        app.launchEnvironment["APPKIT_UI_TEST_EXPLAIN"] = "1"
+        launchApp()
+        copyAndWait("texte")
+        openStrip()
+        waitForCards(1)
+        cards.element(boundBy: 0).click()
+
+        XCTAssertTrue(app.staticTexts["Autoriser le collage direct"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Ouvrir les Réglages"].exists)
+        app.buttons["Plus tard"].click()
+        XCTAssertTrue(copiedMessage.waitForExistence(timeout: 5))
+
+        openStrip()
+        waitForCards(1)
+        cards.element(boundBy: 0).click()
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["Autoriser le collage direct"].waitForExistence(timeout: 1))
+    }
+
+    @MainActor func testWithThePermissionNoMessageIsShown() {
+        app.launchEnvironment["APPKIT_UI_TEST_TRUSTED"] = "1"
+        launchApp()
+        copyAndWait("texte")
+        openStrip()
+        waitForCards(1)
+        cards.element(boundBy: 0).click()
+
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertFalse(copiedMessage.waitForExistence(timeout: 1))
+        XCTAssertEqual(pasteboardText(), "texte")
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }
