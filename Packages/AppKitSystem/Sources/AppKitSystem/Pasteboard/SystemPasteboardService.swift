@@ -12,6 +12,16 @@ public struct SystemPasteboardService: PasteboardService {
         NSPasteboard(name: name).changeCount
     }
 
+    /// Reads the types of every item without fetching any content.
+    public func readTypes() -> Set<String> {
+        let pasteboard = NSPasteboard(name: name)
+        var types = Set((pasteboard.types ?? []).map(\.rawValue))
+        for item in pasteboard.pasteboardItems ?? [] {
+            types.formUnion(item.types.map(\.rawValue))
+        }
+        return types
+    }
+
     public func readText() -> String? {
         NSPasteboard(name: name).string(forType: .string)
     }

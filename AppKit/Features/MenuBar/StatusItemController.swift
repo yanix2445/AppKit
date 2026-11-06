@@ -5,9 +5,11 @@ import AppKit
 final class StatusItemController: NSObject {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     private let onPrimaryClick: () -> Void
+    private let onOpenSettings: () -> Void
 
-    init(onPrimaryClick: @escaping () -> Void) {
+    init(onPrimaryClick: @escaping () -> Void, onOpenSettings: @escaping () -> Void) {
         self.onPrimaryClick = onPrimaryClick
+        self.onOpenSettings = onOpenSettings
         super.init()
         guard let button = statusItem.button else { return }
         button.image = NSImage(systemSymbolName: "clipboard", accessibilityDescription: "AppKit")
@@ -32,6 +34,11 @@ final class StatusItemController: NSObject {
         open.target = self
         menu.addItem(open)
         menu.addItem(.separator())
+        let settings = NSMenuItem(title: String(localized: "Réglages…"), action: #selector(openSettings), keyEquivalent: ",")
+        settings.target = self
+        settings.setAccessibilityIdentifier("statusItem.settings")
+        menu.addItem(settings)
+        menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Quitter AppKit"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
@@ -40,5 +47,9 @@ final class StatusItemController: NSObject {
 
     @objc private func openHistory() {
         onPrimaryClick()
+    }
+
+    @objc private func openSettings() {
+        onOpenSettings()
     }
 }
