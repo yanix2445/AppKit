@@ -279,6 +279,34 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertEqual(pasteboardText(), "texte")
     }
 
+    @MainActor func testShiftEnterPutsThePlainTextBack() {
+        launchApp()
+        copyAndWait("texte")
+        openStrip()
+        waitForCards(1)
+
+        strip.typeKey(.return, modifierFlags: .shift)
+
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(copiedMessage.waitForExistence(timeout: 5))
+        XCTAssertEqual(pasteboardText(), "texte")
+    }
+
+    @MainActor func testTheContextMenuOffersPlainText() {
+        launchApp()
+        copyAndWait("texte")
+        openStrip()
+        waitForCards(1)
+
+        cards.element(boundBy: 0).rightClick()
+        let item = app.menuItems["Coller en texte brut"]
+        XCTAssertTrue(item.waitForExistence(timeout: 5))
+        item.click()
+
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(pasteboardText(), "texte")
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }

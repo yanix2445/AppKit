@@ -10,11 +10,12 @@ final class HistoryStripController {
     private lazy var panel = makePanel()
     private var clickMonitor: Any?
     private var activationObserver: NSObjectProtocol?
+    private var openedAt = ContinuousClock.now
 
     private(set) var isOpen = false
 
     /// - Parameter onChoose: called with the copy the user picks; the strip then closes.
-    init(history: ClipHistory, onChoose: @escaping (Clip) -> Void) {
+    init(history: ClipHistory, onChoose: @escaping (Clip, ClipPasteStyle) -> Void) {
         viewModel = HistoryStripViewModel(history: history, onChoose: onChoose)
     }
 
@@ -30,6 +31,7 @@ final class HistoryStripController {
     func open() {
         guard !isOpen, let screen = screenUnderMouse else { return }
         isOpen = true
+        openedAt = .now
         viewModel.prepareForPresentation()
 
         let frame = NSRect(
@@ -53,8 +55,10 @@ final class HistoryStripController {
         ) { [weak self] notification in
             let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
             let isOtherApp = app?.processIdentifier != ProcessInfo.processInfo.processIdentifier
+            // An app switch still under way as the strip opens, right after ⌘Tab, must not close it.
             MainActor.assumeIsolated {
-                if isOtherApp { self?.close() }
+                guard let self, isOtherApp, ContinuousClock.now - self.openedAt > Motion.stripActivationGrace else { return }
+                self.close()
             }
         }
     }

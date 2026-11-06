@@ -11,7 +11,7 @@ struct HistoryStripControllerTests {
         for index in 0..<1_000 {
             history.insert(Clip(content: .text("copie \(index)"), source: nil, capturedAt: .now))
         }
-        let controller = HistoryStripController(history: history, onChoose: { _ in })
+        let controller = HistoryStripController(history: history, onChoose: { _, _ in })
         let clock = ContinuousClock()
 
         let first = clock.measure { controller.open() }

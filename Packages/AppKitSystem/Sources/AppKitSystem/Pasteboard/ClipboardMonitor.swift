@@ -54,7 +54,8 @@ public actor ClipboardMonitor {
     }
 
     /// Puts a copy back on the pasteboard, without capturing it as a new one.
-    public func restore(_ clip: Clip) {
+    public func restore(_ clip: Clip, style: ClipPasteStyle = .original) {
+        // For now a copy only holds text, so both styles write the same thing.
         switch clip.content {
         case .text(let text):
             lastChangeCount = pasteboard.write(text: text)
