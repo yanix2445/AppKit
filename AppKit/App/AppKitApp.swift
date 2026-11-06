@@ -1,32 +1,13 @@
-//
-//  AppKitApp.swift
-//  AppKit
-//
-//  Created by Yanis HARRAT on 31/10/2026.
-//
-
 import SwiftUI
-import SwiftData
 
 @main
 struct AppKitApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        // A menu bar app has no main window; the strip and the icon belong to AppDelegate.
+        Settings {
+            EmptyView()
         }
-        .modelContainer(sharedModelContainer)
     }
 }

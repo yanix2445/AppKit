@@ -53,7 +53,7 @@ On veut :
      chaque `Package.swift`.
    - Une feature n'importe jamais une autre feature : c'est vérifié en revue.
 7. **Forme de l'app.** Une app de barre de menus, sans fenêtre principale ni
-   icône dans le Dock : `MenuBarExtra` et `Settings` en SwiftUI. Le bandeau de
+   icône dans le Dock : un `NSStatusItem`, car un clic doit ouvrir le bandeau et `MenuBarExtra` ne sait qu'ouvrir un menu ou une fenêtre, et `Settings` en SwiftUI. Le bandeau de
    l'historique est un `NSPanel` non activant, piloté depuis la feature
    `HistoryStrip`, qui glisse depuis le bas de l'écran et reçoit le clavier
    sans prendre le focus de l'app où l'on écrivait, condition du collage

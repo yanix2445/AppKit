@@ -1,0 +1,14 @@
+import CoreGraphics
+
+/// The fixed sizes of the strip and its cards in the mockups.
+enum StripMetrics {
+    static let stripHeight: CGFloat = 212
+    static let screenMargin: CGFloat = 10
+    static let cardWidth: CGFloat = 196
+    static let cardHeight: CGFloat = 176
+    static let cardHeaderHeight: CGFloat = 36
+    static let sourceIconSize: CGFloat = 24
+    static let selectionRingWidth: CGFloat = 3
+    static let previewLineLimit = 6
+    static let previewCharacterLimit = 600
+}

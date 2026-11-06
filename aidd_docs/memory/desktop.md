@@ -13,6 +13,8 @@ The desktop app: framework, native access, and packaging.
 - Enhanced Security activée au niveau du projet : l'app se construit en `arm64e` (authentification des pointeurs), avec les entitlements « hardened-process » de `AppKit/AppKit.entitlements` et le marquage mémoire matériel en mode souple. Chaque décision de sécurité est tracée dans `aidd_docs/memory/internal/xcode-security-settings.md`.
 - Toute permission se demande au moment où elle sert, avec une phrase qui dit ce qui ne marche pas sans elle.
 
+- Les packages locaux se compilent aussi en `arm64e`, par `WorkspaceSettings.xcsettings`.
+
 ## Build and release
 
 - Signature automatique avec l'équipe Apple Developer du projet : macOS garde les autorisations d'un build à l'autre.
