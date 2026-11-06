@@ -6,8 +6,8 @@ compatible macOS 26, Mac Apple silicon seulement.
 
 ## Règles
 
-- **Zéro dépendance tierce** : aucun package Swift externe, aucun outil tiers
-  dans le build ou les tests. Demander avant toute exception.
+- **Une seule dépendance tierce, Sparkle 2** : aucun autre package Swift externe, aucun outil tiers
+  dans le build ou les tests. Demander avant toute autre exception.
 - **Architecture** : MV à la manière d'Apple, rangé par feature, cœur métier
   isolé dans des packages Swift locaux. Voir
   [la décision d'architecture](aidd_docs/memory/internal/decisions/architecture-mv-feature-core.md) et

@@ -16,6 +16,7 @@ order: 15
 ## Acceptance
 
 - Le menu contextuel d'une copie propose Épingler ou Désépingler (XCUITest)
+- Au clavier, ⌘P épingle ou désépingle la copie sélectionnée (XCUITest)
 - Les épinglés s'affichent dans une section à part, dans l'ordre que je choisis en les déplaçant (XCUITest)
 - Au clavier, ⌥⌘← et ⌥⌘→ déplacent l'épinglé sélectionné d'un cran dans sa section (XCUITest)
 - Dans l'historique, un épinglé garde sa place chronologique, avec un badge (XCUITest)

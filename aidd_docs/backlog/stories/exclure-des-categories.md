@@ -15,6 +15,6 @@ order: 21
 
 ## Acceptance
 
-- Les Réglages permettent d'exclure une ou plusieurs catégories ; aucune n'est exclue par défaut (XCUITest)
+- Les Réglages permettent d'exclure une ou plusieurs catégories, dans un menu à coches ; aucune n'est exclue par défaut (XCUITest)
 - Une copie d'une catégorie exclue n'est jamais gardée, et son contenu n'est jamais écrit sur le disque (Swift Testing)
 - Exclure une catégorie ne supprime pas les copies déjà gardées (Swift Testing)

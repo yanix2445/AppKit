@@ -15,7 +15,7 @@ order: 28
 
 ## Acceptance
 
-- Une rubrique « Raccourcis » des Réglages liste chaque action avec son raccourci : ouvrir l'historique (⇧⌘V), mettre en pause ou reprendre la capture (aucun par défaut), coller (↩), coller en texte brut (⇧↩), supprimer (⌫), épingler ou désépingler (aucun par défaut), déplacer un épinglé à gauche ou à droite (⌥⌘← et ⌥⌘→) (XCUITest)
+- Une rubrique « Raccourcis » des Réglages liste chaque action avec son raccourci : ouvrir l'historique (⇧⌘V), mettre en pause ou reprendre la capture (⌃⌥⌘P), coller (↩), coller en texte brut (⇧↩), supprimer (⌫), épingler ou désépingler (⌘P), déplacer un épinglé à gauche ou à droite (⌥⌘← et ⌥⌘→) (XCUITest)
 - Un clic sur un raccourci l'enregistre à la prochaine combinaison tapée ; Échap annule, un bouton l'efface, « Rétablir » revient au raccourci par défaut (XCUITest)
 - Un raccourci déjà pris par macOS, par une autre app ou par une autre action de CopyKit est refusé avec la raison, sans rien changer (Swift Testing et XCUITest)
 - Un raccourci global (ouvrir l'historique, pause) contient au moins ⌘, ⌃ ou ⌥ ; un raccourci du bandeau contient une touche de modification ou une touche spéciale comme ↩ ou ⌫ (Swift Testing)

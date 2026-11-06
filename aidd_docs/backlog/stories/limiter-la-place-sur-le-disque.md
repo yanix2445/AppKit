@@ -15,7 +15,7 @@ order: 18
 
 ## Acceptance
 
-- La limite vaut 1 Go par défaut et se règle jusqu'à 10 Go (XCUITest)
+- La limite vaut 1 Go par défaut, ce qui est aussi son minimum, et se règle jusqu'à 10 Go (XCUITest)
 - Quand la limite est atteinte, les plus vieilles copies non épinglées sont supprimées (Swift Testing)
 - Les Réglages affichent la place réelle sur le disque, vignettes comprises, avec les épinglés à part (« Historique : 650 Mo / 1 Go · Épinglés : 300 Mo ») (Swift Testing et XCUITest)
 - Réduire la limite ou choisir « Tout effacer » ouvre la même confirmation que pour la durée, avec l'impact exact ; les épinglés et les copies volumineuses temporaires ne sont pas touchés (XCUITest)
