@@ -25,7 +25,7 @@ struct ClipCardHeaderView: View {
                 .accessibilityHidden(true)
         }
         .padding(.leading, Spacing.medium)
-        .padding(.trailing, Spacing.small)
+        .padding(.trailing, StripMetrics.cardHeaderTrailingInset)
         .frame(height: StripMetrics.cardHeaderHeight)
         .background(appearance.headerColor)
     }

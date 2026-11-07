@@ -9,6 +9,8 @@ struct ClipCardView: View {
     let appearance: SourceAppAppearance
     let thumbnailProvider: ClipThumbnailProvider
 
+    @State private var isHovered = false
+
     private var title: String {
         switch clip.content {
         case .text: String(localized: "Texte brut")
@@ -79,15 +81,21 @@ struct ClipCardView: View {
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, Spacing.medium)
-                    .padding(.vertical, Spacing.xSmall)
+                    .padding(.bottom, StripMetrics.cardFooterBottomInset)
+                    .frame(height: StripMetrics.cardFooterHeight, alignment: .bottom)
             }
             .frame(width: StripMetrics.cardWidth, height: StripMetrics.cardHeight)
             .background(AppColor.cardFill)
             .clipShape(.rect(cornerRadius: CornerRadius.card))
             .overlay {
                 RoundedRectangle(cornerRadius: CornerRadius.card)
-                    .strokeBorder(Color.accentColor, lineWidth: isSelected ? StripMetrics.selectionRingWidth : 0)
+                    .strokeBorder(
+                        isSelected || isHovered ? Color.accentColor : .clear,
+                        lineWidth: isSelected ? StripMetrics.selectionRingWidth : StripMetrics.hoverRingWidth
+                    )
             }
+            .shadow(color: AppColor.cardShadow, radius: StripMetrics.cardShadowRadius, y: StripMetrics.cardShadowOffset)
+            .onHover { isHovered = $0 }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(String(localized: "\(format), \(sourceName), \(date), \(spokenContent)"))
             .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
@@ -101,7 +109,8 @@ struct ClipCardView: View {
             .lineLimit(StripMetrics.previewLineLimit)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(.horizontal, Spacing.medium)
-            .padding(.top, Spacing.small)
+            .padding(.top, StripMetrics.cardPreviewTopInset)
+            .padding(.bottom, StripMetrics.cardPreviewBottomInset)
     }
 
     @ViewBuilder

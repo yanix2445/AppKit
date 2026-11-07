@@ -97,7 +97,7 @@ final class AppDependencies {
         guard state.retriesByItself else { return }
         retryTask = Task { [lifecycle] in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(30), tolerance: .seconds(5))
+                try? await Task.sleep(for: Motion.pausedRetryInterval, tolerance: Motion.pausedRetryTolerance)
                 guard !Task.isCancelled else { return }
                 await lifecycle.resumeIfPossible()
             }

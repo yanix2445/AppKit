@@ -241,6 +241,16 @@
         }
       }
     },
+    "Fermer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
     "Garder les copies générées automatiquement": {
       "localizations": {
         "en": {
@@ -667,6 +677,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use %@"
+          }
+        }
+      }
+    },
+    "Vos copies restent sur ce Mac, chiffrées.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your copies stay on this Mac, encrypted."
           }
         }
       }
