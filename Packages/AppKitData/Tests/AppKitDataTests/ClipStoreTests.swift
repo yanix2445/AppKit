@@ -229,6 +229,21 @@ struct ClipStoreTests {
         #expect(try await store.formats(of: saved.id) == formats)
     }
 
+    @Test func updatingKeepsTheFormatsAndTheDetailsComeBack() async throws {
+        let store = ClipStore(modelContainer: try .inMemoryHistory())
+        await store.unlock(with: try ClipCipher(keyData: Self.keyA))
+        let formats = [ClipRepresentation(type: "public.rtf", data: Data([1]))]
+        let old = Clip(content: .richText("a"), source: nil, capturedAt: Date(timeIntervalSinceReferenceDate: 100), fingerprint: Data([7]))
+        try await store.insert(old, formats: formats)
+
+        let merged = old.merging(newer: Clip(content: .richText("a"), source: nil, capturedAt: Date(timeIntervalSinceReferenceDate: 200), isRemote: true))
+        try await store.update(merged)
+
+        let loaded = try #require(try await store.load().clips.first)
+        #expect(loaded == merged)
+        #expect(try await store.formats(of: old.id) == formats)
+    }
+
     @Test func deletingEverythingEmptiesTheStore() async throws {
         let store = ClipStore(modelContainer: try .inMemoryHistory())
         await store.unlock(with: try ClipCipher(keyData: Self.keyA))

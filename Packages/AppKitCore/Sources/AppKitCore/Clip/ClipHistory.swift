@@ -33,11 +33,13 @@ public final class ClipHistory {
 
     /// Moves a copy back to the top with a new date, keeping a single entry.
     public func promote(_ id: Clip.ID, at date: Date) {
-        guard let index = clips.firstIndex(where: { $0.id == id }) else { return }
-        let clip = clips.remove(at: index)
-        clips.insert(
-            Clip(id: clip.id, content: clip.content, source: clip.source, capturedAt: date),
-            at: 0
-        )
+        guard let clip = clips.first(where: { $0.id == id }) else { return }
+        moveToTop(clip.replacing(capturedAt: date))
+    }
+
+    /// Puts a newer state of a copy at the top, in place of the old one.
+    public func moveToTop(_ clip: Clip) {
+        clips.removeAll { $0.id == clip.id }
+        clips.insert(clip, at: 0)
     }
 }

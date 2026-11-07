@@ -19,6 +19,8 @@ final class HistoryLifecycle {
     /// The formats of copies still on their way to the disk, ready to be pasted at once.
     private var pendingFormats: [Clip.ID: [ClipRepresentation]] = [:]
     private var processingTasks: [Clip.ID: Task<Void, Never>] = [:]
+    /// The entry that holds each content, to recognize a copy made again.
+    private var entries: [Data: Clip.ID] = [:]
 
     var onStateChange: ((HistoryLifecycleState) -> Void)?
 
@@ -63,6 +65,11 @@ final class HistoryLifecycle {
                 return
             }
             history.replaceAll(with: snapshot.clips)
+            entries = Dictionary(
+                snapshot.clips.compactMap { clip in clip.fingerprint.map { ($0, clip.id) } },
+                uniquingKeysWith: { first, _ in first }
+            )
+            startFingerprintingOlderCopies(snapshot.clips)
             settle()
         } catch EncryptionKeyError.unavailable {
             state = .keyUnavailable
@@ -94,12 +101,16 @@ final class HistoryLifecycle {
         let clip = capture.clip
         history.insert(clip)
         guard !capture.formats.isEmpty else {
-            await store(clip, formats: [], thumbnail: nil)
+            await process(clip, formats: [], fingerprint: ClipFingerprint.make(content: clip.content, formats: []))
             return
         }
         pendingFormats[clip.id] = capture.formats
+        let formats = capture.formats
         processingTasks[clip.id] = Task {
-            await process(clip.id, formats: capture.formats)
+            // Long for a large copy: away from the main thread.
+            let content = clip.content
+            let fingerprint = await Task.detached { ClipFingerprint.make(content: content, formats: formats) }.value
+            await process(clip, formats: formats, fingerprint: fingerprint)
             pendingFormats[clip.id] = nil
             processingTasks[clip.id] = nil
         }
@@ -112,28 +123,53 @@ final class HistoryLifecycle {
         }
     }
 
-    private func process(_ id: Clip.ID, formats: [ClipRepresentation]) async {
-        if let clip = history.clip(withID: id), clip.content.media == nil {
-            // A text has its formats to keep, but no preview to make.
-            await store(clip, formats: formats, thumbnail: nil)
+    /// A copy made again merges with its entry, even if that only shows at the end of its processing.
+    private func process(_ clip: Clip, formats: [ClipRepresentation], fingerprint: Data) async {
+        if let existingID = entries[fingerprint], existingID != clip.id,
+           let existing = history.clip(withID: existingID) {
+            let merged = existing.merging(newer: clip)
+            history.remove(clip.id)
+            history.moveToTop(merged)
+            try? await store.update(merged)
+            return
+        }
+        entries[fingerprint] = clip.id
+
+        guard let current = history.clip(withID: clip.id) else { return }
+        guard var media = current.content.media else {
+            let identified = current.replacing(fingerprint: fingerprint)
+            history.update(identified)
+            await store(identified, formats: formats, thumbnail: nil)
             return
         }
         let thumbnail = await thumbnails.makeThumbnail(from: formats)
-        // Read again: the copy may have moved or gone in the meantime.
-        guard let clip = history.clip(withID: id), var media = clip.content.media else { return }
         media.pixelWidth = thumbnail.pixelWidth
         media.pixelHeight = thumbnail.pixelHeight
         media.pageCount = thumbnail.pageCount
         media.hasThumbnail = thumbnail.imageData != nil
         media.isProcessing = false
-        let processed = Clip(
-            id: clip.id,
-            content: clip.content.replacingMedia(with: media),
-            source: clip.source,
-            capturedAt: clip.capturedAt
-        )
+        // Read again: the copy may have moved or gone during the thumbnail.
+        guard let latest = history.clip(withID: clip.id) else { return }
+        let processed = latest.replacing(content: latest.content.replacingMedia(with: media), fingerprint: fingerprint)
         await store(processed, formats: formats, thumbnail: thumbnail.imageData)
         history.update(processed)
+    }
+
+    /// Copies kept before fingerprints existed get theirs in the background, once.
+    private func startFingerprintingOlderCopies(_ clips: [Clip]) {
+        let older = clips.filter { $0.fingerprint == nil }
+        guard !older.isEmpty else { return }
+        processingTasks[UUID()] = Task {
+            for clip in older {
+                let formats = (try? await store.formats(of: clip.id)) ?? []
+                let content = clip.content
+                let fingerprint = await Task.detached { ClipFingerprint.make(content: content, formats: formats) }.value
+                let identified = clip.replacing(fingerprint: fingerprint)
+                if entries[fingerprint] == nil { entries[fingerprint] = clip.id }
+                history.update(identified)
+                try? await store.update(identified)
+            }
+        }
     }
 
     private func store(_ clip: Clip, formats: [ClipRepresentation], thumbnail: Data?) async {
@@ -167,6 +203,7 @@ final class HistoryLifecycle {
             try await store.deleteAll()
             try await unlock(with: try keyService.createKey())
             history.replaceAll(with: [])
+            entries.removeAll()
             settle()
         } catch {
             state = .keyUnavailable

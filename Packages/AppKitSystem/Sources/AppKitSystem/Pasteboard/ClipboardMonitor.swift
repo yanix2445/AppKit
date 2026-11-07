@@ -1,5 +1,6 @@
 import AppKitCore
 import Foundation
+import UniformTypeIdentifiers
 
 /// Watches the pasteboard counter away from the main thread and turns each new copy into a capture.
 public actor ClipboardMonitor {
@@ -9,6 +10,7 @@ public actor ClipboardMonitor {
     private let capturePolicy: @Sendable () -> ClipCapturePolicy
     private var lastChangeCount: Int
     private var isPaused = false
+    private var isCapturingRemoteCopy = false
 
     public init(
         pasteboard: any PasteboardService,
@@ -37,6 +39,7 @@ public actor ClipboardMonitor {
         let types = pasteboard.readTypes()
         guard capturePolicy().allows(types: types) else { return nil }
 
+        isCapturingRemoteCopy = types.contains(ClipClassifier.remoteClipboardType)
         let capture: ClipCapture?
         switch ClipClassifier.kind(of: types) {
         case .text:
@@ -83,7 +86,26 @@ public actor ClipboardMonitor {
         let formats = pasteboard.readFormats()
         let files = ClipFile.files(in: formats)
         guard !files.isEmpty else { return nil }
+        if isCapturingRemoteCopy, let capture = captureRemoteFile(files[0]) {
+            return capture
+        }
         return ClipCapture(clip: makeClip(content: .files(files)), formats: formats)
+    }
+
+    /// A photo from another device lands in a temporary folder that belongs to the system and
+    /// goes away: its content is kept, not a reference to it.
+    private func captureRemoteFile(_ file: ClipFile) -> ClipCapture? {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: file.path)) else { return nil }
+        let type = UTType(filenameExtension: file.fileExtension)?.identifier ?? "public.data"
+        let formats = [ClipRepresentation(type: type, data: data)]
+        let media = ClipMedia(byteCount: data.count, isProcessing: true)
+        let content: ClipContent
+        switch ClipClassifier.kind(of: [type]) {
+        case .image: content = .image(media)
+        case .pdf: content = .pdf(media)
+        default: content = .other
+        }
+        return ClipCapture(clip: makeClip(content: content), formats: formats)
     }
 
     private func captureOther() -> ClipCapture? {
@@ -93,7 +115,13 @@ public actor ClipboardMonitor {
     }
 
     private func makeClip(content: ClipContent) -> Clip {
-        Clip(content: content, source: frontmostApp.frontmostApp(), capturedAt: .now)
+        // The app in front has nothing to do with a copy made on another device.
+        Clip(
+            content: content,
+            source: isCapturingRemoteCopy ? nil : frontmostApp.frontmostApp(),
+            capturedAt: .now,
+            isRemote: isCapturingRemoteCopy
+        )
     }
 
     public func setPaused(_ isPaused: Bool) {

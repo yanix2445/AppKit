@@ -481,6 +481,33 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertEqual(pasteboard.data(forType: type), data)
     }
 
+    @MainActor func testACopyMadeAgainStaysOneCard() throws {
+        launchApp()
+        let urls = try makeTemporaryFiles(["même fichier.png"])
+        copyAndWait("répété")
+        copyAndWait("autre")
+        copyAndWait("répété")
+        copyFiles(urls)
+        copyFiles(urls)
+        openStrip()
+        waitForCards(3)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("même fichier.png"), cards.element(boundBy: 0).label)
+        XCTAssertTrue(cards.element(boundBy: 1).label.contains("répété"), cards.element(boundBy: 1).label)
+    }
+
+    @MainActor func testACopyFromAnotherDeviceShowsItsOrigin() {
+        launchApp()
+        let remote = NSPasteboard.PasteboardType("com.apple.is-remote-clipboard")
+        pasteboard.declareTypes([.string, remote], owner: nil)
+        pasteboard.setString("depuis l'iPhone", forType: .string)
+        pasteboard.setData(Data(), forType: remote)
+        Thread.sleep(forTimeInterval: 1)
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("Autre appareil"), cards.element(boundBy: 0).label)
+        attachScreenshot(named: "Autre appareil")
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }

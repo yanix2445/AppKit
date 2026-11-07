@@ -252,4 +252,62 @@ struct HistoryLifecycleTests {
         #expect(await lifecycle.formats(of: capture.clip.id) == formats)
         #expect(await lifecycle.thumbnail(of: capture.clip.id) == Data([1]))
     }
+
+    @Test func aTextCopiedAgainKeepsOneEntryAtTheTop() async throws {
+        let lifecycle = try makeLifecycle()
+        await lifecycle.open()
+        let first = clip("répété")
+        await lifecycle.capture(first)
+        await lifecycle.capture(clip("autre"))
+        await lifecycle.capture(clip("répété"))
+
+        #expect(lifecycle.history.clips.map(\.content) == [.text("répété"), .text("autre")])
+        #expect(lifecycle.history.clips[0].id == first.clip.id)
+        #expect(lifecycle.history.clips[0].copyCount == 2)
+        #expect(lifecycle.history.clips[0].firstCapturedAt == first.clip.capturedAt)
+    }
+
+    @Test func aDuplicateFoundAtTheEndOfProcessingMerges() async throws {
+        let lifecycle = try makeLifecycle()
+        await lifecycle.open()
+        let formats = [ClipRepresentation(type: "public.png", data: Data([1, 2, 3]))]
+        let first = image(formats: formats)
+        await lifecycle.capture(first)
+        await lifecycle.finishProcessing()
+
+        let second = image(formats: formats)
+        await lifecycle.capture(second)
+        #expect(lifecycle.history.clips.count == 2)
+        await lifecycle.finishProcessing()
+
+        #expect(lifecycle.history.clips.map(\.id) == [first.clip.id])
+        #expect(lifecycle.history.clips[0].copyCount == 2)
+    }
+
+    @Test func duplicatesAreStillRecognizedAfterARelaunch() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let first = try makeLifecycle(store: store)
+        await first.open()
+        await first.capture(clip("répété"))
+
+        let second = try makeLifecycle(store: store)
+        await second.open()
+        await second.capture(clip("répété"))
+
+        #expect(second.history.clips.count == 1)
+        #expect(second.history.clips[0].copyCount == 2)
+    }
+
+    @Test func theSameSentenceWithAnotherStyleStaysApart() async throws {
+        let lifecycle = try makeLifecycle()
+        await lifecycle.open()
+        for byte: UInt8 in [1, 2] {
+            await lifecycle.capture(ClipCapture(
+                clip: Clip(content: .richText("Bonjour"), source: nil, capturedAt: .now),
+                formats: [ClipRepresentation(type: "public.rtf", data: Data([byte]))]
+            ))
+            await lifecycle.finishProcessing()
+        }
+        #expect(lifecycle.history.clips.count == 2)
+    }
 }

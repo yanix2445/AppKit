@@ -11,6 +11,7 @@ public final class FakePasteboardService: PasteboardService {
         var types: Set<String> = []
         var formats: [ClipRepresentation] = []
         var color: ClipColor?
+        var readDelay: TimeInterval = 0
         var readCount = 0
         var replacementDuringRead: (text: String, types: Set<String>)?
     }
@@ -27,8 +28,15 @@ public final class FakePasteboardService: PasteboardService {
         state.withLock { $0.types }
     }
 
+    /// Simulates the wait for a copy to arrive from another device.
+    public var readDelay: TimeInterval {
+        get { state.withLock { $0.readDelay } }
+        set { state.withLock { $0.readDelay = newValue } }
+    }
+
     public func readText() -> String? {
-        state.withLock {
+        Thread.sleep(forTimeInterval: readDelay)
+        return state.withLock {
             $0.readCount += 1
             let text = $0.text
             if let replacement = $0.replacementDuringRead {

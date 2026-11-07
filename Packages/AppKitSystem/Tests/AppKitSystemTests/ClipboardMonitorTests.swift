@@ -257,6 +257,62 @@ struct ClipboardMonitorTests {
         #expect(pasteboard.readFormats() == formats)
     }
 
+    private let remote = "com.apple.is-remote-clipboard"
+
+    @Test func aCopyFromAnotherDeviceIsKeptAndMarked() async throws {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.copy(text: "depuis l'iPhone", types: ["public.utf8-plain-text", remote])
+
+        let capture = try #require(await monitor.poll())
+
+        #expect(capture.clip.isRemote)
+        #expect(capture.clip.source == nil)
+        #expect(capture.formats.isEmpty)
+    }
+
+    @Test func privacyRulesApplyToACopyFromAnotherDevice() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.copy(text: "secret", types: ["public.utf8-plain-text", remote, "org.nspasteboard.ConcealedType"])
+        #expect(await monitor.poll() == nil)
+        #expect(pasteboard.readCount == 0)
+    }
+
+    @Test func aPhotoFromAnotherDeviceIsKeptWithItsContent() async throws {
+        let url = FileManager.default.temporaryDirectory.appending(path: "photo-\(UUID().uuidString).png")
+        let bytes = Data([1, 2, 3, 4])
+        try bytes.write(to: url)
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.copy(formats: [
+            ClipRepresentation(type: "public.file-url", data: url.dataRepresentation),
+            ClipRepresentation(type: remote, data: Data()),
+        ])
+
+        let capture = try #require(await monitor.poll())
+        try FileManager.default.removeItem(at: url)
+
+        #expect(capture.clip.content == .image(ClipMedia(byteCount: 4, isProcessing: true)))
+        #expect(capture.formats == [ClipRepresentation(type: "public.png", data: bytes)])
+    }
+
+    @MainActor
+    @Test func theWaitForACopyFromAnotherDeviceNeverHoldsTheMainThread() async throws {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.readDelay = 0.5
+        pasteboard.copy(text: "lent", types: ["public.utf8-plain-text", remote])
+
+        let polling = Task { await monitor.poll() }
+        let clock = ContinuousClock()
+        let start = clock.now
+        await Task.yield()
+        #expect(clock.now - start < .milliseconds(100))
+        #expect(await polling.value != nil)
+        #expect(clock.now - start >= .milliseconds(400))
+    }
+
     @Test func thePollingStreamDeliversACopy() async throws {
         let pasteboard = FakePasteboardService()
         let monitor = makeMonitor(

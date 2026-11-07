@@ -62,7 +62,7 @@ struct ClipCardView: View {
     }
 
     private var sourceName: String {
-        clip.source?.name ?? String(localized: "App inconnue")
+        clip.isRemote ? String(localized: "Autre appareil") : clip.source?.name ?? String(localized: "App inconnue")
     }
 
     /// What VoiceOver reads of the content, which an image does not have in words.
@@ -86,6 +86,11 @@ struct ClipCardView: View {
                 content
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .clipped()
+                    .overlay(alignment: .bottomTrailing) {
+                        if clip.isRemote {
+                            ClipRemoteBadgeView()
+                        }
+                    }
 
                 Text(format)
                     .font(.caption)
