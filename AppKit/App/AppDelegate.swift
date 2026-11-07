@@ -1,6 +1,7 @@
 import AppKit
 import AppKitCore
 import AppKitSystem
+import SwiftUI
 
 /// Starts what a menu bar app needs before any scene appears.
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -26,7 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         self.dependencies = dependencies
-        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin)
+        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin, defaults: dependencies.directPasteDefaults)
         directPaste = DirectPasteCoordinator(
             service: dependencies.directPasteService,
             defaults: dependencies.directPasteDefaults,
@@ -102,14 +103,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func restore(_ clip: Clip, style: ClipPasteStyle) {
         historyStrip?.closeImmediately()
         Task {
-            await dependencies?.restore(clip, style: style)
-            switch await directPaste?.deliver() {
-            case .copied(let offersEnabling):
-                let directPaste = self.directPaste
-                copiedMessage.show(onEnableDirectPaste: offersEnabling ? { directPaste?.enable() } : nil)
-            case .pasted, nil:
+            switch await dependencies?.restore(clip, style: style) {
+            case .restored:
+                await deliver()
+            case .filesMissing:
+                copiedMessage.showFailure(String(localized: "Fichier déplacé ou supprimé"))
+            case .unreadable:
+                copiedMessage.showFailure(String(localized: "Cette copie n’a pas pu être relue"))
+            case nil:
                 break
             }
+        }
+    }
+
+    private func deliver() async {
+        switch await directPaste?.deliver() {
+        case .copied(let offersEnabling):
+            let directPaste = self.directPaste
+            copiedMessage.show(onEnableDirectPaste: offersEnabling ? { directPaste?.enable() } : nil)
+        case .pasted:
+            AccessibilityNotification.Announcement(String(localized: "Collé")).post()
+        case nil:
+            break
         }
     }
 }

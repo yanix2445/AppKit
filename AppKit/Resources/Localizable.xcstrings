@@ -281,6 +281,26 @@
         }
       }
     },
+    "Cette copie n’a pas pu être relue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This copy could not be read"
+          }
+        }
+      }
+    },
+    "Choisissez ce qui se passe quand vous validez une copie dans le bandeau.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose what happens when you confirm a copy in the strip."
+          }
+        }
+      }
+    },
     "Choisissez un autre raccourci pour ouvrir l’historique.": {
       "localizations": {
         "en": {
@@ -301,12 +321,32 @@
         }
       }
     },
+    "Coller directement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste directly"
+          }
+        }
+      }
+    },
     "Coller en texte brut": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Paste as Plain Text"
+          }
+        }
+      }
+    },
+    "Collé": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasted"
           }
         }
       }
@@ -327,6 +367,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Continue"
+          }
+        }
+      }
+    },
+    "Copier seulement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy only"
           }
         }
       }
@@ -437,6 +487,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "File"
+          }
+        }
+      }
+    },
+    "Fichier déplacé ou supprimé": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File moved or deleted"
           }
         }
       }
@@ -617,6 +677,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Link"
+          }
+        }
+      }
+    },
+    "Mode de collage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste mode"
           }
         }
       }

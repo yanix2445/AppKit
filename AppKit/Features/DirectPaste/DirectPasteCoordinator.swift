@@ -24,6 +24,9 @@ final class DirectPasteCoordinator {
     }
 
     func deliver() async -> DirectPasteOutcome {
+        guard defaults.string(forKey: PasteMode.storageKey) != PasteMode.copyOnly.rawValue else {
+            return .copied(offersEnabling: false)
+        }
         guard service.isTrusted else {
             explainOnce()
             return .copied(offersEnabling: true)

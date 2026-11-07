@@ -31,7 +31,7 @@ final class SourceAppAppearanceProvider {
             bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
             colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
         ), let context = NSGraphicsContext(bitmapImageRep: bitmap) else {
-            return SourceAppAppearance(icon: icon, headerColor: .gray, prefersDarkText: false)
+            return makeAppearance(icon: icon, red: 0.5, green: 0.5, blue: 0.5)
         }
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = context
@@ -50,14 +50,17 @@ final class SourceAppAppearanceProvider {
             }
         }
         guard totalWeight > 0 else {
-            return SourceAppAppearance(icon: icon, headerColor: .gray, prefersDarkText: false)
+            return makeAppearance(icon: icon, red: 0.5, green: 0.5, blue: 0.5)
         }
-        (red, green, blue) = (red / totalWeight, green / totalWeight, blue / totalWeight)
-        let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+        return makeAppearance(icon: icon, red: red / totalWeight, green: green / totalWeight, blue: blue / totalWeight)
+    }
+
+    private static func makeAppearance(icon: NSImage, red: Double, green: Double, blue: Double) -> SourceAppAppearance {
+        let readable = ClipHeaderContrast.readable(.init(red: red, green: green, blue: blue))
         return SourceAppAppearance(
             icon: icon,
-            headerColor: Color(.sRGB, red: red, green: green, blue: blue),
-            prefersDarkText: luminance > 0.55
+            headerColor: Color(.sRGB, red: readable.color.red, green: readable.color.green, blue: readable.color.blue),
+            prefersDarkText: readable.prefersDarkText
         )
     }
 }
