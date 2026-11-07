@@ -172,6 +172,14 @@ struct HistoryStripViewModelTests {
         #expect(!viewModel.handle(.undo, isRepeat: false) {})
     }
 
+    @Test func upAndDownAreOnlyTakenWithoutModifiers() {
+        let shift = HistoryStripKey.Modifiers(shift: true)
+        #expect(HistoryStripKey(keyCode: 125, character: nil, modifiers: .init()) == .vertical)
+        #expect(HistoryStripKey(keyCode: 126, character: nil, modifiers: .init()) == .vertical)
+        #expect(HistoryStripKey(keyCode: 125, character: nil, modifiers: shift) == nil)
+        #expect(HistoryStripKey(keyCode: 126, character: nil, modifiers: shift) == nil)
+    }
+
     @Test func theKeysDoNotDependOnTheKeyboardLayout() {
         let command = HistoryStripKey.Modifiers(command: true)
         #expect(HistoryStripKey(keyCode: 18, character: "&", modifiers: command) == .filter(0))

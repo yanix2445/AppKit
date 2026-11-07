@@ -41,7 +41,7 @@ enum HistoryStripKey: Equatable {
             } else {
                 return nil
             }
-        case 125, 126 where modifiers.isEmpty:
+        case 125 where modifiers.isEmpty, 126 where modifiers.isEmpty:
             self = .vertical
         case 51 where modifiers.isEmpty || commandOnly:
             self = .delete(command: modifiers.command)
