@@ -7,10 +7,13 @@ public enum ClipClassifier {
         case color
         case image
         case pdf
+        case files
+        case other
     }
 
     public static let plainTextType = "public.utf8-plain-text"
     public static let pdfType = "com.adobe.pdf"
+    public static let fileURLType = "public.file-url"
     public static let colorType = "com.apple.cocoa.pasteboard.color"
     public static let imageTypes: Set<String> = [
         "public.png", "public.tiff", "public.jpeg", "public.heic", "com.compuserve.gif",
@@ -25,13 +28,15 @@ public enum ClipClassifier {
     ]
     private static let linkSchemes: Set<String> = ["http", "https"]
 
-    /// Text comes first: a word processor also offers its selection as a PDF and an image.
+    /// Files come first, as the Finder also writes their names as text and their icons as images.
+    /// Text comes next: a word processor also offers its selection as a PDF and an image.
     public static func kind(of types: Set<String>) -> Kind {
+        if types.contains(fileURLType) { return .files }
         if types.contains(plainTextType) { return .text }
         if types.contains(colorType) { return .color }
         if types.contains(pdfType) { return .pdf }
         if !types.isDisjoint(with: imageTypes) { return .image }
-        return .text
+        return hasOtherFormats(than: types) ? .other : .text
     }
 
     /// What a text is, from the narrowest meaning to the broadest.

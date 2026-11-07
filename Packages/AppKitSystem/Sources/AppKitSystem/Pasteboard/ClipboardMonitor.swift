@@ -47,6 +47,10 @@ public actor ClipboardMonitor {
             capture = captureMedia { .image($0) }
         case .pdf:
             capture = captureMedia { .pdf($0) }
+        case .files:
+            capture = captureFiles()
+        case .other:
+            capture = captureOther()
         }
 
         // A newer copy may have replaced the one whose types were checked: the next poll judges it.
@@ -73,6 +77,19 @@ public actor ClipboardMonitor {
         let byteCount = formats.reduce(0) { $0 + $1.data.count }
         let media = ClipMedia(byteCount: byteCount, isProcessing: true)
         return ClipCapture(clip: makeClip(content: makeContent(media)), formats: formats)
+    }
+
+    private func captureFiles() -> ClipCapture? {
+        let formats = pasteboard.readFormats()
+        let files = ClipFile.files(in: formats)
+        guard !files.isEmpty else { return nil }
+        return ClipCapture(clip: makeClip(content: .files(files)), formats: formats)
+    }
+
+    private func captureOther() -> ClipCapture? {
+        let formats = pasteboard.readFormats()
+        guard !formats.isEmpty else { return nil }
+        return ClipCapture(clip: makeClip(content: .other), formats: formats)
     }
 
     private func makeClip(content: ClipContent) -> Clip {

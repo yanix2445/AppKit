@@ -1,6 +1,7 @@
 import AppKit
 import AppKitCore
 import AppKitSystem
+import Foundation
 import Testing
 
 struct SystemPasteboardServiceTests {
@@ -51,6 +52,52 @@ struct SystemPasteboardServiceTests {
         let color = try #require(SystemPasteboardService(name: pasteboard.name).readColor())
 
         #expect(color.text == "#FF0000")
+    }
+
+    @Test func everyElementComesBackApart() {
+        let pasteboard = makePasteboard()
+        defer { pasteboard.releaseGlobally() }
+        let service = SystemPasteboardService(name: pasteboard.name)
+        let formats = [
+            ClipRepresentation(type: "public.png", data: Data([1]), itemIndex: 0),
+            ClipRepresentation(type: "com.exemple.prive", data: Data([2]), itemIndex: 0),
+            ClipRepresentation(type: "public.png", data: Data([3]), itemIndex: 1),
+        ]
+
+        _ = service.write(formats: formats)
+
+        #expect(pasteboard.pasteboardItems?.count == 2)
+        let read = service.readFormats()
+        #expect(read.filter { $0.itemIndex == 0 }.count == 2)
+        #expect(read.first { $0.itemIndex == 1 }?.data == Data([3]))
+    }
+
+    @Test func realFilesAreCapturedByReferenceAndComeBack() async throws {
+        let pasteboard = makePasteboard()
+        defer { pasteboard.releaseGlobally() }
+        let directory = FileManager.default.temporaryDirectory.appending(path: "Monitor-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let urls = ["a.png", "b.pdf"].map { directory.appending(path: $0) }
+        for url in urls { try Data([1]).write(to: url) }
+        let service = SystemPasteboardService(name: pasteboard.name)
+        let monitor = ClipboardMonitor(pasteboard: service, frontmostApp: SystemFrontmostAppService())
+
+        pasteboard.clearContents()
+        pasteboard.writeObjects(urls.map { $0 as NSURL })
+
+        let capture = try #require(await monitor.poll())
+        guard case .files(let files) = capture.clip.content else {
+            Issue.record("Des fichiers étaient attendus.")
+            return
+        }
+        #expect(files.map(\.name) == ["a.png", "b.pdf"])
+
+        await monitor.restore(capture.clip, formats: capture.formats)
+
+        let restored = try #require(pasteboard.readObjects(forClasses: [NSURL.self]) as? [URL])
+        #expect(restored.map(\.lastPathComponent) == ["a.png", "b.pdf"])
+        #expect(await monitor.poll() == nil)
     }
 
     @Test func readsTheTypesOfAMarkedCopy() {

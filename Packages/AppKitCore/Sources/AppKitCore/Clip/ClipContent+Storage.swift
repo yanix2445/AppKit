@@ -6,7 +6,14 @@ extension ClipContent {
 
     /// The text to search in: without case or accents, cut to the limit.
     public var searchText: String {
-        guard let text = plainText else { return "" }
+        let text: String
+        if case .files(let files) = self {
+            text = files.map(\.name).joined(separator: " ")
+        } else if let plainText {
+            text = plainText
+        } else {
+            return ""
+        }
         return String(
             text.prefix(Self.searchTextLimit)
                 .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
@@ -22,6 +29,8 @@ extension ClipContent {
         case .color: "color"
         case .image: "image"
         case .pdf: "pdf"
+        case .files: "files"
+        case .other: "other"
         }
     }
 }

@@ -14,6 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var globalHotKey: GlobalHotKeyController?
     private let directPasteAlert = DirectPasteAlertPresenter()
     private var directPaste: DirectPasteCoordinator?
+    private let protectedFolderAlert = ProtectedFolderAlertPresenter()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         #if DEBUG
@@ -42,6 +43,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             onPrimaryClick: { historyStrip.toggle() },
             onOpenSettings: { [weak self] in self?.settings.show() }
         )
+        dependencies.onFilesCaptured = { [protectedFolderAlert] files in
+            protectedFolderAlert.explainIfNeeded(for: files)
+        }
         dependencies.start { [weak self] state in
             self?.handle(state)
         }
