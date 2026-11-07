@@ -50,6 +50,15 @@ struct ClipClassifierTests {
         #expect(ClipClassifier.hasOtherFormats(than: [plain, "public.rtf"]))
     }
 
+    @Test func filesComeBeforeTheirNameAndIcon() {
+        #expect(ClipClassifier.kind(of: ["public.file-url", plain, "public.tiff"]) == .files)
+    }
+
+    @Test func onlyPrivateFormatsMeanOther() {
+        #expect(ClipClassifier.kind(of: ["com.figma.element"]) == .other)
+        #expect(ClipClassifier.kind(of: []) == .text)
+    }
+
     @Test func aWordProcessorSelectionStaysText() {
         #expect(ClipClassifier.kind(of: ["public.utf8-plain-text", "com.adobe.pdf", "public.png"]) == .text)
     }

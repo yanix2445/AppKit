@@ -10,6 +10,8 @@ struct ClipCardView: View {
     let thumbnailProvider: ClipThumbnailProvider
 
     @State private var isHovered = false
+    @State private var fileSize: Int64?
+    @AppStorage(ProtectedFolderConsent.anyGrantedKey) private var consentRevision = 0
 
     private var title: String {
         switch clip.content {
@@ -19,6 +21,8 @@ struct ClipCardView: View {
         case .color: String(localized: "Couleur")
         case .image: String(localized: "Image")
         case .pdf: String(localized: "PDF")
+        case .files(let files): files.count == 1 ? String(localized: "Fichier") : String(localized: "Fichiers")
+        case .other: String(localized: "Autre")
         }
     }
 
@@ -44,6 +48,12 @@ struct ClipCardView: View {
                 return String(localized: "PDF · \(size(of: media)) · \(pageCount) pages")
             }
             return String(localized: "PDF · \(size(of: media))")
+        case .files(let files):
+            guard files.count == 1 else { return String(localized: "\(files.count) fichiers") }
+            let kind = files[0].fileExtension.uppercased()
+            return fileSize.map { "\(kind) · \($0.formatted(.byteCount(style: .file)))" } ?? kind
+        case .other:
+            return String(localized: "Se recolle dans \(sourceName)")
         }
     }
 
@@ -61,6 +71,8 @@ struct ClipCardView: View {
         case .text(let text), .richText(let text), .link(let text): String(text.prefix(StripMetrics.previewCharacterLimit))
         case .color(let color): color.text
         case .image, .pdf: title
+        case .files(let files): files.map(\.name).joined(separator: ", ")
+        case .other: String(localized: "Élément \(sourceName)")
         }
     }
 
@@ -96,11 +108,21 @@ struct ClipCardView: View {
             }
             .shadow(color: AppColor.cardShadow, radius: StripMetrics.cardShadowRadius, y: StripMetrics.cardShadowOffset)
             .onHover { isHovered = $0 }
+            .task(id: consentRevision) { readFileSize() }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(String(localized: "\(format), \(sourceName), \(date), \(spokenContent)"))
             .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
             .accessibilityIdentifier("history.card")
         }
+    }
+
+    /// Reads nothing in a protected folder before the user has agreed.
+    private func readFileSize() {
+        guard case .files(let files) = clip.content, files.count == 1,
+              ProtectedFolderConsent.allowsReading(files[0].path)
+        else { return }
+        let attributes = try? FileManager.default.attributesOfItem(atPath: files[0].path)
+        fileSize = (attributes?[.size] as? NSNumber)?.int64Value
     }
 
     private func textPreview(_ text: String) -> some View {
@@ -127,6 +149,10 @@ struct ClipCardView: View {
             ClipMediaPreviewView(id: clip.id, media: media, symbolName: "photo", contentMode: .fill, thumbnailProvider: thumbnailProvider)
         case .pdf(let media):
             ClipMediaPreviewView(id: clip.id, media: media, symbolName: "doc.richtext", contentMode: .fit, thumbnailProvider: thumbnailProvider)
+        case .files(let files):
+            ClipFilesPreviewView(files: files)
+        case .other:
+            ClipOtherPreviewView(name: String(localized: "Élément \(sourceName)"), icon: appearance.icon)
         }
     }
 }

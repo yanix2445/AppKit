@@ -202,6 +202,8 @@ struct ClipStoreTests {
         ClipContent.richText("Bonjour"),
         .link("https://apple.com"),
         .color(ClipColor(red: 1, green: 0.5, blue: 0, alpha: 0.5, text: "rgba(255, 128, 0, 0.5)")),
+        .files([ClipFile(path: "/tmp/a.png"), ClipFile(path: "/tmp/b.pdf")]),
+        .other,
     ])
     func eachKindComesBackAsItWas(content: ClipContent) async throws {
         let store = ClipStore(modelContainer: try .inMemoryHistory())
@@ -212,6 +214,18 @@ struct ClipStoreTests {
         try await store.insert(saved, formats: formats)
 
         #expect(try await store.load().clips.first?.content == content)
+        #expect(try await store.formats(of: saved.id) == formats)
+    }
+
+    @Test func everyElementOfACopyComesBackInPlace() async throws {
+        let store = ClipStore(modelContainer: try .inMemoryHistory())
+        await store.unlock(with: try ClipCipher(keyData: Self.keyA))
+        let saved = Clip(content: .other, source: nil, capturedAt: .now)
+        let formats = [
+            ClipRepresentation(type: "a", data: Data([1]), itemIndex: 0),
+            ClipRepresentation(type: "a", data: Data([2]), itemIndex: 1),
+        ]
+        try await store.insert(saved, formats: formats)
         #expect(try await store.formats(of: saved.id) == formats)
     }
 

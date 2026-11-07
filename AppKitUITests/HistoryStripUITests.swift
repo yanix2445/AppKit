@@ -418,6 +418,69 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertEqual(pasteboardText(), "#FF5733")
     }
 
+    @MainActor private func makeTemporaryFiles(_ names: [String]) throws -> [URL] {
+        let directory = FileManager.default.temporaryDirectory
+            .appending(path: "HistoryStripUITests-\(UUID().uuidString)", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: directory) }
+        let urls = names.map { directory.appending(path: $0) }
+        for url in urls { try Data([1, 2, 3]).write(to: url) }
+        return urls
+    }
+
+    @MainActor private func copyFiles(_ urls: [URL]) {
+        pasteboard.clearContents()
+        pasteboard.writeObjects(urls.map { $0 as NSURL })
+        Thread.sleep(forTimeInterval: 1)
+    }
+
+    @MainActor private func copiedFileNames() -> [String] {
+        let urls = pasteboard.readObjects(forClasses: [NSURL.self], options: [.urlReadingFileURLsOnly: true]) as? [URL]
+        return urls?.map(\.lastPathComponent) ?? []
+    }
+
+    @MainActor func testFilesComeBackAsRealFilesNotAsText() throws {
+        launchApp()
+        let urls = try makeTemporaryFiles(["Icône en verre.png", "Compte rendu.pdf"])
+        copyFiles([urls[0]])
+        copyFiles(urls)
+        openStrip()
+        waitForCards(2)
+        XCTAssertTrue(cards.element(boundBy: 1).label.contains("Icône en verre.png"), cards.element(boundBy: 1).label)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("2 fichiers"), cards.element(boundBy: 0).label)
+        attachScreenshot(named: "Fichiers")
+
+        strip.typeKey(.return, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(copiedFileNames(), ["Icône en verre.png", "Compte rendu.pdf"])
+    }
+
+    @MainActor func testAFileThatHasGoneShowsAsNotFound() throws {
+        launchApp()
+        let urls = try makeTemporaryFiles(["parti.png"])
+        copyFiles(urls)
+        try FileManager.default.removeItem(at: urls[0])
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(app.descendants(matching: .any)["history.strip"].exists)
+        attachScreenshot(named: "Introuvable")
+    }
+
+    @MainActor func testAPrivateFormatComesBackIdentical() {
+        launchApp()
+        let data = Data((0...255).map(UInt8.init))
+        let type = NSPasteboard.PasteboardType("com.exemple.element-prive")
+        copyData(data, type: type.rawValue)
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("Se recolle dans"), cards.element(boundBy: 0).label)
+        attachScreenshot(named: "Format privé")
+
+        strip.typeKey(.return, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(pasteboard.data(forType: type), data)
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }

@@ -6,13 +6,17 @@ public enum ClipContent: Equatable, Sendable {
     case color(ClipColor)
     case image(ClipMedia)
     case pdf(ClipMedia)
+    /// Files kept by reference.
+    case files([ClipFile])
+    /// Only formats that the source app alone can read.
+    case other
 
     /// The text to paste when formats are left out; an image or a PDF has none.
     public var plainText: String? {
         switch self {
         case .text(let text), .richText(let text), .link(let text): text
         case .color(let color): color.text
-        case .image, .pdf: nil
+        case .image, .pdf, .files, .other: nil
         }
     }
 
@@ -24,7 +28,7 @@ public enum ClipContent: Equatable, Sendable {
     public var media: ClipMedia? {
         switch self {
         case .image(let media), .pdf(let media): media
-        case .text, .richText, .link, .color: nil
+        case .text, .richText, .link, .color, .files, .other: nil
         }
     }
 
@@ -32,7 +36,7 @@ public enum ClipContent: Equatable, Sendable {
         switch self {
         case .image: .image(media)
         case .pdf: .pdf(media)
-        case .text, .richText, .link, .color: self
+        case .text, .richText, .link, .color, .files, .other: self
         }
     }
 }

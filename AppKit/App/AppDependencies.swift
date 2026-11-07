@@ -15,6 +15,7 @@ final class AppDependencies {
     private var retryTask: Task<Void, Never>?
 
     var history: ClipHistory { lifecycle.history }
+    var onFilesCaptured: (([ClipFile]) -> Void)?
 
     init() throws {
         let location = AppDependencies.makeLocation()
@@ -79,11 +80,14 @@ final class AppDependencies {
             self?.apply(state)
             onStateChange(state)
         }
-        captureTask = Task { [lifecycle, monitor] in
+        captureTask = Task { [lifecycle, monitor, weak self] in
             await monitor.setPaused(true)
             await lifecycle.open()
             for await capture in await monitor.captures() {
                 await lifecycle.capture(capture)
+                if case .files(let files) = capture.clip.content {
+                    self?.onFilesCaptured?(files)
+                }
             }
         }
     }

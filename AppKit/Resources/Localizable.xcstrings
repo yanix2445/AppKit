@@ -31,6 +31,46 @@
         }
       }
     },
+    "%lld fichiers": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld file"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld files"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld fichier"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld fichiers"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Activer le collage direct": {
       "localizations": {
         "en": {
@@ -57,6 +97,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unknown app"
+          }
+        }
+      }
+    },
+    "AppKit ne lit que les fichiers que vous copiez, rien d’autre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AppKit only reads the files you copy, nothing else."
           }
         }
       }
@@ -97,6 +147,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow Direct Paste"
+          }
+        }
+      }
+    },
+    "Autre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "Bureau": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desktop"
           }
         }
       }
@@ -181,6 +251,16 @@
         }
       }
     },
+    "Continuer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
     "Copié · faites": {
       "localizations": {
         "en": {
@@ -221,12 +301,32 @@
         }
       }
     },
+    "Documents": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Documents"
+          }
+        }
+      }
+    },
     "Déjà pris": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Taken"
+          }
+        }
+      }
+    },
+    "Déplacé ou supprimé": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moved or deleted"
           }
         }
       }
@@ -247,6 +347,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Close"
+          }
+        }
+      }
+    },
+    "Fichier": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File"
+          }
+        }
+      }
+    },
+    "Fichiers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Files"
           }
         }
       }
@@ -297,6 +417,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Image · %1$lld × %2$lld px"
+          }
+        }
+      }
+    },
+    "Introuvable": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not found"
           }
         }
       }
@@ -461,6 +591,16 @@
         }
       }
     },
+    "Pas maintenant": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Now"
+          }
+        }
+      }
+    },
     "Plus tard": {
       "localizations": {
         "en": {
@@ -547,6 +687,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Without its key, this history can no longer be read. Deleting it is permanent, even if the key turns up later."
+          }
+        }
+      }
+    },
+    "Se recolle dans %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pastes back in %@"
           }
         }
       }
@@ -671,6 +821,16 @@
         }
       }
     },
+    "Téléchargements": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloads"
+          }
+        }
+      }
+    },
     "Utiliser %@": {
       "localizations": {
         "en": {
@@ -701,6 +861,26 @@
         }
       }
     },
+    "Vous avez copié « %@ », rangé dans %@. Pour l’afficher et le recoller, AppKit doit lire ce fichier.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You copied “%1$@”, stored in %2$@. To show it and paste it back, AppKit needs to read this file."
+          }
+        }
+      }
+    },
+    "macOS va vous demander l’accès au dossier %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS will ask for access to the %@ folder"
+          }
+        }
+      }
+    },
     "pour copier": {
       "localizations": {
         "en": {
@@ -727,6 +907,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Just now"
+          }
+        }
+      }
+    },
+    "Élément %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ item"
           }
         }
       }
