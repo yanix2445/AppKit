@@ -8,6 +8,7 @@ final class StatusItemController: NSObject {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let copyCount: () -> Int
     private let launchAtLogin: LaunchAtLoginController
+    private let pause: CapturePauseController
     private let onPrimaryClick: () -> Void
     private let onOpenSettings: () -> Void
     private var state = HistoryLifecycleState.starting
@@ -16,11 +17,13 @@ final class StatusItemController: NSObject {
     init(
         copyCount: @escaping () -> Int,
         launchAtLogin: LaunchAtLoginController,
+        pause: CapturePauseController,
         onPrimaryClick: @escaping () -> Void,
         onOpenSettings: @escaping () -> Void
     ) {
         self.copyCount = copyCount
         self.launchAtLogin = launchAtLogin
+        self.pause = pause
         self.onPrimaryClick = onPrimaryClick
         self.onOpenSettings = onOpenSettings
         super.init()
@@ -39,16 +42,61 @@ final class StatusItemController: NSObject {
         updateImage()
     }
 
+    /// The pause the user asked for has changed.
+    func capturePauseDidChange() {
+        updateImage()
+    }
+
+    /// A brief fade of the icon when a rule refuses a copy, without anything of its content.
+    func flashDiscardedCopy() {
+        guard let button = statusItem.button else { return }
+        button.setAccessibilityValue(String(localized: "Copie écartée"))
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = Motion.discardFlash
+            button.animator().alphaValue = StripMetrics.discardFlashOpacity
+        }, completionHandler: {
+            MainActor.assumeIsolated {
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = Motion.discardFlash
+                    button.animator().alphaValue = 1
+                }
+            }
+        })
+        Task {
+            try? await Task.sleep(for: Motion.briefMessageDuration)
+            button.setAccessibilityValue(nil)
+        }
+    }
+
     /// Shown next to the menu entry, as a reminder.
     func setOpenHistoryHotKey(_ combination: HotKeyCombination?) {
         openHistoryHotKey = combination
     }
 
     private func updateImage() {
-        let image = NSImage(named: pauseTitle == nil ? "MenuBarIcon" : "MenuBarIconAlert")
+        let name: String
+        if pauseTitle != nil {
+            name = "MenuBarIconAlert"
+        } else if pause.isPaused || pause.ignoresNextCopy {
+            name = "MenuBarIconPaused"
+        } else {
+            name = "MenuBarIcon"
+        }
+        let image = NSImage(named: name)
         image?.isTemplate = true
-        image?.accessibilityDescription = pauseTitle ?? "AppKit"
+        image?.accessibilityDescription = pauseTitle ?? userPauseTitle ?? "AppKit"
         statusItem.button?.image = image
+    }
+
+    private var userPauseTitle: String? {
+        switch pause.pause {
+        case .until(let end) where pause.isPaused:
+            String(localized: "Capture en pause jusqu’à \(end.formatted(date: .omitted, time: .shortened))")
+        case .untilResumed:
+            String(localized: "Capture en pause jusqu’à réactivation")
+        default:
+            pause.ignoresNextCopy ? String(localized: "La prochaine copie sera ignorée") : nil
+        }
     }
 
     private var pauseTitle: String? {
@@ -91,6 +139,7 @@ final class StatusItemController: NSObject {
             open.keyEquivalentModifierMask = Self.eventModifiers(openHistoryHotKey.modifiers)
         }
         menu.addItem(open)
+        menu.addItem(makePauseItem())
         menu.addItem(.separator())
 
         let settings = NSMenuItem(title: String(localized: "Réglages…"), action: #selector(openSettings), keyEquivalent: ",")
@@ -105,6 +154,37 @@ final class StatusItemController: NSObject {
         statusItem.menu = nil
     }
 
+    private func makePauseItem() -> NSMenuItem {
+        if pause.isPaused || pause.ignoresNextCopy {
+            let resume = NSMenuItem(title: String(localized: "Reprendre"), action: #selector(resumeCapture), keyEquivalent: "")
+            resume.target = self
+            resume.setAccessibilityIdentifier("statusItem.resume")
+            return resume
+        }
+        let item = NSMenuItem(title: String(localized: "Mettre en pause"), action: nil, keyEquivalent: "")
+        let submenu = NSMenu()
+        submenu.addItem(pauseEntry(String(localized: "Pendant 5 minutes"), #selector(pauseFiveMinutes), "statusItem.pause5"))
+        submenu.addItem(pauseEntry(String(localized: "Pendant 1 heure"), #selector(pauseOneHour), "statusItem.pause60"))
+        submenu.addItem(pauseEntry(String(localized: "Jusqu’à réactivation"), #selector(pauseUntilResumed), "statusItem.pauseForever"))
+        submenu.addItem(pauseEntry(String(localized: "Ignorer la prochaine copie"), #selector(ignoreNextCopy), "statusItem.ignoreNext"))
+        item.submenu = submenu
+        item.setAccessibilityIdentifier("statusItem.pauseMenu")
+        return item
+    }
+
+    private func pauseEntry(_ title: String, _ action: Selector, _ identifier: String) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
+        item.target = self
+        item.setAccessibilityIdentifier(identifier)
+        return item
+    }
+
+    @objc private func pauseFiveMinutes() { pause.pause(for: 300) }
+    @objc private func pauseOneHour() { pause.pause(for: 3_600) }
+    @objc private func pauseUntilResumed() { pause.pauseUntilResumed() }
+    @objc private func ignoreNextCopy() { pause.ignoreNextCopy() }
+    @objc private func resumeCapture() { pause.resume() }
+
     private func addHeader(to menu: NSMenu) {
         menu.addItem(disabledItem("AppKit"))
         if let pauseTitle, let pauseExplanation {
@@ -117,6 +197,10 @@ final class StatusItemController: NSObject {
                 freeSpace.target = self
                 menu.addItem(freeSpace)
             }
+        } else if let userPauseTitle {
+            let title = disabledItem(userPauseTitle)
+            title.setAccessibilityIdentifier("statusItem.userPause")
+            menu.addItem(title)
         } else {
             menu.addItem(disabledItem(String(localized: "Capture active · \(copyCount()) copies")))
         }

@@ -9,6 +9,7 @@ enum Motion {
     static let pausedRetryTolerance: Duration = .seconds(5)
     static let storagePruneInterval: Duration = .seconds(3_600)
     static let storagePruneTolerance: Duration = .seconds(300)
+    static let discardFlash: TimeInterval = 0.15
     static let relativeDateRefresh: TimeInterval = 30
     static let briefMessageFade: TimeInterval = 0.15
     static let briefMessageDuration: Duration = .seconds(2)

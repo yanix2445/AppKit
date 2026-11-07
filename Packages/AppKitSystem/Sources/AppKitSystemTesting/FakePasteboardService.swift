@@ -11,6 +11,7 @@ public final class FakePasteboardService: PasteboardService {
         var types: Set<String> = []
         var formats: [ClipRepresentation] = []
         var color: ClipColor?
+        var sourceMarker: String?
         var readDelay: TimeInterval = 0
         var readCount = 0
         var replacementDuringRead: (text: String, types: Set<String>)?
@@ -74,6 +75,15 @@ public final class FakePasteboardService: PasteboardService {
         }
     }
 
+    /// Simulates the marker by which an app names itself.
+    public func setSourceMarker(_ identifier: String?) {
+        state.withLock { $0.sourceMarker = identifier }
+    }
+
+    public func readString(forType type: String) -> String? {
+        type == ClipCapturePolicy.sourceMarkerType ? state.withLock { $0.sourceMarker } : nil
+    }
+
     public func readFormats() -> [ClipRepresentation] {
         state.withLock {
             $0.readCount += 1
@@ -120,7 +130,17 @@ public final class FakePasteboardService: PasteboardService {
         state.withLock {
             $0.changeCount += 1
             $0.text = text
-            $0.types = types
+            $0.types = types.isEmpty && text != nil ? [ClipClassifier.plainTextType] : types
+        }
+    }
+
+    /// Simulates an app that empties the pasteboard.
+    public func empty() {
+        state.withLock {
+            $0.changeCount += 1
+            $0.text = nil
+            $0.types = []
+            $0.formats = []
         }
     }
 }
