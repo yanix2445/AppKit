@@ -21,12 +21,52 @@
         }
       }
     },
-    "%@, %@, %@, %@": {
+    "%lld copies, dont %lld épinglées. Les épinglées ne comptent pas dans la limite.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, %@, %@, %@"
+            "value": "%1$lld copies, %2$lld of them pinned. Pinned copies don’t count against the limit."
+          }
+        }
+      }
+    },
+    "%lld copies.": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copy."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copies."
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copie."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld copies."
+                }
+              }
+            }
           }
         }
       }
@@ -67,6 +107,56 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "1 jour": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 day"
+          }
+        }
+      }
+    },
+    "1 mois": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 month"
+          }
+        }
+      }
+    },
+    "1 semaine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 week"
+          }
+        }
+      }
+    },
+    "3 mois": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 months"
+          }
+        }
+      }
+    },
+    "6 mois": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 months"
           }
         }
       }
@@ -137,6 +227,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "AppKit has erased nothing. The key is kept in this Mac’s keychain: it may have been deleted, or not restored yet."
+          }
+        }
+      }
+    },
+    "Au-delà, une copie est gardée à part et ne compte pas dans la limite.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above this, a copy is kept apart and doesn’t count against the limit."
           }
         }
       }
@@ -421,12 +521,42 @@
         }
       }
     },
+    "De 1 Go à 10 Go.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From 1 GB to 10 GB."
+          }
+        }
+      }
+    },
     "Documents": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Documents"
+          }
+        }
+      }
+    },
+    "Durée de conservation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep copies for"
+          }
+        }
+      }
+    },
+    "Durée des copies volumineuses": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep large copies for"
           }
         }
       }
@@ -447,6 +577,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moved or deleted"
+          }
+        }
+      }
+    },
+    "Effacer tout l’historique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erase the entire history"
+          }
+        }
+      }
+    },
+    "Elle est aussi supprimée dès qu’une autre copie volumineuse arrive.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It is also deleted as soon as another large copy arrives."
           }
         }
       }
@@ -531,6 +681,16 @@
         }
       }
     },
+    "Historique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        }
+      }
+    },
     "Historique des copies": {
       "localizations": {
         "en": {
@@ -577,6 +737,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not found"
+          }
+        }
+      }
+    },
+    "Jamais": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never"
           }
         }
       }
@@ -651,6 +821,36 @@
         }
       }
     },
+    "Les copies plus anciennes sont supprimées, sauf les épinglées.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Older copies are deleted, except pinned ones."
+          }
+        }
+      }
+    },
+    "Les éléments épinglés et les copies volumineuses temporaires ne sont pas touchés.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinned items and temporary large copies are left alone."
+          }
+        }
+      }
+    },
+    "Les épinglés et les copies volumineuses ne sont pas touchés.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinned items and large copies are left alone."
+          }
+        }
+      }
+    },
     "Libre": {
       "localizations": {
         "en": {
@@ -677,6 +877,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Link"
+          }
+        }
+      }
+    },
+    "Limite de stockage : %lld Go": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage limit: %lld GB"
           }
         }
       }
@@ -801,6 +1011,16 @@
         }
       }
     },
+    "Place occupée par l’historique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Room taken by the history"
+          }
+        }
+      }
+    },
     "Plus tard": {
       "localizations": {
         "en": {
@@ -921,6 +1141,76 @@
         }
       }
     },
+    "Seuil des copies volumineuses": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large copy threshold"
+          }
+        }
+      }
+    },
+    "Stockage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage"
+          }
+        }
+      }
+    },
+    "Supprimer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Supprimer %lld éléments (%@) ?": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Delete %1$lld item (%2$@)?"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Delete %1$lld items (%2$@)?"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Supprimer %1$lld élément (%2$@) ?"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Supprimer %1$lld éléments (%2$@) ?"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Supprimer tout l’historique, épinglés compris ?": {
       "localizations": {
         "en": {
@@ -1031,6 +1321,36 @@
         }
       }
     },
+    "Tout effacer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erase All"
+          }
+        }
+      }
+    },
+    "Tout effacer…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erase All…"
+          }
+        }
+      }
+    },
+    "Tout l’historique sera effacé. Les éléments épinglés et les copies volumineuses temporaires ne sont pas touchés.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The entire history will be erased. Pinned items and temporary large copies are left alone."
+          }
+        }
+      }
+    },
     "Tout supprimer": {
       "localizations": {
         "en": {
@@ -1057,6 +1377,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use %@"
+          }
+        }
+      }
+    },
+    "Volumineux · temporaire": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large · temporary"
           }
         }
       }

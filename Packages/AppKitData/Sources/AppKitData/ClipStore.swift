@@ -38,7 +38,8 @@ public actor ClipStore {
                         firstCapturedAt: payload.firstCapturedAt,
                         copyCount: payload.copyCount ?? 1,
                         fingerprint: payload.fingerprint,
-                        isRemote: payload.isRemote ?? false
+                        isRemote: payload.isRemote ?? false,
+                        isLarge: record.isLarge
                     )
                 )
             } catch {
@@ -55,18 +56,38 @@ public actor ClipStore {
         let cipher = try requireCipher()
         let payload = try JSONEncoder().encode(ClipPayload(clip: clip))
         let searchText = Data(clip.content.searchText.utf8)
-        modelContext.insert(
-            ClipRecord(
-                uid: clip.id,
-                capturedAt: clip.capturedAt,
-                byteCount: clip.content.media?.byteCount ?? payload.count,
-                kind: clip.content.kindIdentifier,
-                sealedPayload: try cipher.seal(payload, for: clip.id),
-                sealedSearchText: try cipher.seal(searchText, for: clip.id),
-                sealedFormats: formats.isEmpty ? nil : try cipher.seal(Self.encode(formats), for: clip.id),
-                sealedThumbnail: try thumbnail.map { try cipher.seal($0, for: clip.id) }
-            )
+        let sealedPayload = try cipher.seal(payload, for: clip.id)
+        let sealedSearchText = try cipher.seal(searchText, for: clip.id)
+        let sealedFormats = formats.isEmpty ? nil : try cipher.seal(Self.encode(formats), for: clip.id)
+        let sealedThumbnail = try thumbnail.map { try cipher.seal($0, for: clip.id) }
+        let record = ClipRecord(
+            uid: clip.id,
+            capturedAt: clip.capturedAt,
+            byteCount: sealedPayload.count + sealedSearchText.count + (sealedFormats?.count ?? 0) + (sealedThumbnail?.count ?? 0),
+            kind: clip.content.kindIdentifier,
+            sealedPayload: sealedPayload,
+            sealedSearchText: sealedSearchText,
+            sealedFormats: sealedFormats,
+            sealedThumbnail: sealedThumbnail
         )
+        record.isLarge = clip.isLarge
+        modelContext.insert(record)
+        try saveOrRollBack()
+    }
+
+    /// What can be read without the key: the place each copy takes, its date and its state.
+    public func storageItems() throws -> [ClipStorageItem] {
+        try modelContext.fetch(FetchDescriptor<ClipRecord>()).map {
+            ClipStorageItem(id: $0.uid, capturedAt: $0.capturedAt, byteCount: $0.byteCount, isPinned: $0.isPinned, isLarge: $0.isLarge)
+        }
+    }
+
+    public func delete(_ ids: [Clip.ID]) throws {
+        guard !ids.isEmpty else { return }
+        let wanted = Set(ids)
+        for record in try modelContext.fetch(FetchDescriptor<ClipRecord>()) where wanted.contains(record.uid) {
+            modelContext.delete(record)
+        }
         try saveOrRollBack()
     }
 

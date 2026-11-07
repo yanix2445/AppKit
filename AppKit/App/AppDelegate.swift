@@ -27,7 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         self.dependencies = dependencies
-        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin, defaults: dependencies.directPasteDefaults)
+        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin, lifecycle: dependencies.lifecycle, defaults: dependencies.directPasteDefaults)
         directPaste = DirectPasteCoordinator(
             service: dependencies.directPasteService,
             defaults: dependencies.directPasteDefaults,

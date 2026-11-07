@@ -16,6 +16,7 @@ final class HistoryLifecycle {
     private let keyService: any EncryptionKeyService
     private let diskSpace: any DiskSpaceService
     private let thumbnails: any ClipThumbnailService
+    private let storagePolicy: () -> ClipStoragePolicy
     /// The formats of copies still on their way to the disk, ready to be pasted at once.
     private var pendingFormats: [Clip.ID: [ClipRepresentation]] = [:]
     private var processingTasks: [Clip.ID: Task<Void, Never>] = [:]
@@ -35,13 +36,15 @@ final class HistoryLifecycle {
         store: ClipStore,
         keyService: any EncryptionKeyService,
         diskSpace: any DiskSpaceService,
-        thumbnails: any ClipThumbnailService
+        thumbnails: any ClipThumbnailService,
+        storagePolicy: @escaping () -> ClipStoragePolicy = { ClipStoragePolicy() }
     ) {
         self.history = history
         self.store = store
         self.keyService = keyService
         self.diskSpace = diskSpace
         self.thumbnails = thumbnails
+        self.storagePolicy = storagePolicy
     }
 
     /// Opens the history. Called at launch, and again by Retry.
@@ -70,6 +73,7 @@ final class HistoryLifecycle {
                 uniquingKeysWith: { first, _ in first }
             )
             startFingerprintingOlderCopies(snapshot.clips)
+            await prune()
             settle()
         } catch EncryptionKeyError.unavailable {
             state = .keyUnavailable
@@ -136,8 +140,10 @@ final class HistoryLifecycle {
         entries[fingerprint] = clip.id
 
         guard let current = history.clip(withID: clip.id) else { return }
+        let stored = formats.reduce(0) { $0 + $1.data.count }
+        let isLarge = storagePolicy().isLarge(content: current.content, storedBytes: stored)
         guard var media = current.content.media else {
-            let identified = current.replacing(fingerprint: fingerprint)
+            let identified = current.replacing(fingerprint: fingerprint, isLarge: isLarge)
             history.update(identified)
             await store(identified, formats: formats, thumbnail: nil)
             return
@@ -150,7 +156,11 @@ final class HistoryLifecycle {
         media.isProcessing = false
         // Read again: the copy may have moved or gone during the thumbnail.
         guard let latest = history.clip(withID: clip.id) else { return }
-        let processed = latest.replacing(content: latest.content.replacingMedia(with: media), fingerprint: fingerprint)
+        let processed = latest.replacing(
+            content: latest.content.replacingMedia(with: media),
+            fingerprint: fingerprint,
+            isLarge: isLarge
+        )
         await store(processed, formats: formats, thumbnail: thumbnail.imageData)
         history.update(processed)
     }
@@ -175,6 +185,7 @@ final class HistoryLifecycle {
     private func store(_ clip: Clip, formats: [ClipRepresentation], thumbnail: Data?) async {
         do {
             try await store.insert(clip, formats: formats, thumbnail: thumbnail)
+            await prune()
         } catch {
             history.remove(clip.id)
             state = hasRoom && !Self.isOutOfSpace(error) ? .keyUnavailable : .diskFull
@@ -195,6 +206,45 @@ final class HistoryLifecycle {
         let date = Date.now
         history.promote(clip.id, at: date)
         try? await store.promote(clip.id, at: date)
+    }
+
+    func storageUsage() async -> ClipStorageUsage {
+        ClipStorageUsage(items: (try? await store.storageItems()) ?? [])
+    }
+
+    /// What this policy would delete, to announce it before applying it.
+    func impact(of policy: ClipStoragePolicy) async -> ClipStorageImpact {
+        let items = (try? await store.storageItems()) ?? []
+        return ClipStorageImpact(items: policy.itemsToDelete(from: items, now: .now))
+    }
+
+    func eraseImpact() async -> ClipStorageImpact {
+        let items = (try? await store.storageItems()) ?? []
+        return ClipStorageImpact(items: ClipStoragePolicy.itemsToErase(from: items))
+    }
+
+    /// Applies the current policy.
+    func prune() async {
+        await delete(await impact(of: storagePolicy()).ids)
+    }
+
+    /// Erases the history, but neither the pinned copies nor the large ones.
+    func erase() async {
+        await delete(await eraseImpact().ids)
+    }
+
+    private func delete(_ ids: [Clip.ID]) async {
+        guard !ids.isEmpty else { return }
+        do {
+            try await store.delete(ids)
+        } catch {
+            return
+        }
+        let gone = Set(ids)
+        for id in ids {
+            history.remove(id)
+        }
+        entries = entries.filter { !gone.contains($0.value) }
     }
 
     /// Erases the history that can no longer be read, pinned copies included, and starts anew.

@@ -8,10 +8,12 @@ final class SettingsWindowController {
     private let launchAtLogin: LaunchAtLoginController
     private lazy var window = makeWindow()
 
+    private let storage: StorageSettingsViewModel
     private let defaults: UserDefaults
 
-    init(launchAtLogin: LaunchAtLoginController, defaults: UserDefaults) {
+    init(launchAtLogin: LaunchAtLoginController, lifecycle: HistoryLifecycle, defaults: UserDefaults) {
         self.launchAtLogin = launchAtLogin
+        storage = StorageSettingsViewModel(lifecycle: lifecycle, defaults: defaults)
         self.defaults = defaults
     }
 
@@ -21,7 +23,7 @@ final class SettingsWindowController {
     }
 
     private func makeWindow() -> NSWindow {
-        let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView(launchAtLogin: launchAtLogin).defaultAppStorage(defaults)))
+        let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView(launchAtLogin: launchAtLogin, storage: storage).defaultAppStorage(defaults)))
         window.title = String(localized: "Réglages")
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
