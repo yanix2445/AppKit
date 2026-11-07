@@ -1,4 +1,5 @@
 import Foundation
+import LocalAuthentication
 import Security
 
 /// Keeps the key in the data protection keychain: readable by this app alone, after the first
@@ -25,7 +26,10 @@ public struct SystemEncryptionKeyService: EncryptionKeyService {
     public func existingKey() throws -> Data? {
         var query = baseQuery
         query[kSecReturnData as String] = true
-        query[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
+        // Never asks the user: a key that cannot be read now counts as unavailable.
+        let context = LAContext()
+        context.interactionNotAllowed = true
+        query[kSecUseAuthenticationContext as String] = context
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
         switch status {
