@@ -21,10 +21,18 @@ struct EmptyHistoryView: View {
                     Text("pour rouvrir ce bandeau")
                 }
             }
+            Text("Vos copies restent sur ce Mac, chiffrées.")
         }
         .font(.callout)
         .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .topTrailing) {
+            HStack(spacing: Spacing.xSmall) {
+                KeyCapView(symbol: "esc")
+                Text("Fermer")
+            }
+            .padding(.trailing, Spacing.medium)
+        }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("history.empty")
     }

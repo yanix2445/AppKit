@@ -477,7 +477,7 @@ final class HistoryStripUITests: XCTestCase {
             app.launchArguments = arguments
             app.launch()
             openStrip()
-            attachScreenshot(named: "Vide \(style)")
+            attachBottomOfScreen(named: "Vide \(style)")
             strip.typeKey(.escape, modifierFlags: [])
             XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
 
@@ -493,8 +493,25 @@ final class HistoryStripUITests: XCTestCase {
         }
     }
 
+    /// The empty strip offers no element of its full size: this keeps only the band it covers.
+    @MainActor private func attachBottomOfScreen(named name: String) {
+        Thread.sleep(forTimeInterval: 0.5)
+        let image = XCUIScreen.main.screenshot().image
+        guard let full = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
+        // The strip and its margin, in points, and nothing above it.
+        let screenHeight = NSScreen.main?.frame.height ?? 1
+        let height = Int(CGFloat(full.height) * 222 / screenHeight)
+        guard let band = full.cropping(to: CGRect(x: 0, y: full.height - height, width: full.width, height: height)) else { return }
+        let attachment = XCTAttachment(image: NSImage(cgImage: band, size: .zero))
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     /// Only the element, never the whole screen, which shows whatever else is open on this Mac.
     @MainActor private func attachScreenshot(named name: String, of element: XCUIElement? = nil) {
+        // Past the slide of the strip, which starts off screen.
+        Thread.sleep(forTimeInterval: 0.5)
         let attachment = XCTAttachment(screenshot: (element ?? strip).screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways

@@ -5,6 +5,7 @@ import SwiftUI
 enum AppColor {
     static let cardFill = dynamic(light: .white.withAlphaComponent(0.78), dark: .white.withAlphaComponent(0.08))
     static let controlFill = dynamic(light: .black.withAlphaComponent(0.05), dark: .white.withAlphaComponent(0.09))
+    static let cardShadow = Color(nsColor: .black.withAlphaComponent(0.12))
     static let onBrandDark = Color(nsColor: .black.withAlphaComponent(0.88))
     static let onBrandDarkSecondary = Color(nsColor: .black.withAlphaComponent(0.62))
     static let onBrandLight = Color(nsColor: .white)

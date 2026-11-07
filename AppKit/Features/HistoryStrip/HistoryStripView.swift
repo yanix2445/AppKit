@@ -15,6 +15,9 @@ struct HistoryStripView: View {
             .padding(.vertical, Spacing.medium)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .glassEffect(.regular, in: .rect(cornerRadius: CornerRadius.strip))
+            // In a key window, the glass also draws a rectangular outline with cut corners, and
+            // the cards scroll past its rounded edge. Clipping after the glass removes both.
+            .clipShape(.rect(cornerRadius: CornerRadius.strip))
             .focusable()
             .focusEffectDisabled()
             .focused($isFocused)
