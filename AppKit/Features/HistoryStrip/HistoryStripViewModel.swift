@@ -8,7 +8,7 @@ import SwiftUI
 @Observable
 final class HistoryStripViewModel {
     let history: ClipHistory
-    var openHotKey: HotKeyCombination?
+    var shortcuts: ShortcutsController?
     var pause: CapturePauseController?
 
     private(set) var selection: HistoryStripItem?
@@ -46,6 +46,13 @@ final class HistoryStripViewModel {
     }
 
     // MARK: What is shown
+
+    var openHotKey: HotKeyCombination? { shortcuts?.combination(for: .openHistory) }
+
+    /// The one chosen by the user, or `nil` when it has been erased.
+    func combination(for action: HotKeyAction) -> HotKeyCombination? {
+        shortcuts == nil ? action.defaultCombination : shortcuts?.combination(for: action)
+    }
 
     var hasRemoval: Bool { removalCount > 0 }
 

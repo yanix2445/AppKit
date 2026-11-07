@@ -21,6 +21,7 @@ How the project is tested: the layers, the tools, and the conventions. Where tes
 - Un bug corrigé commence par un test qui échoue.
 - Les captures des tests d'interface se limitent à l'élément testé, jamais à tout l'écran, qui montre les autres fenêtres ouvertes sur le Mac.
 - Les tests d'interface lisent l'ordre des cartes par leur position à l'écran : l'arbre d'accessibilité de SwiftUI ne suit pas toujours un réordonnancement. Le glissement d'une carte du bandeau n'a pas pu être simulé par XCUITest : il s'essaie à la main.
+- `APPKIT_UI_TEST_CLIPBOARD` (`asks`, `denied`) simule ce que macOS permet pour le presse-papiers ; sans elle, l'accès est autorisé.
 - Une instance d'AppKit lancée depuis Xcode bloque les tests d'interface (`Failed to terminate`) : l'arrêter d'abord.
 - Les tests d'interface lancent l'app avec `APPKIT_UI_TEST_ID` : en Debug, elle prend alors un historique, une clé, un presse-papiers et un collage direct jetables, jamais les vrais : ainsi, une copie ou un travail en cours sur le Mac ne fausse pas les tests, et les tests ne touchent pas au presse-papiers de l'utilisateur. Hébergeant des tests unitaires, elle n'ouvre rien.
 - La vraie clé du Trousseau se teste dans `AppKitTests`, seule cible signée pour l'atteindre ; `swift test` ne le peut pas.

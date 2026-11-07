@@ -15,12 +15,15 @@ struct UITestEnvironment {
     let launchAtLoginService: any LaunchAtLoginService
     /// Tests stay silent.
     let soundService: any SoundService
+    /// What macOS would say, as tests cannot change it.
+    let clipboardAccess: any ClipboardAccessService
 
     static let identifierVariable = "APPKIT_UI_TEST_ID"
     static let deleteKeyVariable = "APPKIT_UI_TEST_DELETE_KEY"
     static let trustedVariable = "APPKIT_UI_TEST_TRUSTED"
     static let explainVariable = "APPKIT_UI_TEST_EXPLAIN"
     static let offerLaunchAtLoginVariable = "APPKIT_UI_TEST_OFFER_LOGIN"
+    static let clipboardVariable = "APPKIT_UI_TEST_CLIPBOARD"
     static let largeThresholdVariable = "APPKIT_UI_TEST_LARGE_THRESHOLD"
 
     static var current: UITestEnvironment? {
@@ -46,8 +49,17 @@ struct UITestEnvironment {
             directPasteService: FakeDirectPasteService(isTrusted: environment[trustedVariable] != nil),
             directPasteDefaults: defaults,
             launchAtLoginService: FakeLaunchAtLoginService(),
-            soundService: SilentSoundService()
+            soundService: SilentSoundService(),
+            clipboardAccess: FakeClipboardAccessService(access: environment[clipboardVariable].flatMap(Self.access) ?? .allowed)
         )
+    }
+
+    private static func access(named name: String) -> ClipboardAccess? {
+        switch name {
+        case "asks": .asks
+        case "denied": .denied
+        default: nil
+        }
     }
 
     /// True when the app only hosts unit tests, which must not open any real data.
@@ -66,6 +78,16 @@ struct UITestEnvironment {
         func focusedTarget() -> DirectPasteTarget { .editable }
         func postPaste() {}
         func openAccessibilitySettings() {}
+    }
+
+    private final class FakeClipboardAccessService: ClipboardAccessService {
+        let access: ClipboardAccess
+
+        init(access: ClipboardAccess) {
+            self.access = access
+        }
+
+        func openSettings() {}
     }
 
     private final class SilentSoundService: SoundService {

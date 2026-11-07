@@ -27,9 +27,9 @@ final class HistoryStripController {
         thumbnailProvider = ClipThumbnailProvider(load: loadThumbnail)
     }
 
-    /// The shortcut that opens the strip, which the empty strip mentions.
-    func setOpenHotKey(_ combination: HotKeyCombination?) {
-        viewModel.openHotKey = combination
+    /// The strip answers to the shortcuts chosen, and shows them.
+    func setShortcuts(_ shortcuts: ShortcutsController) {
+        viewModel.shortcuts = shortcuts
     }
 
     func setPause(_ pause: CapturePauseController) {
@@ -139,7 +139,12 @@ final class HistoryStripController {
             option: flags.contains(.option),
             control: flags.contains(.control)
         )
-        guard let key = HistoryStripKey(keyCode: event.keyCode, character: event.charactersIgnoringModifiers, modifiers: modifiers) else {
+        guard let key = HistoryStripKey(
+            keyCode: event.keyCode,
+            character: event.charactersIgnoringModifiers,
+            modifiers: modifiers,
+            bindings: viewModel.shortcuts?.current ?? HistoryStripKey.defaultBindings
+        ) else {
             return false
         }
         return viewModel.handle(key, isRepeat: event.isARepeat, close: { [weak self] in self?.close() })

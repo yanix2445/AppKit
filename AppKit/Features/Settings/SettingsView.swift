@@ -1,67 +1,96 @@
-import AppKit
-import AppKitSystem
+import AppKitCore
 import SwiftUI
 
-/// The settings. Only the general and privacy options exist so far.
+/// The settings: pages in a sidebar, and a search that leads to any setting.
 struct SettingsView: View {
+    let navigation: SettingsNavigation
     let launchAtLogin: LaunchAtLoginController
+    let shortcuts: ShortcutsController
+    let permissions: PermissionsController
     let storage: StorageSettingsViewModel
     let defaults: UserDefaults
     let feedback: CopyFeedbackController
 
-    @AppStorage(PasteMode.storageKey) private var pasteMode = PasteMode.direct.rawValue
-
-    var body: some View {
-        Form {
-            Section("Général") {
-                Toggle(isOn: launchAtLoginBinding) {
-                    Text("Lancer AppKit à l’ouverture de session")
-                    Text("Pour que vos copies soient gardées dès le démarrage du Mac.")
-                }
-                .accessibilityIdentifier("settings.launchAtLogin")
-
-                if launchAtLogin.status == .requiresApproval {
-                    LabeledContent {
-                        Button("Ouvrir les Réglages Système", action: launchAtLogin.openSystemSettings)
-                    } label: {
-                        Text("En attente de votre accord dans les Réglages Système.")
-                    }
-                }
-                Picker(selection: $pasteMode) {
-                    Text("Coller directement").tag(PasteMode.direct.rawValue)
-                    Text("Copier seulement").tag(PasteMode.copyOnly.rawValue)
-                } label: {
-                    Text("Mode de collage")
-                    Text("Choisissez ce qui se passe quand vous validez une copie dans le bandeau.")
-                }
-                .accessibilityIdentifier("settings.pasteMode")
-
-                if launchAtLogin.hasFailed {
-                    Text("macOS a refusé ce changement. Réessayez depuis les Réglages Système.")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            StorageSettingsSection(viewModel: storage)
-
-            PrivacySettingsSection(defaults: defaults)
-
-            SoundSettingsSection(feedback: feedback)
-        }
-        .formStyle(.grouped)
-        // A fixed height, as the form scrolls: it must fit on a small screen.
-        .frame(width: SettingsMetrics.width, height: SettingsMetrics.height)
-        .onAppear(perform: launchAtLogin.refresh)
-        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            launchAtLogin.refresh()
-        }
+    private var selection: Binding<SettingsPane?> {
+        Binding(
+            get: { navigation.isSearching ? nil : navigation.pane },
+            set: { if let pane = $0 { navigation.show(pane) } }
+        )
     }
 
-    private var launchAtLoginBinding: Binding<Bool> {
-        Binding(
-            get: { launchAtLogin.status != .disabled },
-            set: { launchAtLogin.setEnabled($0) }
+    private var query: Binding<String> {
+        Binding(get: { navigation.query }, set: { navigation.query = $0 })
+    }
+
+    var body: some View {
+        NavigationSplitView {
+            List(selection: selection) {
+                Section {
+                    row(.general)
+                    row(.shortcuts)
+                    row(.sounds)
+                }
+                Section {
+                    row(.privacy)
+                    row(.storage)
+                    row(.permissions)
+                }
+            }
+            .toolbar(removing: .sidebarToggle)
+            .navigationSplitViewColumnWidth(SettingsMetrics.sidebarWidth)
+        } detail: {
+            detail
+                .navigationTitle(navigation.isSearching ? String(localized: "Réglages") : navigation.pane.title)
+                .toolbar {
+                    ToolbarItemGroup(placement: .navigation) {
+                        Button("Précédent", systemImage: "chevron.left", action: navigation.goBack)
+                            .disabled(!navigation.canGoBack)
+                            .accessibilityIdentifier("settings.back")
+                        Button("Suivant", systemImage: "chevron.right", action: navigation.goForward)
+                            .disabled(!navigation.canGoForward)
+                            .accessibilityIdentifier("settings.forward")
+                    }
+                }
+        }
+        .searchable(text: query, placement: .sidebar, prompt: Text("Rechercher dans les réglages…"))
+        .navigationSplitViewStyle(.balanced)
+        .frame(
+            minWidth: SettingsMetrics.minimumWidth,
+            idealWidth: SettingsMetrics.width,
+            minHeight: SettingsMetrics.minimumHeight,
+            idealHeight: SettingsMetrics.height
         )
+    }
+
+    private func row(_ pane: SettingsPane) -> some View {
+        Label {
+            Text(verbatim: pane.title)
+        } icon: {
+            SettingsPaneIconView(pane: pane)
+        }
+        .tag(pane)
+        .accessibilityIdentifier("settings.pane.\(pane.rawValue)")
+    }
+
+    @ViewBuilder
+    private var detail: some View {
+        if navigation.isSearching {
+            SettingsSearchResultsView(navigation: navigation)
+        } else {
+            switch navigation.pane {
+            case .general:
+                GeneralSettingsView(launchAtLogin: launchAtLogin, shortcuts: shortcuts)
+            case .shortcuts:
+                ShortcutsSettingsView(shortcuts: shortcuts)
+            case .sounds:
+                Form { SoundSettingsSection(feedback: feedback) }.formStyle(.grouped)
+            case .privacy:
+                Form { PrivacySettingsSection(defaults: defaults) }.formStyle(.grouped)
+            case .storage:
+                Form { StorageSettingsSection(viewModel: storage) }.formStyle(.grouped)
+            case .permissions:
+                PermissionsSettingsView(permissions: permissions)
+            }
+        }
     }
 }

@@ -12,6 +12,6 @@ How the user moves through the app: routing and the page structure.
 
 - Le bandeau : l'historique, sa recherche, ses filtres et ses cartes.
 - Le menu de l'icône : la pause de la capture, les Réglages et Quitter.
-- Les Réglages : une fenêtre avec une barre latérale (Général, Raccourcis, Sons, Mises à jour, Confidentialité, Stockage, Permissions, À propos).
+- Les Réglages : une fenêtre avec une barre latérale et une recherche (Général, Raccourcis, Sons, Confidentialité, Stockage, Permissions ; Mises à jour et À propos arrivent avec leurs fonctionnalités).
 - L'onboarding : une fenêtre en cinq étapes, au premier lancement.
 - La fenêtre de mise à jour, et des messages brefs près du bandeau ou de l'icône.
