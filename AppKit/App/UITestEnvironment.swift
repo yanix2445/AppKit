@@ -19,6 +19,7 @@ struct UITestEnvironment {
     static let trustedVariable = "APPKIT_UI_TEST_TRUSTED"
     static let explainVariable = "APPKIT_UI_TEST_EXPLAIN"
     static let offerLaunchAtLoginVariable = "APPKIT_UI_TEST_OFFER_LOGIN"
+    static let largeThresholdVariable = "APPKIT_UI_TEST_LARGE_THRESHOLD"
 
     static var current: UITestEnvironment? {
         let environment = ProcessInfo.processInfo.environment
@@ -33,6 +34,9 @@ struct UITestEnvironment {
         // The explanation of the permission would stop every test that chooses a copy.
         defaults.set(environment[explainVariable] == nil, forKey: DirectPasteCoordinator.explanationSeenKey)
         defaults.set(environment[offerLaunchAtLoginVariable] == nil, forKey: LaunchAtLoginController.offerSeenKey)
+        if let threshold = environment[largeThresholdVariable].flatMap(Int.init) {
+            defaults.set(threshold, forKey: "storageLargeThreshold")
+        }
         return UITestEnvironment(
             storeURL: directory.appending(path: "History.store"),
             keyService: FileKeyService(url: keyURL),

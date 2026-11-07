@@ -14,6 +14,8 @@ public struct Clip: Identifiable, Equatable, Sendable {
     public let fingerprint: Data?
     /// Came from another device through Universal Clipboard.
     public let isRemote: Bool
+    /// Kept apart, for a short time, as it takes too much room.
+    public let isLarge: Bool
 
     public init(
         id: UUID = UUID(),
@@ -23,7 +25,8 @@ public struct Clip: Identifiable, Equatable, Sendable {
         firstCapturedAt: Date? = nil,
         copyCount: Int = 1,
         fingerprint: Data? = nil,
-        isRemote: Bool = false
+        isRemote: Bool = false,
+        isLarge: Bool = false
     ) {
         self.id = id
         self.content = content
@@ -33,9 +36,15 @@ public struct Clip: Identifiable, Equatable, Sendable {
         self.copyCount = copyCount
         self.fingerprint = fingerprint
         self.isRemote = isRemote
+        self.isLarge = isLarge
     }
 
-    public func replacing(content: ClipContent? = nil, capturedAt: Date? = nil, fingerprint: Data? = nil) -> Clip {
+    public func replacing(
+        content: ClipContent? = nil,
+        capturedAt: Date? = nil,
+        fingerprint: Data? = nil,
+        isLarge: Bool? = nil
+    ) -> Clip {
         Clip(
             id: id,
             content: content ?? self.content,
@@ -44,7 +53,8 @@ public struct Clip: Identifiable, Equatable, Sendable {
             firstCapturedAt: firstCapturedAt,
             copyCount: copyCount,
             fingerprint: fingerprint ?? self.fingerprint,
-            isRemote: isRemote
+            isRemote: isRemote,
+            isLarge: isLarge ?? self.isLarge
         )
     }
 
@@ -58,7 +68,8 @@ public struct Clip: Identifiable, Equatable, Sendable {
             firstCapturedAt: firstCapturedAt,
             copyCount: copyCount + 1,
             fingerprint: fingerprint,
-            isRemote: newer.isRemote
+            isRemote: newer.isRemote,
+            isLarge: isLarge
         )
     }
 }

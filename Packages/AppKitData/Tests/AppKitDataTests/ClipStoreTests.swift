@@ -244,6 +244,35 @@ struct ClipStoreTests {
         #expect(try await store.formats(of: old.id) == formats)
     }
 
+    @Test func theRoomOfACopyCountsItsFormatsAndThumbnail() async throws {
+        let store = ClipStore(modelContainer: try .inMemoryHistory())
+        await store.unlock(with: try ClipCipher(keyData: Self.keyA))
+        let image = Clip(content: .image(ClipMedia(byteCount: 3)), source: nil, capturedAt: .now, isLarge: true)
+        try await store.insert(
+            image,
+            formats: [ClipRepresentation(type: "public.png", data: Data(repeating: 1, count: 5_000))],
+            thumbnail: Data(repeating: 2, count: 1_000)
+        )
+
+        let item = try #require(try await store.storageItems().first)
+
+        #expect(item.byteCount > 6_000)
+        #expect(item.isLarge)
+        #expect(try await store.load().clips.first?.isLarge == true)
+    }
+
+    @Test func deletingRemovesOnlyTheChosenCopies() async throws {
+        let store = ClipStore(modelContainer: try .inMemoryHistory())
+        await store.unlock(with: try ClipCipher(keyData: Self.keyA))
+        let kept = clip("gardé"), gone = clip("parti", secondsAgo: 5)
+        try await store.insert(kept)
+        try await store.insert(gone)
+
+        try await store.delete([gone.id])
+
+        #expect(try await store.load().clips == [kept])
+    }
+
     @Test func deletingEverythingEmptiesTheStore() async throws {
         let store = ClipStore(modelContainer: try .inMemoryHistory())
         await store.unlock(with: try ClipCipher(keyData: Self.keyA))

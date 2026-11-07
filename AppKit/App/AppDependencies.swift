@@ -20,11 +20,11 @@ final class AppDependencies {
 
     init() throws {
         let location = AppDependencies.makeLocation()
+        // Apple documents UserDefaults as thread-safe, though it is not marked Sendable.
+        nonisolated(unsafe) let defaults = location.directPasteDefaults
         directPasteService = location.directPasteService
         directPasteDefaults = location.directPasteDefaults
         launchAtLogin = LaunchAtLoginController(service: location.launchAtLoginService, defaults: location.directPasteDefaults)
-        // Apple documents UserDefaults as thread-safe, though it is not marked Sendable.
-        nonisolated(unsafe) let defaults = location.directPasteDefaults
         monitor = ClipboardMonitor(
             pasteboard: SystemPasteboardService(name: location.pasteboardName),
             frontmostApp: SystemFrontmostAppService(),
@@ -39,7 +39,8 @@ final class AppDependencies {
             store: ClipStore(modelContainer: try .history(at: location.storeURL)),
             keyService: location.keyService,
             diskSpace: SystemDiskSpaceService(url: location.storeURL.deletingLastPathComponent()),
-            thumbnails: SystemClipThumbnailService()
+            thumbnails: SystemClipThumbnailService(),
+            storagePolicy: { ClipStoragePolicy.current(in: defaults) }
         )
     }
 
@@ -95,6 +96,13 @@ final class AppDependencies {
         captureTask = Task { [lifecycle, monitor, weak self] in
             await monitor.setPaused(true)
             await lifecycle.open()
+            Task {
+                // Copies also expire while the app stays open.
+                while !Task.isCancelled {
+                    try? await Task.sleep(for: Motion.storagePruneInterval, tolerance: Motion.storagePruneTolerance)
+                    await lifecycle.prune()
+                }
+            }
             for await capture in await monitor.captures() {
                 await lifecycle.capture(capture)
                 if case .files(let files) = capture.clip.content {

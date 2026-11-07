@@ -329,4 +329,71 @@ struct HistoryLifecycleTests {
         #expect(second.history.clips.count == 1_000)
         #expect(elapsed < .seconds(1), "\(elapsed)")
     }
+
+    private func makeLifecycle(policy: ClipStoragePolicy, store: ClipStore? = nil) throws -> HistoryLifecycle {
+        HistoryLifecycle(
+            history: ClipHistory(),
+            store: try store ?? ClipStore(modelContainer: .inMemoryHistory()),
+            keyService: keyService,
+            diskSpace: disk,
+            thumbnails: thumbnails,
+            storagePolicy: { policy }
+        )
+    }
+
+    @Test func oldCopiesGoAtTheOpening() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let first = try makeLifecycle(store: store)
+        await first.open()
+        let old = Date.now.addingTimeInterval(-40 * 86_400)
+        await first.capture(ClipCapture(clip: Clip(content: .text("ancien"), source: nil, capturedAt: old)))
+        await first.capture(clip("récent"))
+
+        let second = try makeLifecycle(store: store)
+        await second.open()
+
+        #expect(second.history.clips.map(\.content) == [.text("récent")])
+    }
+
+    @Test func aCopyOverTheThresholdIsLargeAndReplacesTheLastOne() async throws {
+        let lifecycle = try makeLifecycle(policy: ClipStoragePolicy(largeThreshold: 2))
+        await lifecycle.open()
+        let first = image(formats: [ClipRepresentation(type: "public.png", data: Data([1, 2, 3]))])
+        await lifecycle.capture(first)
+        await lifecycle.finishProcessing()
+        #expect(lifecycle.history.clips.first?.isLarge == true)
+
+        let second = image(formats: [ClipRepresentation(type: "public.png", data: Data([4, 5, 6]))])
+        await lifecycle.capture(second)
+        await lifecycle.finishProcessing()
+
+        #expect(lifecycle.history.clips.map(\.id) == [second.clip.id])
+    }
+
+    @Test func aFileByReferenceIsNeverLarge() async throws {
+        let lifecycle = try makeLifecycle(policy: ClipStoragePolicy(largeThreshold: 1))
+        await lifecycle.open()
+        await lifecycle.capture(ClipCapture(
+            clip: Clip(content: .files([ClipFile(path: "/tmp/gros.mov")]), source: nil, capturedAt: .now),
+            formats: [ClipRepresentation(type: ClipClassifier.fileURLType, data: Data(repeating: 1, count: 100))]
+        ))
+        await lifecycle.finishProcessing()
+        #expect(lifecycle.history.clips.first?.isLarge == false)
+    }
+
+    @Test func erasingAnnouncesThenDeletes() async throws {
+        let lifecycle = try makeLifecycle()
+        await lifecycle.open()
+        await lifecycle.capture(clip("a"))
+        await lifecycle.capture(clip("b"))
+
+        #expect(await lifecycle.eraseImpact().ids.count == 2)
+        #expect(lifecycle.history.clips.count == 2)
+
+        await lifecycle.erase()
+
+        #expect(lifecycle.history.clips.isEmpty)
+        await lifecycle.capture(clip("a"))
+        #expect(lifecycle.history.clips.count == 1)
+    }
 }

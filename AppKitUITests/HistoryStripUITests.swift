@@ -588,6 +588,51 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertFalse(app.descendants(matching: .any)["history.enableDirectPaste"].exists)
     }
 
+    @MainActor private func openSettings() {
+        XCTAssertTrue(statusItem.waitForExistence(timeout: 5))
+        statusItem.rightClick()
+        let settings = app.menuItems["statusItem.settings"]
+        XCTAssertTrue(settings.waitForExistence(timeout: 5))
+        settings.click()
+    }
+
+    @MainActor func testErasingAnnouncesTheImpactAndCancelKeepsEverything() {
+        launchApp()
+        copyAndWait("un")
+        copyAndWait("deux")
+        openSettings()
+        let erase = app.descendants(matching: .any)["settings.eraseAll"]
+        XCTAssertTrue(erase.waitForExistence(timeout: 5))
+        attachScreenshot(named: "Stockage", of: app.windows.firstMatch)
+
+        erase.click()
+        XCTAssertTrue(app.buttons["Annuler"].waitForExistence(timeout: 5))
+        let title = NSPredicate(format: "label CONTAINS 'Supprimer 2 ' OR value CONTAINS 'Supprimer 2 '")
+        XCTAssertTrue(app.descendants(matching: .any).matching(title).firstMatch.waitForExistence(timeout: 5))
+        app.buttons["Annuler"].click()
+
+        erase.click()
+        let confirm = app.buttons["Tout effacer"]
+        XCTAssertTrue(confirm.waitForExistence(timeout: 5))
+        confirm.click()
+        app.windows.firstMatch.typeKey("w", modifierFlags: .command)
+
+        openStrip()
+        XCTAssertTrue(app.descendants(matching: .any)["history.empty"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor func testALargeCopyShowsItsBadge() throws {
+        app.launchEnvironment["APPKIT_UI_TEST_LARGE_THRESHOLD"] = "10"
+        launchApp()
+        copyData(try makePNG(), type: "public.png")
+        openStrip()
+        waitForCards(1)
+        let badge = NSPredicate(format: "label CONTAINS 'Volumineux'")
+        let done = expectation(for: badge, evaluatedWith: cards.element(boundBy: 0))
+        wait(for: [done], timeout: 5)
+        attachScreenshot(named: "Volumineux")
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }

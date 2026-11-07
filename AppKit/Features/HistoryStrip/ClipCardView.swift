@@ -61,6 +61,11 @@ struct ClipCardView: View {
         Int64(media.byteCount).formatted(.byteCount(style: .file))
     }
 
+    private var badge: String? {
+        if clip.isLarge { return String(localized: "Volumineux · temporaire") }
+        return clip.isRemote ? String(localized: "Autre appareil") : nil
+    }
+
     private var sourceName: String {
         clip.isRemote ? String(localized: "Autre appareil") : clip.source?.name ?? String(localized: "App inconnue")
     }
@@ -87,8 +92,8 @@ struct ClipCardView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .clipped()
                     .overlay(alignment: .bottomTrailing) {
-                        if clip.isRemote {
-                            ClipRemoteBadgeView()
+                        if let badge {
+                            ClipBadgeView(text: badge)
                         }
                     }
 
@@ -115,7 +120,7 @@ struct ClipCardView: View {
             .onHover { isHovered = $0 }
             .task(id: consentRevision) { readFileSize() }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(String(localized: "\(format), \(sourceName), \(date), \(spokenContent)"))
+            .accessibilityLabel([format, sourceName, date, spokenContent, badge].compactMap { $0 }.joined(separator: ", "))
             .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
             .accessibilityIdentifier("history.card")
         }
