@@ -197,7 +197,7 @@ final class HistoryStripViewModel {
     func didAppear() {
         if pauseIsTimedOrUntilResumed {
             tips?.show(.pause)
-        } else if selection != nil, combination(for: .paste) != nil {
+        } else if selection != nil, combination(for: .paste) != nil, tips?.pastesDirectly == true {
             tips?.show(.paste)
         }
     }

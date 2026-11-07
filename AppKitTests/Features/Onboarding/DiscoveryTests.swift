@@ -40,6 +40,18 @@ struct DiscoveryTests {
         #expect(tips.active == nil)
     }
 
+    @Test func pastingIsNotExplainedWhenItOnlyCopies() {
+        defaults.set(PasteMode.copyOnly.rawValue, forKey: PasteMode.storageKey)
+        let history = ClipHistory()
+        history.insert(Clip(content: .text("a"), source: nil, capturedAt: .now))
+        let tips = HistoryStripTips(defaults: defaults)
+        let viewModel = HistoryStripViewModel(history: history)
+        viewModel.tips = tips
+        viewModel.prepareForPresentation()
+        viewModel.didAppear()
+        #expect(tips.active == nil)
+    }
+
     @Test func unpinningIsNoFirstUseOfPinning() {
         let history = ClipHistory()
         history.insert(Clip(content: .text("a"), source: nil, capturedAt: .now, isPinned: true))

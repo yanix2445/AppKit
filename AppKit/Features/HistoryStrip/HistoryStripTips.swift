@@ -23,6 +23,11 @@ final class HistoryStripTips {
         active = tip
     }
 
+    /// In « Copier seulement », nothing is pasted where the user was writing.
+    var pastesDirectly: Bool {
+        defaults.string(forKey: PasteMode.storageKey) != PasteMode.copyOnly.rawValue
+    }
+
     func dismiss() {
         active = nil
     }
