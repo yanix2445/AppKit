@@ -18,6 +18,7 @@ struct HistoryStripToolbarView: View {
         }
         .frame(height: StripMetrics.toolbarHeight)
         .onChange(of: viewModel.openingCount, initial: true) { isSearchFocused = true }
+        .onChange(of: viewModel.pause?.statusText) { viewModel.pauseDidChange() }
     }
 
     private var searchField: some View {
@@ -56,6 +57,7 @@ struct HistoryStripToolbarView: View {
                     .strokeBorder(Color.accentColor, lineWidth: StripMetrics.focusRingWidth)
             }
         }
+        .historyStripTip(.search, viewModel: viewModel)
     }
 
     private var resultText: String {
@@ -130,6 +132,7 @@ struct HistoryStripToolbarView: View {
                 .accessibilityIdentifier("history.resume")
         }
         .font(.callout)
+        .historyStripTip(.pause, viewModel: viewModel)
     }
 
     @ViewBuilder

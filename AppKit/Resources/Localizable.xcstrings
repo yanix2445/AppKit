@@ -1,6 +1,26 @@
 {
   "sourceLanguage": "fr",
   "strings": {
+    "%@ colle la copie là où vous écriviez.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ pastes the copy where you were writing."
+          }
+        }
+      }
+    },
+    "%@ colle la copie là où vous écriviez. %@ la colle sans mise en forme.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ pastes the copy where you were writing. %2$@ pastes it without formatting."
+          }
+        }
+      }
+    },
     "%@ est déjà pris par macOS ou une autre app. Choisissez une autre combinaison.": {
       "localizations": {
         "en": {
@@ -311,6 +331,16 @@
         }
       }
     },
+    "AppKit garde ce que vous copiez et vous le rend en un instant. Il marche tout de suite, sans aucun réglage.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AppKit keeps what you copy and gives it back in an instant. It works right away, with nothing to set up."
+          }
+        }
+      }
+    },
     "AppKit ne lit que les fichiers que vous copiez, rien d’autre.": {
       "localizations": {
         "en": {
@@ -357,6 +387,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Excluded apps"
+          }
+        }
+      }
+    },
+    "Appuyez sur %@, ou faites un clic droit puis Épingler. La copie reste à gauche du bandeau et n’est jamais effacée.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press %@, or right-click then Pin. The copy stays on the left of the strip and is never erased."
           }
         }
       }
@@ -487,6 +527,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Other device"
+          }
+        }
+      }
+    },
+    "Bienvenue dans AppKit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome to AppKit"
           }
         }
       }
@@ -721,6 +771,26 @@
         }
       }
     },
+    "Commencer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Started"
+          }
+        }
+      }
+    },
+    "Compris": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got It"
+          }
+        }
+      }
+    },
     "Confidentialité": {
       "localizations": {
         "en": {
@@ -771,6 +841,16 @@
         }
       }
     },
+    "Copie épinglée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Pinned"
+          }
+        }
+      }
+    },
     "Copier seulement": {
       "localizations": {
         "en": {
@@ -797,6 +877,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pinned copies"
+          }
+        }
+      }
+    },
+    "Copiez comme d’habitude, AppKit s’occupe du reste. Vous pouvez revoir cette découverte dans les Réglages.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy as usual, AppKit takes care of the rest. You can see this again in Settings."
+          }
+        }
+      }
+    },
+    "Copiez comme d’habitude. %@ ouvre le bandeau en bas de l’écran, et %@ reprend la copie sélectionnée.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy as usual. %1$@ opens the strip at the bottom of the screen, and %2$@ brings back the selected copy."
+          }
+        }
+      }
+    },
+    "Copiez comme d’habitude. L’icône de la barre de menus ouvre le bandeau en bas de l’écran, et %@ reprend la copie sélectionnée.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy as usual. The menu bar icon opens the strip at the bottom of the screen, and %@ brings back the selected copy."
           }
         }
       }
@@ -897,6 +1007,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keep large copies for"
+          }
+        }
+      }
+    },
+    "Décisions\n• Conserver le bandeau aéré.\n• Distinguer le type et le format.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decisions\n• Keep the strip airy.\n• Tell type and format apart."
+          }
+        }
+      }
+    },
+    "Découverte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discovery"
           }
         }
       }
@@ -1021,6 +1151,16 @@
         }
       }
     },
+    "Elle reste à gauche du bandeau, n’est jamais effacée, et se glisse pour changer l’ordre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It stays on the left of the strip, is never erased, and can be dragged to change the order."
+          }
+        }
+      }
+    },
     "En attendant, la capture est en pause : aucune copie n’est écrite en clair.": {
       "localizations": {
         "en": {
@@ -1081,6 +1221,16 @@
         }
       }
     },
+    "Faites un clic droit puis Épingler. La copie reste à gauche du bandeau et n’est jamais effacée.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right-click then Pin. The copy stays on the left of the strip and is never erased."
+          }
+        }
+      }
+    },
     "Fermer": {
       "localizations": {
         "en": {
@@ -1127,6 +1277,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keep automatically generated copies"
+          }
+        }
+      }
+    },
+    "Gardez l’essentiel sous la main": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep the Essentials at Hand"
           }
         }
       }
@@ -1321,6 +1481,16 @@
         }
       }
     },
+    "Le bandeau ouvert, tapez simplement quelques mots, sans cliquer. Les accents et les majuscules ne comptent pas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With the strip open, just type a few words, without clicking. Accents and capitals don’t matter."
+          }
+        }
+      }
+    },
     "Le bandeau reste accessible par l’icône de la barre de menus.": {
       "localizations": {
         "en": {
@@ -1337,6 +1507,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opening at login is off."
+          }
+        }
+      }
+    },
+    "Les 5 étapes du premier lancement.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The 5 steps of the first launch."
           }
         }
       }
@@ -1501,6 +1681,16 @@
         }
       }
     },
+    "Ouvrez l’historique, puis recollez": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the History, Then Paste Again"
+          }
+        }
+      }
+    },
     "Ouvrir le réglage": {
       "localizations": {
         "en": {
@@ -1617,6 +1807,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not Now"
+          }
+        }
+      }
+    },
+    "Passer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
           }
         }
       }
@@ -1841,12 +2041,62 @@
         }
       }
     },
+    "Retrouvez vos copies": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find Your Copies"
+          }
+        }
+      }
+    },
+    "Revoir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Again"
+          }
+        }
+      }
+    },
+    "Revoir la découverte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the Discovery Again"
+          }
+        }
+      }
+    },
     "Rien dans la catégorie %@. Essayez d’autres mots, ou cherchez dans toutes les catégories.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Nothing in the %@ category. Try other words, or search all categories."
+          }
+        }
+      }
+    },
+    "Rien de ce que vous copiez n’est gardé jusqu’à %@. L’icône de la barre de menus vous le rappelle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing you copy is kept until %@. The menu bar icon reminds you."
+          }
+        }
+      }
+    },
+    "Rien de ce que vous copiez n’est gardé jusqu’à ce que vous repreniez. L’icône de la barre de menus vous le rappelle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing you copy is kept until you resume. The menu bar icon reminds you."
           }
         }
       }
@@ -2121,6 +2371,16 @@
         }
       }
     },
+    "Tapez simplement pour chercher, sans cliquer. Chaque mot compte ; les accents et les majuscules, non.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just type to search, without clicking. Every word counts; accents and capitals don’t."
+          }
+        }
+      }
+    },
     "Tapez un raccourci…": {
       "localizations": {
         "en": {
@@ -2267,6 +2527,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erase All…"
+          }
+        }
+      }
+    },
+    "Tout est prêt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You’re All Set"
           }
         }
       }
@@ -2461,6 +2731,26 @@
         }
       }
     },
+    "puis": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "then"
+          }
+        }
+      }
+    },
+    "un clic": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a click"
+          }
+        }
+      }
+    },
     "À autoriser": {
       "localizations": {
         "en": {
@@ -2527,6 +2817,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pinned"
+          }
+        }
+      }
+    },
+    "Étape %lld sur %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %1$lld of %2$lld"
           }
         }
       }

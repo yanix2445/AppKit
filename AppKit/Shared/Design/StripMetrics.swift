@@ -20,6 +20,7 @@ enum StripMetrics {
     static let previewLineLimit = 6
     static let discardFlashOpacity: CGFloat = 0.25
     static let toolbarHeight: CGFloat = 28
+    static let tipWidth: CGFloat = 280
     static let searchFieldWidth: CGFloat = 237
     static let focusRingWidth: CGFloat = 2
     static let toolbarButtonSize: CGFloat = 28

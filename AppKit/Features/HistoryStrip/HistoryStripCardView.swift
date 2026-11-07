@@ -22,6 +22,8 @@ struct HistoryStripCardView: View {
             thumbnailProvider: thumbnailProvider
         )
         .id(item)
+        // Only on the card it speaks of.
+        .modifier(SelectedCardTip(isSelected: item == viewModel.selection && item.section == .history, viewModel: viewModel))
         .onTapGesture {
             viewModel.select(item)
             viewModel.choose(clip.id)

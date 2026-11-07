@@ -43,6 +43,7 @@ struct PinnedSectionView: View {
         }
         .padding(StripMetrics.pinnedSectionInset)
         .background(AppColor.controlFill, in: .rect(cornerRadius: CornerRadius.group))
+        .historyStripTip(.pin, viewModel: viewModel)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Copies épinglées")
         .accessibilityIdentifier("history.pinned")

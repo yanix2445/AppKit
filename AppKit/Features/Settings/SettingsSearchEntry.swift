@@ -11,6 +11,7 @@ struct SettingsSearchEntry: Identifiable {
         [
             SettingsSearchEntry(title: String(localized: "Lancer AppKit à l’ouverture de session"), pane: .general),
             SettingsSearchEntry(title: String(localized: "Mode de collage"), pane: .general),
+            SettingsSearchEntry(title: String(localized: "Revoir la découverte"), pane: .general),
             SettingsSearchEntry(title: String(localized: "Ouvrir l’historique"), pane: .shortcuts),
             SettingsSearchEntry(title: String(localized: "Mettre en pause ou reprendre la capture"), pane: .shortcuts),
             SettingsSearchEntry(title: String(localized: "Coller en texte brut"), pane: .shortcuts),

@@ -7,6 +7,7 @@ import SwiftUI
 struct GeneralSettingsView: View {
     let launchAtLogin: LaunchAtLoginController
     let shortcuts: ShortcutsController
+    let showOnboarding: () -> Void
 
     @AppStorage(PasteMode.storageKey) private var pasteMode = PasteMode.direct.rawValue
 
@@ -39,6 +40,16 @@ struct GeneralSettingsView: View {
             }
             Section {
                 PasteModePickerView(selection: $pasteMode)
+            }
+            Section("Découverte") {
+                LabeledContent {
+                    Button("Revoir", action: showOnboarding)
+                        .accessibilityLabel("Revoir la découverte")
+                        .accessibilityIdentifier("settings.showOnboarding")
+                } label: {
+                    Text("Revoir la découverte")
+                    Text("Les 5 étapes du premier lancement.")
+                }
             }
         }
         .formStyle(.grouped)
