@@ -9,6 +9,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var historyStrip: HistoryStripController?
     private var permissions: PermissionsController?
     private var shortcuts: ShortcutsController?
+    private var onboarding: OnboardingController?
     private let clipboardAlert = ClipboardAccessAlertPresenter()
     private var hasExplainedRefusal = false
     private var statusItem: StatusItemController?
@@ -64,13 +65,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let shortcuts = makeShortcuts(dependencies: dependencies, historyStrip: historyStrip, pause: pause)
         self.shortcuts = shortcuts
         historyStrip.setShortcuts(shortcuts)
+        historyStrip.setTips(HistoryStripTips(defaults: dependencies.directPasteDefaults))
+        let onboarding = OnboardingController(defaults: dependencies.directPasteDefaults, shortcuts: shortcuts)
+        self.onboarding = onboarding
         settings = SettingsWindowController(
             launchAtLogin: dependencies.launchAtLogin,
             shortcuts: shortcuts,
             permissions: permissions,
             lifecycle: dependencies.lifecycle,
             defaults: dependencies.directPasteDefaults,
-            feedback: dependencies.feedback
+            feedback: dependencies.feedback,
+            showOnboarding: { onboarding.show() }
         )
         let history = dependencies.history
         statusItem = StatusItemController(
@@ -94,13 +99,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         )
         statusItem?.capturePauseDidChange()
-        permissions.onClipboardAccessChange = { [weak self] _ in self?.applyClipboardAccess() }
+        permissions.onClipboardAccessChange = { [weak self] _ in
+            Task { await self?.applyClipboardAccess() }
+        }
         permissions.startObserving()
-        // Past launch, as these explanations run modally.
-        Task { [weak self, launchAtLoginAlert, launchAtLogin = dependencies.launchAtLogin] in
-            self?.resolveClipboardAccess()
+        // Past launch, as the explanations that follow run modally. On a first launch, the discovery
+        // comes first: nothing is asked of a person who does not yet know what AppKit does.
+        let finishLaunching = { @MainActor [weak self, launchAtLoginAlert, launchAtLogin = dependencies.launchAtLogin] in
+            await self?.resolveClipboardAccess()
             shortcuts.start()
             launchAtLogin.offerOnce { launchAtLoginAlert.askToEnable() }
+        }
+        Task {
+            if onboarding.needsShowing {
+                onboarding.show(onFinish: { Task { await finishLaunching() } })
+            } else {
+                await finishLaunching()
+            }
         }
     }
 
@@ -118,7 +133,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 defaults: defaults,
                 onTrigger: { historyStrip.toggle() },
                 askForFallback: { [hotKeyConflict] taken, fallbacks in
-                    hotKeyConflict.askForFallback(taken: taken, fallbacks: fallbacks)
+                    #if DEBUG
+                    // An AppKit launched from Xcode holds the shortcut: tests must not stop on it.
+                    if UITestEnvironment.current != nil { return nil }
+                    #endif
+                    return hotKeyConflict.askForFallback(taken: taken, fallbacks: fallbacks)
                 }
             ),
             togglePause: GlobalHotKeyController(
@@ -137,7 +156,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// The first time, says why before macOS asks; « Pas maintenant » leaves capture in pause.
-    private func resolveClipboardAccess() {
+    private func resolveClipboardAccess() async {
         guard let permissions, let dependencies else { return }
         if permissions.shouldExplainClipboard {
             permissions.markClipboardExplained()
@@ -145,13 +164,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 dependencies.pause.pauseUntilResumed()
             }
         }
-        applyClipboardAccess()
+        await applyClipboardAccess()
     }
 
-    private func applyClipboardAccess() {
+    private func applyClipboardAccess() async {
         guard let permissions, let dependencies else { return }
         let isDenied = permissions.clipboardAccess == .denied
-        dependencies.setCanReadClipboard(!isDenied)
+        await dependencies.setCanReadClipboard(!isDenied)
         statusItem?.setClipboardDenied(isDenied)
         if isDenied, !hasExplainedRefusal {
             hasExplainedRefusal = true

@@ -36,6 +36,10 @@ final class HistoryStripController {
         viewModel.pause = pause
     }
 
+    func setTips(_ tips: HistoryStripTips) {
+        viewModel.tips = tips
+    }
+
     private func openFrame(on screen: NSScreen) -> NSRect {
         NSRect(
             x: screen.frame.minX + StripMetrics.screenMargin,
@@ -58,7 +62,10 @@ final class HistoryStripController {
         let frame = openFrame(on: screen)
         panel.setFrame(hiddenFrame(from: frame), display: false)
         panel.makeKeyAndOrderFront(nil)
-        animate(to: frame)
+        // Past the slide: a tip cannot attach to a strip that is not yet in place.
+        animate(to: frame) { [weak self] in
+            self?.viewModel.didAppear()
+        }
 
         clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
             MainActor.assumeIsolated { self?.close() }

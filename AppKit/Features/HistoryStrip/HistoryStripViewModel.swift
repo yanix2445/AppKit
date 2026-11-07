@@ -10,6 +10,7 @@ final class HistoryStripViewModel {
     let history: ClipHistory
     var shortcuts: ShortcutsController?
     var pause: CapturePauseController?
+    var tips: HistoryStripTips?
 
     private(set) var selection: HistoryStripItem?
     private(set) var pinnedClips: [Clip] = []
@@ -24,6 +25,7 @@ final class HistoryStripViewModel {
     var query = "" {
         didSet {
             if query != oldValue { applyFilters() }
+            if isSearching { tips?.show(.search) }
         }
     }
 
@@ -88,6 +90,7 @@ final class HistoryStripViewModel {
     func didClose() {
         searchTask?.cancel()
         indexTask = nil
+        tips?.dismiss()
         removalCount = 0
         actions.commitRemovals()
     }
@@ -176,7 +179,47 @@ final class HistoryStripViewModel {
     }
 
     func togglePin(_ id: Clip.ID) {
+        let isPinning = history.clip(withID: id)?.isPinned == false
         actions.togglePin(id)
+        if isPinning { tips?.show(.pin) }
+    }
+
+    /// A pause may begin while the strip is open.
+    func pauseDidChange() {
+        if pauseIsTimedOrUntilResumed { tips?.show(.pause) }
+    }
+
+    private var pauseIsTimedOrUntilResumed: Bool {
+        pause?.isPaused == true
+    }
+
+    /// The strip is in place: what its opening has to explain can show.
+    func didAppear() {
+        if pauseIsTimedOrUntilResumed {
+            tips?.show(.pause)
+        } else if selection != nil, combination(for: .paste) != nil, tips?.pastesDirectly == true {
+            tips?.show(.paste)
+        }
+    }
+
+    func text(of tip: HistoryStripTip) -> String {
+        switch tip {
+        case .paste:
+            let paste = combination(for: .paste)?.displayName ?? "↩"
+            if let plain = combination(for: .pastePlainText)?.displayName {
+                return String(localized: "\(paste) colle la copie là où vous écriviez. \(plain) la colle sans mise en forme.")
+            }
+            return String(localized: "\(paste) colle la copie là où vous écriviez.")
+        case .search:
+            return String(localized: "Tapez simplement pour chercher, sans cliquer. Chaque mot compte ; les accents et les majuscules, non.")
+        case .pin:
+            return String(localized: "Elle reste à gauche du bandeau, n’est jamais effacée, et se glisse pour changer l’ordre.")
+        case .pause:
+            if case .until(let end) = pause?.pause {
+                return String(localized: "Rien de ce que vous copiez n’est gardé jusqu’à \(end.formatted(date: .omitted, time: .shortened)). L’icône de la barre de menus vous le rappelle.")
+            }
+            return String(localized: "Rien de ce que vous copiez n’est gardé jusqu’à ce que vous repreniez. L’icône de la barre de menus vous le rappelle.")
+        }
     }
 
     /// Moves the selected copy within the pinned section.

@@ -144,9 +144,10 @@ final class AppDependencies {
         }
     }
 
-    func setCanReadClipboard(_ canRead: Bool) {
+    /// Waits until it is in effect, as an alert shown next would hold up anything still queued.
+    func setCanReadClipboard(_ canRead: Bool) async {
         canReadClipboard = canRead
-        updateMonitorPause()
+        await monitor.setPaused(!capturesCopies || !canReadClipboard || pause.isPaused)
     }
 
     private func updateMonitorPause() {

@@ -12,6 +12,7 @@ final class SettingsWindowController {
     private let storage: StorageSettingsViewModel
     private let defaults: UserDefaults
     private let feedback: CopyFeedbackController
+    private let showOnboarding: () -> Void
     private lazy var window = makeWindow()
 
     init(
@@ -20,7 +21,8 @@ final class SettingsWindowController {
         permissions: PermissionsController,
         lifecycle: HistoryLifecycle,
         defaults: UserDefaults,
-        feedback: CopyFeedbackController
+        feedback: CopyFeedbackController,
+        showOnboarding: @escaping () -> Void
     ) {
         self.launchAtLogin = launchAtLogin
         self.shortcuts = shortcuts
@@ -28,6 +30,7 @@ final class SettingsWindowController {
         storage = StorageSettingsViewModel(lifecycle: lifecycle, defaults: defaults)
         self.defaults = defaults
         self.feedback = feedback
+        self.showOnboarding = showOnboarding
     }
 
     func show(_ pane: SettingsPane? = nil) {
@@ -46,7 +49,8 @@ final class SettingsWindowController {
             permissions: permissions,
             storage: storage,
             defaults: defaults,
-            feedback: feedback
+            feedback: feedback,
+            showOnboarding: showOnboarding
         ).defaultAppStorage(defaults)
         let controller = NSHostingController(rootView: view)
         // The window takes the size of the mockups, and stays resizable down to the minimum.

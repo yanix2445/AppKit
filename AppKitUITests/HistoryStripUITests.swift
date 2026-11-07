@@ -1196,6 +1196,125 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertTrue(app.buttons["settings.permissionOpen.clipboard"].exists)
     }
 
+    @MainActor private func discoveryTitle(_ text: String) -> XCUIElement {
+        let title = app.descendants(matching: .any)["onboarding.title"]
+        let matches = NSPredicate(format: "value == %@ OR label == %@", text, text)
+        wait(for: [expectation(for: matches, evaluatedWith: title)], timeout: 5)
+        return title
+    }
+
+    @MainActor func testTheDiscoveryShowsTheKeyActionsOnceAndComesBackFromSettings() {
+        app.launchEnvironment["APPKIT_UI_TEST_ONBOARDING"] = "1"
+        launchApp()
+        let next = app.buttons["onboarding.next"]
+        XCTAssertTrue(next.waitForExistence(timeout: 10))
+        let window = app.windows.firstMatch
+        for (index, title) in ["Bienvenue dans AppKit", "Ouvrez l’historique, puis recollez", "Retrouvez vos copies", "Gardez l’essentiel sous la main", "Tout est prêt"].enumerated() {
+            _ = discoveryTitle(title)
+            attachScreenshot(named: "Découverte \(index + 1)", of: window)
+            next.click()
+        }
+        XCTAssertTrue(next.waitForNonExistence(timeout: 5))
+
+        // Useful at once, with nothing set: a copy is kept and comes back.
+        copyAndWait("sans aucun réglage")
+        openStrip()
+        waitForCards(1)
+        strip.typeKey(.escape, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+
+        // Not a second time.
+        app.terminate()
+        app.launch()
+        XCTAssertFalse(next.waitForExistence(timeout: 3))
+
+        openSettings()
+        let again = app.descendants(matching: .any)["settings.showOnboarding"]
+        XCTAssertTrue(again.waitForExistence(timeout: 5))
+        again.click()
+        XCTAssertTrue(next.waitForExistence(timeout: 5))
+        _ = discoveryTitle("Bienvenue dans AppKit")
+        app.buttons["onboarding.skip"].click()
+        XCTAssertTrue(next.waitForNonExistence(timeout: 5))
+    }
+
+    @MainActor func testTheDiscoveryWorksWithTheKeyboardAndCaptureWaitsForIt() {
+        app.launchEnvironment["APPKIT_UI_TEST_ONBOARDING"] = "1"
+        launchApp()
+        let next = app.buttons["onboarding.next"]
+        XCTAssertTrue(next.waitForExistence(timeout: 10))
+        copyAndWait("pendant la découverte")
+
+        app.typeKey(.return, modifierFlags: [])
+        _ = discoveryTitle("Ouvrez l’historique, puis recollez")
+        app.typeKey(.escape, modifierFlags: [])
+        XCTAssertTrue(next.waitForNonExistence(timeout: 5))
+
+        copyAndWait("après la découverte")
+        openStrip()
+        waitForCards(1)
+        waitForCard(0, toContain: "après la découverte")
+    }
+
+    @MainActor private func waitForTip(_ tip: String, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
+        let element = app.descendants(matching: .any)["history.tip.\(tip)"]
+        XCTAssertTrue(element.waitForExistence(timeout: 5), file: file, line: line)
+        return element
+    }
+
+    @MainActor func testEachExplanationShowsOnceAtFirstUse() {
+        app.launchEnvironment["APPKIT_UI_TEST_TIPS"] = "1"
+        launchApp()
+        copyAndWait("une copie à retrouver")
+        copyAndWait("la plus récente")
+
+        openStrip()
+        _ = waitForTip("paste")
+        app.buttons["history.tipDone"].click()
+        XCTAssertTrue(app.descendants(matching: .any)["history.tip.paste"].waitForNonExistence(timeout: 5))
+
+        // The tip must not take the keyboard away from the search.
+        app.typeText("retrouver")
+        _ = waitForTip("search")
+        app.typeText(" une")
+        waitForCards(1)
+        app.buttons["history.tipDone"].click()
+        strip.typeKey(.escape, modifierFlags: [])
+        waitForCards(2)
+
+        strip.typeKey("p", modifierFlags: .command)
+        _ = waitForTip("pin")
+        app.buttons["history.tipDone"].click()
+        strip.typeKey(.escape, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+
+        // Never again.
+        openStrip()
+        waitForCards(3)
+        app.typeText("x")
+        Thread.sleep(forTimeInterval: 0.5)
+        for tip in ["paste", "search", "pin"] {
+            XCTAssertFalse(app.descendants(matching: .any)["history.tip.\(tip)"].exists, tip)
+        }
+    }
+
+    @MainActor func testThePauseIsExplainedOnce() {
+        app.launchEnvironment["APPKIT_UI_TEST_TIPS"] = "1"
+        launchApp()
+        openPauseMenu()
+        let entry = app.menuItems["statusItem.pauseForever"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.click()
+        openStrip()
+        _ = waitForTip("pause")
+        app.buttons["history.tipDone"].click()
+        strip.typeKey(.escape, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        openStrip()
+        Thread.sleep(forTimeInterval: 0.5)
+        XCTAssertFalse(app.descendants(matching: .any)["history.tip.pause"].exists)
+    }
+
     @MainActor func testTheNextCopyCanBeIgnored() {
         launchApp()
         openPauseMenu()

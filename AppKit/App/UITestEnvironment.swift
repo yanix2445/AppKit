@@ -23,6 +23,8 @@ struct UITestEnvironment {
     static let trustedVariable = "APPKIT_UI_TEST_TRUSTED"
     static let explainVariable = "APPKIT_UI_TEST_EXPLAIN"
     static let offerLaunchAtLoginVariable = "APPKIT_UI_TEST_OFFER_LOGIN"
+    static let onboardingVariable = "APPKIT_UI_TEST_ONBOARDING"
+    static let tipsVariable = "APPKIT_UI_TEST_TIPS"
     static let clipboardVariable = "APPKIT_UI_TEST_CLIPBOARD"
     static let largeThresholdVariable = "APPKIT_UI_TEST_LARGE_THRESHOLD"
 
@@ -38,6 +40,15 @@ struct UITestEnvironment {
         let defaults = UserDefaults(suiteName: "appkit.uitest.\(identifier)") ?? .standard
         // The explanation of the permission would stop every test that chooses a copy.
         defaults.set(environment[explainVariable] == nil, forKey: DirectPasteCoordinator.explanationSeenKey)
+        // The discovery and the explanations would stop every other test too.
+        if environment[onboardingVariable] == nil {
+            defaults.set(true, forKey: OnboardingController.seenKey)
+        }
+        if environment[tipsVariable] == nil {
+            for tip in HistoryStripTip.allCases {
+                defaults.set(true, forKey: HistoryStripTips.key(for: tip))
+            }
+        }
         defaults.set(environment[offerLaunchAtLoginVariable] == nil, forKey: LaunchAtLoginController.offerSeenKey)
         if let threshold = environment[largeThresholdVariable].flatMap(Int.init) {
             defaults.set(threshold, forKey: "storageLargeThreshold")

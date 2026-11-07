@@ -10,6 +10,7 @@ struct SettingsView: View {
     let storage: StorageSettingsViewModel
     let defaults: UserDefaults
     let feedback: CopyFeedbackController
+    let showOnboarding: () -> Void
 
     private var selection: Binding<SettingsPane?> {
         Binding(
@@ -79,7 +80,7 @@ struct SettingsView: View {
         } else {
             switch navigation.pane {
             case .general:
-                GeneralSettingsView(launchAtLogin: launchAtLogin, shortcuts: shortcuts)
+                GeneralSettingsView(launchAtLogin: launchAtLogin, shortcuts: shortcuts, showOnboarding: showOnboarding)
             case .shortcuts:
                 ShortcutsSettingsView(shortcuts: shortcuts)
             case .sounds:
