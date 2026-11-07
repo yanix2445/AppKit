@@ -1,4 +1,5 @@
 import AppKitCore
+import Foundation
 import Testing
 
 struct ClipCapturePolicyTests {
@@ -21,5 +22,41 @@ struct ClipCapturePolicyTests {
 
     @Test func keepsAnOrdinaryCopy() {
         #expect(ClipCapturePolicy().allows(types: [text]))
+    }
+}
+
+struct ClipExclusionTests {
+    @Test func theDefaultListHoldsTheFourteenApps() {
+        let names = Set(ClipExcludedApp.defaults.map(\.name))
+        for name in ["Mots de passe", "Trousseaux d’accès", "1Password", "Bitwarden", "Dashlane", "Proton Pass", "KeePassXC", "Strongbox", "MacPass", "Enpass", "NordPass", "Keeper", "LastPass", "RoboForm"] {
+            #expect(names.contains(name), "\(name)")
+        }
+    }
+
+    @Test func anExcludedAppIsKnownByItsIdentifier() {
+        let policy = ClipCapturePolicy()
+        #expect(!policy.allows(appIdentifier: "com.apple.Passwords"))
+        #expect(policy.allows(appIdentifier: "com.apple.Notes"))
+        #expect(policy.allows(appIdentifier: nil))
+    }
+
+    @Test func noCategoryIsExcludedByDefault() {
+        for category in ClipCategory.allCases {
+            #expect(ClipCapturePolicy().allows(category: category))
+        }
+    }
+
+    @Test func anExcludedCategoryIsRefused() {
+        let policy = ClipCapturePolicy(excludedCategories: [.image])
+        #expect(!policy.allows(category: .image))
+        #expect(policy.allows(category: .text))
+    }
+
+    @Test func aPauseEndsOnItsOwn() {
+        let end = Date(timeIntervalSinceReferenceDate: 100)
+        #expect(ClipCapturePause.until(end).isActive(at: end.addingTimeInterval(-1)))
+        #expect(!ClipCapturePause.until(end).isActive(at: end))
+        #expect(ClipCapturePause.untilResumed.isActive(at: end))
+        #expect(!ClipCapturePause.none.isActive(at: end))
     }
 }

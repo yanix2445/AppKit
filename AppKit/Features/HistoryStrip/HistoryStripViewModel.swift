@@ -9,6 +9,8 @@ final class HistoryStripViewModel {
     let history: ClipHistory
     private(set) var selectedClipID: Clip.ID?
     var openHotKey: HotKeyCombination?
+    var pauseBanner: String?
+    var onResume: (() -> Void)?
     private let onChoose: (Clip, ClipPasteStyle) -> Void
 
     init(history: ClipHistory, onChoose: @escaping (Clip, ClipPasteStyle) -> Void = { _, _ in }) {

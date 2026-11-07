@@ -11,8 +11,23 @@ struct HistoryStripView: View {
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        content
-            .padding(.vertical, Spacing.medium)
+        VStack(spacing: 0) {
+            if let banner = viewModel.pauseBanner {
+                HStack(spacing: Spacing.small) {
+                    Image(systemName: "pause.circle")
+                        .accessibilityHidden(true)
+                    Text(verbatim: banner)
+                        .font(.callout)
+                        .accessibilityIdentifier("history.pauseBanner")
+                    Button("Reprendre") { viewModel.onResume?() }
+                        .controlSize(.small)
+                        .accessibilityIdentifier("history.resume")
+                }
+                .frame(height: StripMetrics.pauseBannerHeight)
+            }
+            content
+                .padding(.vertical, Spacing.medium)
+        }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .glassEffect(.regular, in: .rect(cornerRadius: CornerRadius.strip))
             // In a key window, the glass also draws a rectangular outline with cut corners, and

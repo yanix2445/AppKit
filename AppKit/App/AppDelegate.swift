@@ -27,7 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         self.dependencies = dependencies
-        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin, lifecycle: dependencies.lifecycle, defaults: dependencies.directPasteDefaults)
+        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin, lifecycle: dependencies.lifecycle, defaults: dependencies.directPasteDefaults, feedback: dependencies.feedback)
         directPaste = DirectPasteCoordinator(
             service: dependencies.directPasteService,
             defaults: dependencies.directPasteDefaults,
@@ -46,15 +46,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = StatusItemController(
             copyCount: { history.clips.count },
             launchAtLogin: dependencies.launchAtLogin,
+            pause: dependencies.pause,
             onPrimaryClick: { historyStrip.toggle() },
             onOpenSettings: { [weak self] in self?.settings?.show() }
         )
         dependencies.onFilesCaptured = { [protectedFolderAlert] files in
             protectedFolderAlert.explainIfNeeded(for: files)
         }
-        dependencies.start { [weak self] state in
-            self?.handle(state)
-        }
+        let pause = dependencies.pause
+        historyStrip.setPause(pause)
+        dependencies.start(
+            onStateChange: { [weak self] state in self?.handle(state) },
+            onDiscard: { [weak self] in self?.statusItem?.flashDiscardedCopy() },
+            onPauseChange: { [weak self] in
+                self?.statusItem?.capturePauseDidChange()
+                historyStrip.pauseDidChange()
+            }
+        )
+        statusItem?.capturePauseDidChange()
         startGlobalHotKey(historyStrip: historyStrip)
         // Past launch, as the offer runs modally.
         Task { [launchAtLoginAlert, launchAtLogin = dependencies.launchAtLogin] in

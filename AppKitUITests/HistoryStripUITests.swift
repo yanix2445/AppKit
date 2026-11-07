@@ -633,6 +633,211 @@ final class HistoryStripUITests: XCTestCase {
         attachScreenshot(named: "Volumineux")
     }
 
+    @MainActor private func copyFromApp(_ text: String, identifier: String) {
+        let marker = NSPasteboard.PasteboardType("org.nspasteboard.source")
+        pasteboard.declareTypes([.string, marker], owner: nil)
+        pasteboard.setString(text, forType: .string)
+        pasteboard.setString(identifier, forType: marker)
+    }
+
+    @MainActor func testACopyFromAnExcludedAppIsLeftOutAndTheIconFlashes() {
+        launchApp()
+        XCTAssertTrue(statusItem.waitForExistence(timeout: 5))
+        Thread.sleep(forTimeInterval: 1)
+        copyFromApp("secret", identifier: "com.apple.Passwords")
+        let flash = NSPredicate(format: "value CONTAINS 'écartée'")
+        wait(for: [expectation(for: flash, evaluatedWith: statusItem)], timeout: 3)
+
+        copyFromApp("permis", identifier: "com.apple.Notes")
+        Thread.sleep(forTimeInterval: 1)
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("permis"))
+    }
+
+    @MainActor private func openPauseMenu() {
+        XCTAssertTrue(statusItem.waitForExistence(timeout: 5))
+        Thread.sleep(forTimeInterval: 1)
+        statusItem.rightClick()
+        let menu = app.menuItems["statusItem.pauseMenu"]
+        XCTAssertTrue(menu.waitForExistence(timeout: 5))
+        menu.hover()
+    }
+
+    @MainActor func testAPauseKeepsNothingUntilResumed() {
+        launchApp()
+        openPauseMenu()
+        let entry = app.menuItems["statusItem.pause5"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.click()
+
+        copyAndWait("pendant la pause")
+        openStrip()
+        XCTAssertTrue(app.descendants(matching: .any)["history.pauseBanner"].waitForExistence(timeout: 5))
+        XCTAssertEqual(cards.count, 0)
+
+        app.descendants(matching: .any)["history.resume"].click()
+        XCTAssertTrue(app.descendants(matching: .any)["history.pauseBanner"].waitForNonExistence(timeout: 5))
+        copyAndWait("après la pause")
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("après la pause"))
+    }
+
+    @MainActor func testAPauseUntilResumedSurvivesARelaunch() {
+        launchApp()
+        openPauseMenu()
+        let entry = app.menuItems["statusItem.pauseForever"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.click()
+        app.terminate()
+        app.launch()
+
+        openStrip()
+        XCTAssertTrue(app.descendants(matching: .any)["history.pauseBanner"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor private func reveal(_ element: XCUIElement) {
+        // Moving the pointer onto an element scrolls it into view.
+        XCTAssertTrue(element.waitForExistence(timeout: 5))
+        element.hover()
+    }
+
+    @MainActor func testTheIconShowsThePause() {
+        launchApp()
+        openPauseMenu()
+        let entry = app.menuItems["statusItem.pauseForever"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.click()
+        let paused = NSPredicate(format: "label CONTAINS 'pause'")
+        wait(for: [expectation(for: paused, evaluatedWith: statusItem)], timeout: 5)
+        attachScreenshot(named: "Icône en pause", of: statusItem)
+
+        statusItem.rightClick()
+        let resume = app.menuItems["statusItem.resume"]
+        XCTAssertTrue(resume.waitForExistence(timeout: 5))
+        resume.click()
+        let active = NSPredicate(format: "NOT (label CONTAINS 'pause')")
+        wait(for: [expectation(for: active, evaluatedWith: statusItem)], timeout: 5)
+    }
+
+    @MainActor func testTheExcludedAppsCanBeRemovedAndAdded() {
+        launchApp()
+        openSettings()
+        let passwords = app.buttons["settings.removeApp.com.apple.Passwords"]
+        reveal(passwords)
+        passwords.click()
+        XCTAssertTrue(passwords.waitForNonExistence(timeout: 5))
+
+        let add = app.buttons["settings.addApp"]
+        reveal(add)
+        add.click()
+        let search = app.textFields["settings.appPickerSearch"]
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        search.click()
+        search.typeText("Notes")
+        let notes = app.descendants(matching: .any)["settings.appPicker.com.apple.Notes"]
+        XCTAssertTrue(notes.waitForExistence(timeout: 5))
+        notes.click()
+        attachScreenshot(named: "Exclure une app", of: app.sheets.firstMatch)
+        app.buttons["settings.appPickerConfirm"].click()
+        XCTAssertTrue(app.buttons["settings.removeApp.com.apple.Notes"].waitForExistence(timeout: 5))
+        app.windows.firstMatch.typeKey("w", modifierFlags: .command)
+
+        copyFromApp("autorisé", identifier: "com.apple.Passwords")
+        Thread.sleep(forTimeInterval: 1)
+        copyFromApp("refusé", identifier: "com.apple.Notes")
+        let flash = NSPredicate(format: "value CONTAINS 'écartée'")
+        wait(for: [expectation(for: flash, evaluatedWith: statusItem)], timeout: 3)
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("autorisé"))
+    }
+
+    @MainActor func testEachSoundCanBeTurnedOffAndChosen() {
+        launchApp()
+        openSettings()
+        let picker = app.popUpButtons["settings.soundKeptName"]
+        reveal(picker)
+        XCTAssertTrue(picker.isEnabled)
+        let toggle = app.descendants(matching: .any)["settings.soundKept"]
+        reveal(toggle)
+        toggle.switches.firstMatch.exists ? toggle.switches.firstMatch.click() : toggle.click()
+        let disabled = NSPredicate(format: "enabled == false")
+        wait(for: [expectation(for: disabled, evaluatedWith: picker)], timeout: 5)
+
+        let discarded = app.popUpButtons["settings.soundDiscardedName"]
+        reveal(discarded)
+        discarded.click()
+        let glass = app.menuItems["Glass"]
+        XCTAssertTrue(glass.waitForExistence(timeout: 5))
+        glass.click()
+        XCTAssertEqual(discarded.value as? String, "Glass")
+        attachScreenshot(named: "Sons", of: app.windows.firstMatch)
+    }
+
+    @MainActor func testPrivacyScreensInBothAppearances() {
+        addTeardownBlock { @MainActor [app] in app.terminate() }
+        let appearances = [
+            "Light": ["-NSRequiresAquaSystemAppearance", "YES"],
+            "Dark": ["-AppleInterfaceStyle", "Dark"],
+        ]
+        for (style, arguments) in appearances {
+            app.terminate()
+            useFreshHistory()
+            app.launchArguments = arguments
+            app.launch()
+            openPauseMenu()
+            let entry = app.menuItems["statusItem.pauseForever"]
+            XCTAssertTrue(entry.waitForExistence(timeout: 5))
+            entry.click()
+            openStrip()
+            XCTAssertTrue(app.descendants(matching: .any)["history.pauseBanner"].waitForExistence(timeout: 5))
+            attachBottomOfScreen(named: "Bandeau en pause \(style)", height: 262)
+            app.typeKey(.escape, modifierFlags: [])
+            openSettings()
+            let add = app.buttons["settings.addApp"]
+            reveal(add)
+            attachScreenshot(named: "Apps exclues \(style)", of: app.windows.firstMatch)
+            let sound = app.popUpButtons["settings.soundDiscardedName"]
+            reveal(sound)
+            attachScreenshot(named: "Sons \(style)", of: app.windows.firstMatch)
+        }
+    }
+
+    @MainActor func testTheNextCopyCanBeIgnored() {
+        launchApp()
+        openPauseMenu()
+        let entry = app.menuItems["statusItem.ignoreNext"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.click()
+        Thread.sleep(forTimeInterval: 0.5)
+
+        copyAndWait("ignorée")
+        copyAndWait("gardée")
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("gardée"))
+    }
+
+    @MainActor func testAnExcludedCategoryIsNoLongerKeptAndTheRestStays() {
+        launchApp()
+        copyAndWait("déjà gardé")
+        openSettings()
+        let menu = app.descendants(matching: .any)["settings.excludedCategories"]
+        XCTAssertTrue(menu.waitForExistence(timeout: 5))
+        menu.click()
+        let entry = app.menuItems["Lien"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.click()
+        attachScreenshot(named: "Confidentialité", of: app.windows.firstMatch)
+        app.windows.firstMatch.typeKey("w", modifierFlags: .command)
+
+        copyAndWait("https://www.apple.com")
+        openStrip()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("déjà gardé"))
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }
@@ -709,13 +914,13 @@ final class HistoryStripUITests: XCTestCase {
     }
 
     /// The empty strip offers no element of its full size: this keeps only the band it covers.
-    @MainActor private func attachBottomOfScreen(named name: String) {
+    @MainActor private func attachBottomOfScreen(named name: String, height points: CGFloat = 222) {
         Thread.sleep(forTimeInterval: 0.5)
         let image = XCUIScreen.main.screenshot().image
         guard let full = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
         // The strip and its margin, in points, and nothing above it.
         let screenHeight = NSScreen.main?.frame.height ?? 1
-        let height = Int(CGFloat(full.height) * 222 / screenHeight)
+        let height = Int(CGFloat(full.height) * points / screenHeight)
         guard let band = full.cropping(to: CGRect(x: 0, y: full.height - height, width: full.width, height: height)) else { return }
         let attachment = XCTAttachment(image: NSImage(cgImage: band, size: .zero))
         attachment.name = name

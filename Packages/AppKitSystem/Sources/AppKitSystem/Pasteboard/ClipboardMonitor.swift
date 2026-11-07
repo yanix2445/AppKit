@@ -9,8 +9,12 @@ public actor ClipboardMonitor {
     private let policy: ClipboardPollingPolicy
     private let capturePolicy: @Sendable () -> ClipCapturePolicy
     private var lastChangeCount: Int
+    private var activePolicy = ClipCapturePolicy()
     private var isPaused = false
     private var isCapturingRemoteCopy = false
+    private var ignoresNextCopy = false
+    private var onDiscard: @Sendable () -> Void = {}
+    private var onIgnoredCopy: @Sendable () -> Void = {}
 
     public init(
         pasteboard: any PasteboardService,
@@ -36,8 +40,22 @@ public actor ClipboardMonitor {
         // During a pause, a copy is passed over without being read.
         guard !isPaused else { return nil }
 
+        // An app that empties the pasteboard has copied nothing.
         let types = pasteboard.readTypes()
-        guard capturePolicy().allows(types: types) else { return nil }
+        guard !types.isEmpty else { return nil }
+
+        guard !ignoresNextCopy else {
+            ignoresNextCopy = false
+            onIgnoredCopy()
+            return nil
+        }
+
+        let policy = capturePolicy()
+        guard policy.allows(types: types), policy.allows(appIdentifier: sourceIdentifier(types: types)) else {
+            onDiscard()
+            return nil
+        }
+        activePolicy = policy
 
         isCapturingRemoteCopy = types.contains(ClipClassifier.remoteClipboardType)
         let capture: ClipCapture?
@@ -61,20 +79,42 @@ public actor ClipboardMonitor {
         return capture
     }
 
+    /// The app that names itself, or else the one in front at the moment of the copy.
+    private func sourceIdentifier(types: Set<String>) -> String? {
+        if types.contains(ClipCapturePolicy.sourceMarkerType),
+           let marker = pasteboard.readString(forType: ClipCapturePolicy.sourceMarkerType) {
+            return marker
+        }
+        return frontmostApp.frontmostApp()?.bundleIdentifier
+    }
+
+    /// Checked before reading anything more of the copy.
+    private func categoryIsAllowed(_ category: ClipCategory) -> Bool {
+        guard activePolicy.allows(category: category) else {
+            onDiscard()
+            return false
+        }
+        return true
+    }
+
     private func captureText(types: Set<String>) -> ClipCapture? {
         guard let text = pasteboard.readText(), !text.isEmpty else { return nil }
+        let content = ClipClassifier.content(ofText: text, types: types)
+        guard categoryIsAllowed(ClipCategory(content)) else { return nil }
         return ClipCapture(
-            clip: makeClip(content: ClipClassifier.content(ofText: text, types: types)),
+            clip: makeClip(content: content),
             formats: ClipClassifier.hasOtherFormats(than: types) ? pasteboard.readFormats() : []
         )
     }
 
     private func captureColor() -> ClipCapture? {
+        guard categoryIsAllowed(.color) else { return nil }
         guard let color = pasteboard.readColor() else { return nil }
         return ClipCapture(clip: makeClip(content: .color(color)), formats: pasteboard.readFormats())
     }
 
     private func captureMedia(_ makeContent: (ClipMedia) -> ClipContent) -> ClipCapture? {
+        guard categoryIsAllowed(ClipCategory(makeContent(ClipMedia(byteCount: 0)))) else { return nil }
         let formats = pasteboard.readFormats()
         guard !formats.isEmpty else { return nil }
         let byteCount = formats.reduce(0) { $0 + $1.data.count }
@@ -87,8 +127,9 @@ public actor ClipboardMonitor {
         let files = ClipFile.files(in: formats)
         guard !files.isEmpty else { return nil }
         if isCapturingRemoteCopy, let capture = captureRemoteFile(files[0]) {
-            return capture
+            return categoryIsAllowed(ClipCategory(capture.clip.content)) ? capture : nil
         }
+        guard categoryIsAllowed(.files) else { return nil }
         return ClipCapture(clip: makeClip(content: .files(files)), formats: formats)
     }
 
@@ -109,6 +150,7 @@ public actor ClipboardMonitor {
     }
 
     private func captureOther() -> ClipCapture? {
+        guard categoryIsAllowed(.other) else { return nil }
         let formats = pasteboard.readFormats()
         guard !formats.isEmpty else { return nil }
         return ClipCapture(clip: makeClip(content: .other), formats: formats)
@@ -126,6 +168,22 @@ public actor ClipboardMonitor {
 
     public func setPaused(_ isPaused: Bool) {
         self.isPaused = isPaused
+    }
+
+    /// Passes over the next copy without reading it, then captures as usual.
+    public func ignoreNextCopy(_ ignores: Bool = true) {
+        ignoresNextCopy = ignores
+    }
+
+    /// - Parameters:
+    ///   - onDiscard: told when a rule refuses a copy, never what it held.
+    ///   - onIgnoredCopy: told when the copy to ignore has gone by.
+    public func setHandlers(
+        onDiscard: @escaping @Sendable () -> Void,
+        onIgnoredCopy: @escaping @Sendable () -> Void
+    ) {
+        self.onDiscard = onDiscard
+        self.onIgnoredCopy = onIgnoredCopy
     }
 
     /// Puts a copy back on the pasteboard, without capturing it as a new one.

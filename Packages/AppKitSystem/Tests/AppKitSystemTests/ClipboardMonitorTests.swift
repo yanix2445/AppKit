@@ -2,7 +2,18 @@ import AppKitCore
 import AppKitSystem
 import AppKitSystemTesting
 import Foundation
+import Synchronization
 import Testing
+
+private final class Counter: Sendable {
+    private let count = Mutex(0)
+
+    var value: Int { count.withLock { $0 } }
+
+    func add() {
+        count.withLock { $0 += 1 }
+    }
+}
 
 struct ClipboardMonitorTests {
     private let source = ClipSource(name: "Notes", bundleIdentifier: "com.apple.Notes")
@@ -311,6 +322,108 @@ struct ClipboardMonitorTests {
         #expect(clock.now - start < .milliseconds(100))
         #expect(await polling.value != nil)
         #expect(clock.now - start >= .milliseconds(400))
+    }
+
+    @Test func anExcludedAppIsNeverRead() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = ClipboardMonitor(
+            pasteboard: pasteboard,
+            frontmostApp: FakeFrontmostAppService(source: ClipSource(name: "Mots de passe", bundleIdentifier: "com.apple.Passwords"))
+        )
+        pasteboard.copy(text: "secret")
+        #expect(await monitor.poll() == nil)
+        #expect(pasteboard.readCount == 0)
+    }
+
+    @Test func theMarkerOfAnAppComesBeforeTheAppInFront() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        pasteboard.setSourceMarker("com.bitwarden.desktop")
+        pasteboard.copy(text: "secret", types: ["public.utf8-plain-text", "org.nspasteboard.source"])
+        #expect(await monitor.poll() == nil)
+        #expect(pasteboard.readCount == 0)
+    }
+
+    @Test func anAppRemovedFromTheListIsCapturedAgain() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = ClipboardMonitor(
+            pasteboard: pasteboard,
+            frontmostApp: FakeFrontmostAppService(source: ClipSource(name: "Bitwarden", bundleIdentifier: "com.bitwarden.desktop")),
+            capturePolicy: { ClipCapturePolicy(excludedApps: []) }
+        )
+        pasteboard.copy(text: "permis")
+        #expect(await monitor.poll()?.clip.content == .text("permis"))
+    }
+
+    @Test func anExcludedImageIsNeverRead() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = ClipboardMonitor(
+            pasteboard: pasteboard,
+            frontmostApp: FakeFrontmostAppService(source: source),
+            capturePolicy: { ClipCapturePolicy(excludedCategories: [.image]) }
+        )
+        pasteboard.copy(formats: [ClipRepresentation(type: "public.png", data: Data([1]))])
+        let readsBefore = pasteboard.readCount
+        #expect(await monitor.poll() == nil)
+        #expect(pasteboard.readCount == readsBefore)
+    }
+
+    @Test func anExcludedLinkIsRefusedOnceRecognized() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = ClipboardMonitor(
+            pasteboard: pasteboard,
+            frontmostApp: FakeFrontmostAppService(source: source),
+            capturePolicy: { ClipCapturePolicy(excludedCategories: [.link]) }
+        )
+        pasteboard.copy(text: "https://apple.com")
+        #expect(await monitor.poll() == nil)
+        pasteboard.copy(text: "un texte")
+        #expect(await monitor.poll()?.clip.content == .text("un texte"))
+    }
+
+    @Test func aRefusedCopyIsReportedWithoutItsContent() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        let count = Counter()
+        await monitor.setHandlers(onDiscard: { count.add() }, onIgnoredCopy: {})
+        pasteboard.copy(text: "secret", types: ["org.nspasteboard.ConcealedType"])
+        _ = await monitor.poll()
+        #expect(count.value == 1)
+    }
+
+    @Test func anEmptiedPasteboardIsNotACopy() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = ClipboardMonitor(
+            pasteboard: pasteboard,
+            frontmostApp: FakeFrontmostAppService(source: ClipSource(name: "Mots de passe", bundleIdentifier: "com.apple.Passwords"))
+        )
+        let discards = Counter()
+        await monitor.setHandlers(onDiscard: { discards.add() }, onIgnoredCopy: {})
+        await monitor.ignoreNextCopy()
+
+        pasteboard.empty()
+        #expect(await monitor.poll() == nil)
+        #expect(discards.value == 0)
+
+        pasteboard.copy(text: "ignorée")
+        #expect(await monitor.poll() == nil)
+        #expect(discards.value == 0)
+    }
+
+    @Test func theNextCopyCanBeIgnoredOnce() async {
+        let pasteboard = FakePasteboardService()
+        let monitor = makeMonitor(pasteboard)
+        let count = Counter()
+        await monitor.setHandlers(onDiscard: {}, onIgnoredCopy: { count.add() })
+        await monitor.ignoreNextCopy()
+
+        pasteboard.copy(text: "ignorée")
+        #expect(await monitor.poll() == nil)
+        #expect(pasteboard.readCount == 0)
+        #expect(count.value == 1)
+
+        pasteboard.copy(text: "gardée")
+        #expect(await monitor.poll()?.clip.content == .text("gardée"))
     }
 
     @Test func thePollingStreamDeliversACopy() async throws {

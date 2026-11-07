@@ -11,6 +11,7 @@ final class HistoryStripController {
     private let thumbnailProvider: ClipThumbnailProvider
     private lazy var panel = makePanel()
     private var clickMonitor: Any?
+    private var pause: CapturePauseController?
     private var activationObserver: NSObjectProtocol?
     private var openedAt = ContinuousClock.now
 
@@ -31,6 +32,41 @@ final class HistoryStripController {
         viewModel.openHotKey = combination
     }
 
+    func setPause(_ pause: CapturePauseController) {
+        self.pause = pause
+        viewModel.onResume = { [weak pause] in pause?.resume() }
+        pauseDidChange()
+    }
+
+    /// The banner comes and goes, and the strip makes room for it.
+    func pauseDidChange() {
+        viewModel.pauseBanner = pause.flatMap(Self.bannerText)
+        if isOpen, let screen = panel.screen {
+            panel.setFrame(openFrame(on: screen), display: true)
+        }
+    }
+
+    private static func bannerText(_ pause: CapturePauseController) -> String? {
+        switch pause.pause {
+        case .until(let end) where pause.isPaused:
+            String(localized: "Capture en pause jusqu’à \(end.formatted(date: .omitted, time: .shortened))")
+        case .untilResumed:
+            String(localized: "Capture en pause jusqu’à réactivation")
+        default:
+            nil
+        }
+    }
+
+    private func openFrame(on screen: NSScreen) -> NSRect {
+        let banner = viewModel.pauseBanner == nil ? 0 : StripMetrics.pauseBannerHeight
+        return NSRect(
+            x: screen.frame.minX + StripMetrics.screenMargin,
+            y: screen.frame.minY + StripMetrics.screenMargin,
+            width: screen.frame.width - 2 * StripMetrics.screenMargin,
+            height: StripMetrics.stripHeight + banner
+        )
+    }
+
     func toggle() {
         isOpen ? close() : open()
     }
@@ -41,12 +77,7 @@ final class HistoryStripController {
         openedAt = .now
         viewModel.prepareForPresentation()
 
-        let frame = NSRect(
-            x: screen.frame.minX + StripMetrics.screenMargin,
-            y: screen.frame.minY + StripMetrics.screenMargin,
-            width: screen.frame.width - 2 * StripMetrics.screenMargin,
-            height: StripMetrics.stripHeight
-        )
+        let frame = openFrame(on: screen)
         panel.setFrame(hiddenFrame(from: frame), display: false)
         panel.makeKeyAndOrderFront(nil)
         animate(to: frame)

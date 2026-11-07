@@ -191,6 +191,16 @@
         }
       }
     },
+    "Ajouter une app…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add an App…"
+          }
+        }
+      }
+    },
     "Annuler": {
       "localizations": {
         "en": {
@@ -231,12 +241,42 @@
         }
       }
     },
+    "Apps exclues": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excluded apps"
+          }
+        }
+      }
+    },
     "Au-delà, une copie est gardée à part et ne compte pas dans la limite.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Above this, a copy is kept apart and doesn’t count against the limit."
+          }
+        }
+      }
+    },
+    "Aucun son n’est joué quand ils sont désactivés dans Réglages Système.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sound plays when they are off in System Settings."
+          }
+        }
+      }
+    },
+    "Aucune": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
           }
         }
       }
@@ -341,6 +381,26 @@
         }
       }
     },
+    "Capture en pause jusqu’à %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture paused until %@"
+          }
+        }
+      }
+    },
+    "Capture en pause jusqu’à réactivation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture paused until resumed"
+          }
+        }
+      }
+    },
     "Capture en pause · clé inaccessible": {
       "localizations": {
         "en": {
@@ -367,6 +427,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Capture paused · disk full"
+          }
+        }
+      }
+    },
+    "Catégories exclues": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excluded categories"
+          }
+        }
+      }
+    },
+    "Ce que vous copiez dans cette app ne sera jamais gardé.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What you copy in this app is never kept."
           }
         }
       }
@@ -467,6 +547,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Continue"
+          }
+        }
+      }
+    },
+    "Copie gardée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kept Copy"
+          }
+        }
+      }
+    },
+    "Copie écartée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discarded Copy"
           }
         }
       }
@@ -591,6 +691,16 @@
         }
       }
     },
+    "Effets sonores de macOS": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS sound effects"
+          }
+        }
+      }
+    },
     "Elle est aussi supprimée dès qu’une autre copie volumineuse arrive.": {
       "localizations": {
         "en": {
@@ -617,6 +727,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Waiting for your approval in System Settings."
+          }
+        }
+      }
+    },
+    "Exclure": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exclude"
+          }
+        }
+      }
+    },
+    "Exclure %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exclude %@"
+          }
+        }
+      }
+    },
+    "Exclure une app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exclude an App"
           }
         }
       }
@@ -701,6 +841,16 @@
         }
       }
     },
+    "Ignorer la prochaine copie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignore the next copy"
+          }
+        }
+      }
+    },
     "Image": {
       "localizations": {
         "en": {
@@ -761,6 +911,46 @@
         }
       }
     },
+    "Jouer un son": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play a sound"
+          }
+        }
+      }
+    },
+    "Jouer un son pour une copie gardée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play a sound for a kept copy"
+          }
+        }
+      }
+    },
+    "Jouer un son pour une copie écartée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play a sound for a discarded copy"
+          }
+        }
+      }
+    },
+    "Jusqu’à réactivation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Until resumed"
+          }
+        }
+      }
+    },
     "La capture reprendra seule dès que la clé sera accessible. Aucune copie n’est écrite en clair.": {
       "localizations": {
         "en": {
@@ -777,6 +967,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Capture will resume by itself once there is room. No copy is written by halves."
+          }
+        }
+      }
+    },
+    "La prochaine copie sera ignorée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The next copy will be ignored"
           }
         }
       }
@@ -891,12 +1091,32 @@
         }
       }
     },
+    "Mettre en pause": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
     "Mode de collage": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Paste mode"
+          }
+        }
+      }
+    },
+    "Mots de passe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwords"
           }
         }
       }
@@ -1011,6 +1231,26 @@
         }
       }
     },
+    "Pendant 1 heure": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For 1 hour"
+          }
+        }
+      }
+    },
+    "Pendant 5 minutes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For 5 minutes"
+          }
+        }
+      }
+    },
     "Place occupée par l’historique": {
       "localizations": {
         "en": {
@@ -1071,12 +1311,52 @@
         }
       }
     },
+    "Rechercher une app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for an app"
+          }
+        }
+      }
+    },
     "Repartir à zéro…": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Start Over…"
+          }
+        }
+      }
+    },
+    "Reprendre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        }
+      }
+    },
+    "Retirer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove"
+          }
+        }
+      }
+    },
+    "Retirer %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove %@"
           }
         }
       }
@@ -1151,6 +1431,36 @@
         }
       }
     },
+    "Son": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound"
+          }
+        }
+      }
+    },
+    "Son d’une copie gardée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound for a kept copy"
+          }
+        }
+      }
+    },
+    "Son d’une copie écartée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound for a discarded copy"
+          }
+        }
+      }
+    },
     "Stockage": {
       "localizations": {
         "en": {
@@ -1217,6 +1527,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete the entire history, pinned items included?"
+          }
+        }
+      }
+    },
+    "Texte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text"
           }
         }
       }
@@ -1361,12 +1681,32 @@
         }
       }
     },
+    "Trousseaux d’accès": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keychain Access"
+          }
+        }
+      }
+    },
     "Téléchargements": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Downloads"
+          }
+        }
+      }
+    },
+    "Une copie de ces catégories n’est plus gardée. Celles déjà gardées restent.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copies in these categories are no longer kept. Those already kept stay."
           }
         }
       }
@@ -1421,6 +1761,26 @@
         }
       }
     },
+    "Vous entendez que la copie est dans l’historique.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You hear that the copy is in the history."
+          }
+        }
+      }
+    },
+    "Vous entendez qu’une copie n’a pas été gardée, sans rien voir de son contenu.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You hear that a copy wasn’t kept, without seeing anything of it."
+          }
+        }
+      }
+    },
     "macOS a refusé ce changement. Réessayez depuis les Réglages Système.": {
       "localizations": {
         "en": {
@@ -1437,6 +1797,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "macOS will ask for access to the %@ folder"
+          }
+        }
+      }
+    },
+    "par défaut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "default"
           }
         }
       }

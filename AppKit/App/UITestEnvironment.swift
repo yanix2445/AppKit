@@ -13,6 +13,8 @@ struct UITestEnvironment {
     let directPasteDefaults: UserDefaults
     /// Never the real login items of this Mac.
     let launchAtLoginService: any LaunchAtLoginService
+    /// Tests stay silent.
+    let soundService: any SoundService
 
     static let identifierVariable = "APPKIT_UI_TEST_ID"
     static let deleteKeyVariable = "APPKIT_UI_TEST_DELETE_KEY"
@@ -43,7 +45,8 @@ struct UITestEnvironment {
             pasteboardName: "appkit.uitest.\(identifier)",
             directPasteService: FakeDirectPasteService(isTrusted: environment[trustedVariable] != nil),
             directPasteDefaults: defaults,
-            launchAtLoginService: FakeLaunchAtLoginService()
+            launchAtLoginService: FakeLaunchAtLoginService(),
+            soundService: SilentSoundService()
         )
     }
 
@@ -63,6 +66,10 @@ struct UITestEnvironment {
         func focusedTarget() -> DirectPasteTarget { .editable }
         func postPaste() {}
         func openAccessibilitySettings() {}
+    }
+
+    private final class SilentSoundService: SoundService {
+        func play(named name: String) {}
     }
 
     private final class FakeLaunchAtLoginService: LaunchAtLoginService {

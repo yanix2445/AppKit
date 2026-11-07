@@ -23,6 +23,10 @@ public struct SystemPasteboardService: PasteboardService {
         return types
     }
 
+    public func readString(forType type: String) -> String? {
+        NSPasteboard(name: name).string(forType: NSPasteboard.PasteboardType(type))
+    }
+
     public func readText() -> String? {
         NSPasteboard(name: name).string(forType: .string)
     }
