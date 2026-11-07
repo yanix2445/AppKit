@@ -538,6 +538,56 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertFalse(app.menuItems["statusItem.launchAtLoginNotice"].exists)
     }
 
+    @MainActor func testAFileThatHasGoneSaysSoAndLeavesThePasteboardAlone() throws {
+        launchApp()
+        let urls = try makeTemporaryFiles(["parti.png"])
+        copyFiles(urls)
+        try FileManager.default.removeItem(at: urls[0])
+        copyAndWait("autre chose")
+        openStrip()
+        waitForCards(2)
+
+        cards.element(boundBy: 1).click()
+
+        XCTAssertTrue(app.descendants(matching: .any)["history.failureMessage"].waitForExistence(timeout: 5))
+        XCTAssertEqual(pasteboardText(), "autre chose")
+    }
+
+    @MainActor func testPlainTextIsOnlyOfferedWhenThereIsText() throws {
+        launchApp()
+        let urls = try makeTemporaryFiles(["fichier.png"])
+        copyFiles(urls)
+        openStrip()
+        waitForCards(1)
+        cards.element(boundBy: 0).rightClick()
+        XCTAssertTrue(app.menuItems["Coller"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.menuItems["Coller en texte brut"].exists)
+    }
+
+    @MainActor func testCopyOnlyModeNeverPastes() {
+        app.launchEnvironment["APPKIT_UI_TEST_TRUSTED"] = "1"
+        launchApp()
+        XCTAssertTrue(statusItem.waitForExistence(timeout: 5))
+        statusItem.rightClick()
+        let settings = app.menuItems["statusItem.settings"]
+        XCTAssertTrue(settings.waitForExistence(timeout: 5))
+        settings.click()
+        let picker = app.descendants(matching: .any)["settings.pasteMode"]
+        XCTAssertTrue(picker.waitForExistence(timeout: 5))
+        attachScreenshot(named: "Réglages Général", of: app.windows.firstMatch)
+        picker.click()
+        app.menuItems["Copier seulement"].click()
+        app.windows.firstMatch.typeKey("w", modifierFlags: .command)
+
+        copyAndWait("texte")
+        openStrip()
+        waitForCards(1)
+        cards.element(boundBy: 0).click()
+
+        XCTAssertTrue(copiedMessage.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.descendants(matching: .any)["history.enableDirectPaste"].exists)
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }

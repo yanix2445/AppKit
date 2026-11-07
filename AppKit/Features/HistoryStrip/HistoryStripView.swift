@@ -52,11 +52,19 @@ struct HistoryStripView: View {
                             .id(clip.id)
                             .onTapGesture { viewModel.choose(clip.id) }
                             .accessibilityAction { viewModel.choose(clip.id) }
+                            .accessibilityActions {
+                                if clip.content.plainText != nil {
+                                    Button("Coller en texte brut") { viewModel.choose(clip.id, style: .plainText) }
+                                }
+                            }
                             .contextMenu {
                                 Button("Coller") { viewModel.choose(clip.id) }
                                     .keyboardShortcut(.return, modifiers: [])
-                                Button("Coller en texte brut") { viewModel.choose(clip.id, style: .plainText) }
-                                    .keyboardShortcut(.return, modifiers: .shift)
+                                // An image or a file has no text to paste alone.
+                                if clip.content.plainText != nil {
+                                    Button("Coller en texte brut") { viewModel.choose(clip.id, style: .plainText) }
+                                        .keyboardShortcut(.return, modifiers: .shift)
+                                }
                             }
                         }
                     }

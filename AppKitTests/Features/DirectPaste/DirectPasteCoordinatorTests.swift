@@ -56,6 +56,15 @@ struct DirectPasteCoordinatorTests {
         #expect(service.pasteCount == 0)
     }
 
+    @Test func copyOnlyNeverPastesNorAsks() async {
+        service.isTrusted = true
+        defaults.set(PasteMode.copyOnly.rawValue, forKey: PasteMode.storageKey)
+        var askCount = 0
+        #expect(await makeCoordinator { askCount += 1; return true }.deliver() == .copied(offersEnabling: false))
+        #expect(service.pasteCount == 0)
+        #expect(askCount == 0)
+    }
+
     @Test func theExplanationComesOnlyOnce() async {
         var askCount = 0
         let coordinator = makeCoordinator { askCount += 1; return false }
