@@ -11,7 +11,6 @@ final class HistoryStripController {
     private let thumbnailProvider: ClipThumbnailProvider
     private lazy var panel = makePanel()
     private var clickMonitor: Any?
-    private var pause: CapturePauseController?
     private var activationObserver: NSObjectProtocol?
     private var openedAt = ContinuousClock.now
 
@@ -21,9 +20,10 @@ final class HistoryStripController {
     init(
         history: ClipHistory,
         loadThumbnail: @escaping (Clip.ID) async -> Data? = { _ in nil },
+        actions: HistoryStripActions = HistoryStripActions(),
         onChoose: @escaping (Clip, ClipPasteStyle) -> Void
     ) {
-        viewModel = HistoryStripViewModel(history: history, onChoose: onChoose)
+        viewModel = HistoryStripViewModel(history: history, actions: actions, onChoose: onChoose)
         thumbnailProvider = ClipThumbnailProvider(load: loadThumbnail)
     }
 
@@ -33,37 +33,15 @@ final class HistoryStripController {
     }
 
     func setPause(_ pause: CapturePauseController) {
-        self.pause = pause
-        viewModel.onResume = { [weak pause] in pause?.resume() }
-        pauseDidChange()
-    }
-
-    /// The banner comes and goes, and the strip makes room for it.
-    func pauseDidChange() {
-        viewModel.pauseBanner = pause.flatMap(Self.bannerText)
-        if isOpen, let screen = panel.screen {
-            panel.setFrame(openFrame(on: screen), display: true)
-        }
-    }
-
-    private static func bannerText(_ pause: CapturePauseController) -> String? {
-        switch pause.pause {
-        case .until(let end) where pause.isPaused:
-            String(localized: "Capture en pause jusqu’à \(end.formatted(date: .omitted, time: .shortened))")
-        case .untilResumed:
-            String(localized: "Capture en pause jusqu’à réactivation")
-        default:
-            nil
-        }
+        viewModel.pause = pause
     }
 
     private func openFrame(on screen: NSScreen) -> NSRect {
-        let banner = viewModel.pauseBanner == nil ? 0 : StripMetrics.pauseBannerHeight
-        return NSRect(
+        NSRect(
             x: screen.frame.minX + StripMetrics.screenMargin,
             y: screen.frame.minY + StripMetrics.screenMargin,
             width: screen.frame.width - 2 * StripMetrics.screenMargin,
-            height: StripMetrics.stripHeight + banner
+            height: StripMetrics.stripHeight
         )
     }
 
@@ -104,6 +82,7 @@ final class HistoryStripController {
     func close() {
         guard isOpen else { return }
         isOpen = false
+        viewModel.didClose()
         thumbnailProvider.releaseAll()
         if let clickMonitor {
             NSEvent.removeMonitor(clickMonitor)
@@ -152,15 +131,29 @@ final class HistoryStripController {
         }
     }
 
+    private func handleKey(_ event: NSEvent) -> Bool {
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        let modifiers = HistoryStripKey.Modifiers(
+            command: flags.contains(.command),
+            shift: flags.contains(.shift),
+            option: flags.contains(.option),
+            control: flags.contains(.control)
+        )
+        guard let key = HistoryStripKey(keyCode: event.keyCode, character: event.charactersIgnoringModifiers, modifiers: modifiers) else {
+            return false
+        }
+        return viewModel.handle(key, isRepeat: event.isARepeat, close: { [weak self] in self?.close() })
+    }
+
     private func makePanel() -> HistoryStripPanel {
         let panel = HistoryStripPanel()
         panel.onCancel = { [weak self] in self?.close() }
+        panel.onKeyDown = { [weak self] event in self?.handleKey(event) ?? false }
         panel.contentView = NSHostingView(
             rootView: HistoryStripView(
                 viewModel: viewModel,
                 appearanceProvider: appearanceProvider,
-                thumbnailProvider: thumbnailProvider,
-                close: { [weak self] in self?.close() }
+                thumbnailProvider: thumbnailProvider
             )
         )
         return panel

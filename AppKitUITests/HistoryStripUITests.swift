@@ -42,7 +42,8 @@ final class HistoryStripUITests: XCTestCase {
     }
 
     @MainActor private var cards: XCUIElementQuery {
-        app.descendants(matching: .any).matching(identifier: "history.card")
+        // A card with a context menu also lends its identifier to that menu.
+        app.buttons.matching(identifier: "history.card")
     }
 
     @MainActor private func openStrip() {
@@ -696,6 +697,200 @@ final class HistoryStripUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["history.pauseBanner"].waitForExistence(timeout: 5))
     }
 
+    @MainActor private var searchField: XCUIElement {
+        app.textFields["history.search"]
+    }
+
+    @MainActor private func openContextMenu(ofCard index: Int) {
+        let card = cards.element(boundBy: index)
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.rightClick()
+    }
+
+    /// As seen on screen, from the left.
+    @MainActor private var cardLabels: [String] {
+        cards.allElementsBoundByIndex
+            .sorted { $0.frame.minX < $1.frame.minX }
+            .map(\.label)
+    }
+
+    @MainActor private func waitForCard(_ index: Int, toContain text: String, file: StaticString = #filePath, line: UInt = #line) {
+        let deadline = Date.now.addingTimeInterval(5)
+        while Date.now < deadline {
+            let labels = cardLabels
+            if labels.indices.contains(index), labels[index].contains(text) { return }
+            Thread.sleep(forTimeInterval: 0.2)
+        }
+        XCTFail("Carte \(index) sans « \(text) » : \(cardLabels)", file: file, line: line)
+    }
+
+    @MainActor func testTypingFiltersAtOnceAndEscapeClearsThenCloses() {
+        launchApp()
+        copyAndWait("Décisions du bandeau")
+        copyAndWait("Décisions")
+        copyAndWait("autre chose")
+        openStrip()
+        waitForCards(3)
+
+        // Without clicking anywhere: the keyboard is already in the search.
+        app.typeText("DECISIONS band")
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("Décisions du bandeau"))
+        attachBottomOfScreen(named: "Recherche")
+
+        strip.typeKey(.escape, modifierFlags: [])
+        waitForCards(3)
+        XCTAssertTrue(strip.exists)
+        strip.typeKey(.escape, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+    }
+
+    @MainActor func testAKeyPastesTheResultFound() {
+        launchApp()
+        copyAndWait("première")
+        copyAndWait("seconde")
+        openStrip()
+        app.typeText("premi")
+        waitForCards(1)
+        strip.typeKey(.return, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(pasteboard.string(forType: .string), "première")
+    }
+
+    @MainActor func testACategoryShowsOnlyItselfAndAllComesBack() {
+        launchApp()
+        copyAndWait("un texte")
+        copyAndWait("https://www.apple.com")
+        openStrip()
+        waitForCards(2)
+        for identifier in ["all", "text", "richText", "link", "image", "files", "color", "pdf", "other"] {
+            XCTAssertTrue(app.buttons["history.filter.\(identifier)"].exists, identifier)
+        }
+
+        app.buttons["history.filter.link"].click()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("apple.com"))
+        attachBottomOfScreen(named: "Filtre")
+
+        app.buttons["history.filter.image"].click()
+        XCTAssertTrue(app.descendants(matching: .any)["history.noResults"].waitForExistence(timeout: 5))
+        attachBottomOfScreen(named: "Aucune copie")
+
+        app.buttons["history.filter.all"].click()
+        waitForCards(2)
+    }
+
+    @MainActor func testACopyCanBePinnedFromItsMenuAndTheKeyboard() {
+        launchApp()
+        copyAndWait("ancienne")
+        copyAndWait("récente")
+        openStrip()
+        waitForCards(2)
+
+        openContextMenu(ofCard: 1)
+        XCTAssertTrue(app.menuItems["Épingler"].waitForExistence(timeout: 5))
+        app.menuItems["Épingler"].click()
+
+        let pinned = app.descendants(matching: .any)["history.pinned"]
+        XCTAssertTrue(pinned.waitForExistence(timeout: 5))
+        // In its section, and still at its place by date, with its badge.
+        waitForCards(3)
+        waitForCard(0, toContain: "ancienne")
+        waitForCard(0, toContain: "Épinglée")
+        waitForCard(2, toContain: "Épinglée")
+        XCTAssertFalse(cardLabels[1].contains("Épinglée"))
+        attachBottomOfScreen(named: "Épinglé")
+
+        // The newest copy is selected: ⌘P pins it too.
+        strip.typeKey("p", modifierFlags: .command)
+        waitForCards(4)
+        waitForCard(1, toContain: "récente")
+
+        // Then it goes before the other one, without the mouse.
+        strip.typeKey(.leftArrow, modifierFlags: [.command, .option])
+        waitForCard(0, toContain: "récente")
+
+        openContextMenu(ofCard: 0)
+        XCTAssertTrue(app.menuItems["Désépingler"].waitForExistence(timeout: 5))
+        app.menuItems["Désépingler"].click()
+        waitForCards(3)
+    }
+
+    @MainActor func testAPinnedCopyStaysPinnedWhenCopiedAgain() {
+        launchApp()
+        copyAndWait("à garder")
+        copyAndWait("autre")
+        openStrip()
+        waitForCards(2)
+        strip.typeKey(.rightArrow, modifierFlags: [])
+        strip.typeKey("p", modifierFlags: .command)
+        waitForCards(3)
+        strip.typeKey(.escape, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+
+        copyAndWait("à garder")
+        openStrip()
+        waitForCards(3)
+        waitForCard(0, toContain: "à garder")
+        // Back at the top of the history, and still pinned.
+        waitForCard(1, toContain: "à garder")
+    }
+
+    @MainActor func testACopyIsRemovedAtOnceAndUndoBringsItBack() {
+        launchApp()
+        copyAndWait("à supprimer")
+        copyAndWait("à garder")
+        openStrip()
+        waitForCards(2)
+
+        strip.typeKey(.delete, modifierFlags: [])
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("à supprimer"))
+        XCTAssertTrue(app.buttons["history.undoRemoval"].waitForExistence(timeout: 5))
+        attachBottomOfScreen(named: "Copie supprimée")
+
+        strip.typeKey("z", modifierFlags: .command)
+        waitForCards(2)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("à garder"))
+        XCTAssertTrue(app.buttons["history.undoRemoval"].waitForNonExistence(timeout: 5))
+
+        openContextMenu(ofCard: 1)
+        // The menu of the app has its own « Supprimer ».
+        XCTAssertTrue(app.menuItems["history.menu.delete"].waitForExistence(timeout: 5))
+        app.menuItems["history.menu.delete"].click()
+        waitForCards(1)
+        XCTAssertTrue(cards.element(boundBy: 0).label.contains("à garder"))
+    }
+
+    @MainActor func testARemovalIsFinalOnceTheStripIsClosed() {
+        launchApp()
+        copyAndWait("à supprimer")
+        openStrip()
+        waitForCards(1)
+        strip.typeKey(.delete, modifierFlags: [])
+        waitForCards(0)
+        strip.typeKey(.escape, modifierFlags: [])
+        XCTAssertTrue(strip.waitForNonExistence(timeout: 5))
+        Thread.sleep(forTimeInterval: 0.5)
+
+        app.terminate()
+        app.launch()
+        openStrip()
+        XCTAssertTrue(app.descendants(matching: .any)["history.empty"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor func testTheStripPausesFromItsToolbar() {
+        launchApp()
+        openStrip()
+        let menu = app.descendants(matching: .any)["history.pauseMenu"]
+        XCTAssertTrue(menu.waitForExistence(timeout: 5))
+        menu.click()
+        let entry = app.menuItems["Jusqu’à réactivation"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.click()
+        XCTAssertTrue(app.descendants(matching: .any)["history.pauseBanner"].waitForExistence(timeout: 5))
+    }
+
     @MainActor private func reveal(_ element: XCUIElement) {
         // Moving the pointer onto an element scrolls it into view.
         XCTAssertTrue(element.waitForExistence(timeout: 5))
@@ -792,7 +987,7 @@ final class HistoryStripUITests: XCTestCase {
             entry.click()
             openStrip()
             XCTAssertTrue(app.descendants(matching: .any)["history.pauseBanner"].waitForExistence(timeout: 5))
-            attachBottomOfScreen(named: "Bandeau en pause \(style)", height: 262)
+            attachBottomOfScreen(named: "Bandeau en pause \(style)")
             app.typeKey(.escape, modifierFlags: [])
             openSettings()
             let add = app.buttons["settings.addApp"]
@@ -914,7 +1109,7 @@ final class HistoryStripUITests: XCTestCase {
     }
 
     /// The empty strip offers no element of its full size: this keeps only the band it covers.
-    @MainActor private func attachBottomOfScreen(named name: String, height points: CGFloat = 222) {
+    @MainActor private func attachBottomOfScreen(named name: String, height points: CGFloat = 262) {
         Thread.sleep(forTimeInterval: 0.5)
         let image = XCUIScreen.main.screenshot().image
         guard let full = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }

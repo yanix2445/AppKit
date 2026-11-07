@@ -77,7 +77,7 @@ final class StatusItemController: NSObject {
         let name: String
         if pauseTitle != nil {
             name = "MenuBarIconAlert"
-        } else if pause.isPaused || pause.ignoresNextCopy {
+        } else if pause.statusText != nil {
             name = "MenuBarIconPaused"
         } else {
             name = "MenuBarIcon"
@@ -88,16 +88,7 @@ final class StatusItemController: NSObject {
         statusItem.button?.image = image
     }
 
-    private var userPauseTitle: String? {
-        switch pause.pause {
-        case .until(let end) where pause.isPaused:
-            String(localized: "Capture en pause jusqu’à \(end.formatted(date: .omitted, time: .shortened))")
-        case .untilResumed:
-            String(localized: "Capture en pause jusqu’à réactivation")
-        default:
-            pause.ignoresNextCopy ? String(localized: "La prochaine copie sera ignorée") : nil
-        }
-    }
+    private var userPauseTitle: String? { pause.statusText }
 
     private var pauseTitle: String? {
         switch state {
@@ -155,7 +146,7 @@ final class StatusItemController: NSObject {
     }
 
     private func makePauseItem() -> NSMenuItem {
-        if pause.isPaused || pause.ignoresNextCopy {
+        if pause.statusText != nil {
             let resume = NSMenuItem(title: String(localized: "Reprendre"), action: #selector(resumeCapture), keyEquivalent: "")
             resume.target = self
             resume.setAccessibilityIdentifier("statusItem.resume")

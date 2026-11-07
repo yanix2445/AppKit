@@ -39,7 +39,9 @@ public actor ClipStore {
                         copyCount: payload.copyCount ?? 1,
                         fingerprint: payload.fingerprint,
                         isRemote: payload.isRemote ?? false,
-                        isLarge: record.isLarge
+                        isLarge: record.isLarge,
+                        isPinned: record.isPinned,
+                        pinOrder: payload.pinOrder ?? 0
                     )
                 )
             } catch {
@@ -71,6 +73,7 @@ public actor ClipStore {
             sealedThumbnail: sealedThumbnail
         )
         record.isLarge = clip.isLarge
+        record.isPinned = clip.isPinned
         modelContext.insert(record)
         try saveOrRollBack()
     }
@@ -122,6 +125,7 @@ public actor ClipStore {
         let cipher = try requireCipher()
         guard let record = try record(clip.id) else { return }
         record.capturedAt = clip.capturedAt
+        record.isPinned = clip.isPinned
         record.sealedPayload = try cipher.seal(JSONEncoder().encode(ClipPayload(clip: clip)), for: clip.id)
         try saveOrRollBack()
     }

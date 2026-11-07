@@ -16,6 +16,10 @@ public struct Clip: Identifiable, Equatable, Sendable {
     public let isRemote: Bool
     /// Kept apart, for a short time, as it takes too much room.
     public let isLarge: Bool
+    /// Kept whatever the cleaning does, in a section of its own.
+    public let isPinned: Bool
+    /// Its place in that section, from the left.
+    public let pinOrder: Int
 
     public init(
         id: UUID = UUID(),
@@ -26,7 +30,9 @@ public struct Clip: Identifiable, Equatable, Sendable {
         copyCount: Int = 1,
         fingerprint: Data? = nil,
         isRemote: Bool = false,
-        isLarge: Bool = false
+        isLarge: Bool = false,
+        isPinned: Bool = false,
+        pinOrder: Int = 0
     ) {
         self.id = id
         self.content = content
@@ -37,13 +43,17 @@ public struct Clip: Identifiable, Equatable, Sendable {
         self.fingerprint = fingerprint
         self.isRemote = isRemote
         self.isLarge = isLarge
+        self.isPinned = isPinned
+        self.pinOrder = pinOrder
     }
 
     public func replacing(
         content: ClipContent? = nil,
         capturedAt: Date? = nil,
         fingerprint: Data? = nil,
-        isLarge: Bool? = nil
+        isLarge: Bool? = nil,
+        isPinned: Bool? = nil,
+        pinOrder: Int? = nil
     ) -> Clip {
         Clip(
             id: id,
@@ -54,7 +64,9 @@ public struct Clip: Identifiable, Equatable, Sendable {
             copyCount: copyCount,
             fingerprint: fingerprint ?? self.fingerprint,
             isRemote: isRemote,
-            isLarge: isLarge ?? self.isLarge
+            isLarge: isLarge ?? self.isLarge,
+            isPinned: isPinned ?? self.isPinned,
+            pinOrder: pinOrder ?? self.pinOrder
         )
     }
 
@@ -69,7 +81,9 @@ public struct Clip: Identifiable, Equatable, Sendable {
             copyCount: copyCount + 1,
             fingerprint: fingerprint,
             isRemote: newer.isRemote,
-            isLarge: isLarge
+            isLarge: isLarge,
+            isPinned: isPinned,
+            pinOrder: pinOrder
         )
     }
 }

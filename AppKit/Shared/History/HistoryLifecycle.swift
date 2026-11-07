@@ -22,6 +22,8 @@ final class HistoryLifecycle {
     private var processingTasks: [Clip.ID: Task<Void, Never>] = [:]
     /// The entry that holds each content, to recognize a copy made again.
     private var entries: [Data: Clip.ID] = [:]
+    /// Removed from the strip, and still on the disk for as long as ⌘Z can bring them back.
+    private var removals: [Clip] = []
 
     var onStateChange: ((HistoryLifecycleState) -> Void)?
 
@@ -139,7 +141,7 @@ final class HistoryLifecycle {
         }
         entries[fingerprint] = clip.id
 
-        guard let current = history.clip(withID: clip.id) else { return }
+        guard let current = currentState(of: clip.id) else { return }
         let stored = formats.reduce(0) { $0 + $1.data.count }
         let isLarge = storagePolicy().isLarge(content: current.content, storedBytes: stored)
         guard var media = current.content.media else {
@@ -155,7 +157,7 @@ final class HistoryLifecycle {
         media.hasThumbnail = thumbnail.imageData != nil
         media.isProcessing = false
         // Read again: the copy may have moved or gone during the thumbnail.
-        guard let latest = history.clip(withID: clip.id) else { return }
+        guard let latest = currentState(of: clip.id) else { return }
         let processed = latest.replacing(
             content: latest.content.replacingMedia(with: media),
             fingerprint: fingerprint,
@@ -163,6 +165,10 @@ final class HistoryLifecycle {
         )
         await store(processed, formats: formats, thumbnail: thumbnail.imageData)
         history.update(processed)
+    }
+
+    private func currentState(of id: Clip.ID) -> Clip? {
+        history.clip(withID: id) ?? removals.first { $0.id == id }
     }
 
     /// Copies kept before fingerprints existed get theirs in the background, once.
@@ -174,7 +180,9 @@ final class HistoryLifecycle {
                 let formats = (try? await store.formats(of: clip.id)) ?? []
                 let content = clip.content
                 let fingerprint = await Task.detached { ClipFingerprint.make(content: content, formats: formats) }.value
-                let identified = clip.replacing(fingerprint: fingerprint)
+                // Read again: it may have been pinned or removed in the meantime.
+                guard let current = currentState(of: clip.id) else { continue }
+                let identified = current.replacing(fingerprint: fingerprint)
                 if entries[fingerprint] == nil { entries[fingerprint] = clip.id }
                 history.update(identified)
                 try? await store.update(identified)
@@ -206,6 +214,45 @@ final class HistoryLifecycle {
         let date = Date.now
         history.promote(clip.id, at: date)
         try? await store.promote(clip.id, at: date)
+    }
+
+    func togglePin(_ id: Clip.ID) async {
+        guard let changed = history.togglePin(id) else { return }
+        try? await store.update(changed)
+    }
+
+    func movePinned(_ id: Clip.ID, to place: Int) async {
+        for clip in history.movePinned(id, to: place) {
+            try? await store.update(clip)
+        }
+    }
+
+    /// Takes a copy out of the strip at once. It leaves the disk when ⌘Z can no longer bring it back.
+    func remove(_ id: Clip.ID) {
+        guard let clip = history.clip(withID: id) else { return }
+        removals.append(clip)
+        history.remove(id)
+    }
+
+    /// Brings back the last copy removed, and tells whether there was one.
+    @discardableResult
+    func undoRemoval() -> Bool {
+        guard let clip = removals.popLast() else { return false }
+        history.restore(clip)
+        return true
+    }
+
+    var hasRemovals: Bool { !removals.isEmpty }
+
+    /// Erases the removed copies for good.
+    func commitRemovals() async {
+        let gone = removals
+        removals.removeAll()
+        // One still being processed would otherwise reach the disk after its erasure.
+        for clip in gone {
+            await processingTasks[clip.id]?.value
+        }
+        await delete(gone.map(\.id))
     }
 
     func storageUsage() async -> ClipStorageUsage {

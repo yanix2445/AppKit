@@ -91,6 +91,75 @@ struct HistoryLifecycleTests {
         )
     }
 
+    @Test func aRemovedCopyStaysOnTheDiskUntilItCanNoLongerComeBack() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let lifecycle = try makeLifecycle(store: store)
+        await lifecycle.open()
+        let copy = clip("à supprimer")
+        await lifecycle.capture(copy)
+
+        lifecycle.remove(copy.clip.id)
+        #expect(lifecycle.history.clips.isEmpty)
+        #expect(try await store.storageItems().count == 1)
+
+        #expect(lifecycle.undoRemoval())
+        #expect(lifecycle.history.clips.map(\.id) == [copy.clip.id])
+        #expect(!lifecycle.undoRemoval())
+
+        lifecycle.remove(copy.clip.id)
+        await lifecycle.commitRemovals()
+        #expect(try await store.storageItems().isEmpty)
+        #expect(!lifecycle.hasRemovals)
+    }
+
+    @Test func aPinnedCopyIsRemovedLikeAnyOther() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let lifecycle = try makeLifecycle(store: store)
+        await lifecycle.open()
+        let copy = clip("épinglée")
+        await lifecycle.capture(copy)
+        await lifecycle.togglePin(copy.clip.id)
+        lifecycle.remove(copy.clip.id)
+        await lifecycle.commitRemovals()
+        #expect(try await store.storageItems().isEmpty)
+    }
+
+    @Test func aCopyRemovedWhileBeingProcessedNeverStaysOnTheDisk() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let lifecycle = try makeLifecycle(store: store)
+        await lifecycle.open()
+        let copy = image(formats: [ClipRepresentation(type: "public.png", data: Data([1]))])
+        await lifecycle.capture(copy)
+        lifecycle.remove(copy.clip.id)
+        await lifecycle.commitRemovals()
+        await lifecycle.finishProcessing()
+        #expect(try await store.storageItems().isEmpty)
+    }
+
+    @Test func pinsAndTheirOrderComeBackAfterReopening() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let first = try makeLifecycle(store: store)
+        await first.open()
+        let older = clip("ancienne")
+        let newer = clip("récente")
+        await first.capture(older)
+        await first.capture(newer)
+        await first.togglePin(older.clip.id)
+        await first.togglePin(newer.clip.id)
+        await first.movePinned(newer.clip.id, to: 0)
+
+        let second = try makeLifecycle(store: store)
+        await second.open()
+        #expect(second.history.pinned.map(\.id) == [newer.clip.id, older.clip.id])
+        #expect(try await store.storageItems().allSatisfy(\.isPinned))
+    }
+
+    @Test func aPinnedCopySurvivesTheCleaningAndCountsForNothingInTheLimit() {
+        let old = Date(timeIntervalSinceReferenceDate: 0)
+        let pinned = ClipStorageItem(id: UUID(), capturedAt: old, byteCount: 5_000_000_000, isPinned: true, isLarge: false)
+        #expect(ClipStoragePolicy().itemsToDelete(from: [pinned], now: .now).isEmpty)
+    }
+
     @Test func aFirstLaunchCreatesAKeyAndCaptures() async throws {
         let lifecycle = try makeLifecycle()
         await lifecycle.open()

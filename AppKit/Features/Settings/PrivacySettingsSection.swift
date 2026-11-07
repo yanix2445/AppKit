@@ -37,7 +37,7 @@ struct PrivacySettingsSection: View {
             LabeledContent {
                 Menu(categorySummary) {
                     ForEach(ClipCategory.allCases, id: \.self) { category in
-                        Toggle(title(of: category), isOn: binding(for: category))
+                        Toggle(category.title, isOn: binding(for: category))
                     }
                 }
                 .fixedSize()
@@ -71,7 +71,7 @@ struct PrivacySettingsSection: View {
     }
 
     private var categorySummary: String {
-        let titles = ClipCategory.allCases.filter(excludedCategories.contains).map(title)
+        let titles = ClipCategory.allCases.filter(excludedCategories.contains).map(\.title)
         return titles.isEmpty ? String(localized: "Aucune") : titles.formatted(.list(type: .and))
     }
 
@@ -124,19 +124,6 @@ struct PrivacySettingsSection: View {
         case "com.apple.Passwords": String(localized: "Mots de passe")
         case "com.apple.keychainaccess": String(localized: "Trousseaux d’accès")
         default: app.name
-        }
-    }
-
-    private func title(of category: ClipCategory) -> String {
-        switch category {
-        case .text: String(localized: "Texte")
-        case .richText: String(localized: "Texte enrichi")
-        case .link: String(localized: "Lien")
-        case .image: String(localized: "Image")
-        case .files: String(localized: "Fichiers")
-        case .color: String(localized: "Couleur")
-        case .pdf: String(localized: "PDF")
-        case .other: String(localized: "Autre")
         }
     }
 }

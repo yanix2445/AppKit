@@ -15,6 +15,7 @@ struct ClipPayload: Codable {
     let copyCount: Int?
     let fingerprint: Data?
     let isRemote: Bool?
+    let pinOrder: Int?
 
     private static let imageKind = "image"
     private static let pdfKind = "pdf"
@@ -54,6 +55,7 @@ struct ClipPayload: Codable {
         copyCount = clip.copyCount
         fingerprint = clip.fingerprint
         isRemote = clip.isRemote
+        pinOrder = clip.pinOrder
         sourceName = clip.source?.name
         sourceBundleIdentifier = clip.source?.bundleIdentifier
     }

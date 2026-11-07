@@ -4,5 +4,6 @@ import CoreGraphics
 enum CornerRadius {
     static let control: CGFloat = 8
     static let card: CGFloat = 14
+    static let group: CGFloat = 20
     static let strip: CGFloat = 32
 }

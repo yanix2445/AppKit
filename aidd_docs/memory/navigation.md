@@ -5,7 +5,7 @@ How the user moves through the app: routing and the page structure.
 ## Routing
 
 - App de barre de menus, sans fenêtre principale ni icône dans le Dock, sans routeur ni Coordinator : on navigue par l'état.
-- Le bandeau s'ouvre au raccourci global (⇧⌘V) ou depuis l'icône de la barre de menus ; Échap ou un clic ailleurs le ferme.
+- Le bandeau s'ouvre au raccourci global (⇧⌘V) ou depuis l'icône de la barre de menus ; Échap efface la recherche, puis le ferme ; un clic ailleurs le ferme.
 - Chaque action fréquente a une entrée de menu et un raccourci clavier ; `Settings` s'ouvre avec ⌘,.
 
 ## Surfaces
