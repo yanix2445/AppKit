@@ -34,7 +34,11 @@ public actor ClipStore {
                         id: record.uid,
                         content: payload.content,
                         source: payload.source,
-                        capturedAt: record.capturedAt
+                        capturedAt: record.capturedAt,
+                        firstCapturedAt: payload.firstCapturedAt,
+                        copyCount: payload.copyCount ?? 1,
+                        fingerprint: payload.fingerprint,
+                        isRemote: payload.isRemote ?? false
                     )
                 )
             } catch {
@@ -90,6 +94,15 @@ public actor ClipStore {
         let encoder = PropertyListEncoder()
         encoder.outputFormat = .binary
         return try encoder.encode(formats)
+    }
+
+    /// Seals a newer state of a copy over the old one, keeping its formats.
+    public func update(_ clip: Clip) throws {
+        let cipher = try requireCipher()
+        guard let record = try record(clip.id) else { return }
+        record.capturedAt = clip.capturedAt
+        record.sealedPayload = try cipher.seal(JSONEncoder().encode(ClipPayload(clip: clip)), for: clip.id)
+        try saveOrRollBack()
     }
 
     public func promote(_ id: Clip.ID, at date: Date) throws {

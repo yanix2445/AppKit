@@ -161,6 +161,16 @@
         }
       }
     },
+    "Autre appareil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other device"
+          }
+        }
+      }
+    },
     "Bureau": {
       "localizations": {
         "en": {

@@ -14,6 +14,8 @@ public enum ClipClassifier {
     public static let plainTextType = "public.utf8-plain-text"
     public static let pdfType = "com.adobe.pdf"
     public static let fileURLType = "public.file-url"
+    /// Set by macOS on a copy that came from another device.
+    public static let remoteClipboardType = "com.apple.is-remote-clipboard"
     public static let colorType = "com.apple.cocoa.pasteboard.color"
     public static let imageTypes: Set<String> = [
         "public.png", "public.tiff", "public.jpeg", "public.heic", "com.compuserve.gif",
@@ -24,7 +26,7 @@ public enum ClipClassifier {
     /// Variants of the same plain text, and a marker that says nothing of the content.
     private static let plainTextVariants: Set<String> = [
         plainTextType, "public.utf16-plain-text", "public.utf16-external-plain-text",
-        "NSStringPboardType", "org.nspasteboard.source",
+        "NSStringPboardType", "org.nspasteboard.source", remoteClipboardType,
     ]
     private static let linkSchemes: Set<String> = ["http", "https"]
 

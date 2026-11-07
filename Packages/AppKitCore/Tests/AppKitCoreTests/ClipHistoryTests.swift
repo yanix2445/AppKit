@@ -29,6 +29,21 @@ struct ClipHistoryTests {
         #expect(history.clips[0].capturedAt == date)
     }
 
+    @Test func aCopyMadeAgainKeepsItsFirstDateAndCountsUp() {
+        let first = Date(timeIntervalSinceReferenceDate: 100)
+        let later = Date(timeIntervalSinceReferenceDate: 200)
+        let source = ClipSource(name: "Notes", bundleIdentifier: nil)
+        let old = Clip(content: .text("a"), source: nil, capturedAt: first)
+
+        let merged = old.merging(newer: Clip(content: .text("a"), source: source, capturedAt: later))
+
+        #expect(merged.id == old.id)
+        #expect(merged.capturedAt == later)
+        #expect(merged.firstCapturedAt == first)
+        #expect(merged.copyCount == 2)
+        #expect(merged.source == source)
+    }
+
     @Test func promotingAnUnknownCopyChangesNothing() {
         let history = ClipHistory()
         history.insert(clip("seule"))

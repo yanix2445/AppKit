@@ -1,4 +1,5 @@
 import AppKitCore
+import Foundation
 
 /// What is sealed for a copy: its content and the app it came from.
 struct ClipPayload: Codable {
@@ -10,6 +11,10 @@ struct ClipPayload: Codable {
     let textKind: String?
     let color: ClipColor?
     let files: [ClipFile]?
+    let firstCapturedAt: Date?
+    let copyCount: Int?
+    let fingerprint: Data?
+    let isRemote: Bool?
 
     private static let imageKind = "image"
     private static let pdfKind = "pdf"
@@ -45,6 +50,10 @@ struct ClipPayload: Codable {
         } else {
             files = nil
         }
+        firstCapturedAt = clip.firstCapturedAt
+        copyCount = clip.copyCount
+        fingerprint = clip.fingerprint
+        isRemote = clip.isRemote
         sourceName = clip.source?.name
         sourceBundleIdentifier = clip.source?.bundleIdentifier
     }
