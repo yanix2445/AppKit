@@ -1,16 +1,26 @@
 import AppKit
 import AppKitCore
+import AppKitSystem
 
 /// The menu bar icon: a click opens the strip, a right click shows the menu.
 @MainActor
 final class StatusItemController: NSObject {
-    private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    private let copyCount: () -> Int
+    private let launchAtLogin: LaunchAtLoginController
     private let onPrimaryClick: () -> Void
     private let onOpenSettings: () -> Void
     private var state = HistoryLifecycleState.starting
     private var openHistoryHotKey: HotKeyCombination?
 
-    init(onPrimaryClick: @escaping () -> Void, onOpenSettings: @escaping () -> Void) {
+    init(
+        copyCount: @escaping () -> Int,
+        launchAtLogin: LaunchAtLoginController,
+        onPrimaryClick: @escaping () -> Void,
+        onOpenSettings: @escaping () -> Void
+    ) {
+        self.copyCount = copyCount
+        self.launchAtLogin = launchAtLogin
         self.onPrimaryClick = onPrimaryClick
         self.onOpenSettings = onOpenSettings
         super.init()
@@ -35,11 +45,10 @@ final class StatusItemController: NSObject {
     }
 
     private func updateImage() {
-        let isPaused = state != .ready && state != .starting
-        statusItem.button?.image = NSImage(
-            systemSymbolName: isPaused ? "exclamationmark.triangle" : "clipboard",
-            accessibilityDescription: pauseTitle ?? "AppKit"
-        )
+        let image = NSImage(named: pauseTitle == nil ? "MenuBarIcon" : "MenuBarIconAlert")
+        image?.isTemplate = true
+        image?.accessibilityDescription = pauseTitle ?? "AppKit"
+        statusItem.button?.image = image
     }
 
     private var pauseTitle: String? {
@@ -69,22 +78,12 @@ final class StatusItemController: NSObject {
     }
 
     private func showMenu() {
+        launchAtLogin.refresh()
         let menu = NSMenu()
-        if let pauseTitle, let pauseExplanation {
-            let title = NSMenuItem(title: pauseTitle, action: nil, keyEquivalent: "")
-            title.isEnabled = false
-            title.setAccessibilityIdentifier("statusItem.pause")
-            menu.addItem(title)
-            let explanation = NSMenuItem(title: pauseExplanation, action: nil, keyEquivalent: "")
-            explanation.isEnabled = false
-            menu.addItem(explanation)
-            if state == .diskFull {
-                let freeSpace = NSMenuItem(title: String(localized: "Libérer de la place…"), action: #selector(openStorageSettings), keyEquivalent: "")
-                freeSpace.target = self
-                menu.addItem(freeSpace)
-            }
-            menu.addItem(.separator())
-        }
+        menu.autoenablesItems = false
+        addHeader(to: menu)
+        addLaunchAtLoginNotice(to: menu)
+
         let open = NSMenuItem(title: String(localized: "Ouvrir l’historique"), action: #selector(openHistory), keyEquivalent: "")
         open.target = self
         if let openHistoryHotKey {
@@ -93,15 +92,53 @@ final class StatusItemController: NSObject {
         }
         menu.addItem(open)
         menu.addItem(.separator())
+
         let settings = NSMenuItem(title: String(localized: "Réglages…"), action: #selector(openSettings), keyEquivalent: ",")
         settings.target = self
         settings.setAccessibilityIdentifier("statusItem.settings")
         menu.addItem(settings)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Quitter AppKit"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
         statusItem.menu = nil
+    }
+
+    private func addHeader(to menu: NSMenu) {
+        menu.addItem(disabledItem("AppKit"))
+        if let pauseTitle, let pauseExplanation {
+            let title = disabledItem(pauseTitle)
+            title.setAccessibilityIdentifier("statusItem.pause")
+            menu.addItem(title)
+            menu.addItem(disabledItem(pauseExplanation))
+            if state == .diskFull {
+                let freeSpace = NSMenuItem(title: String(localized: "Libérer de la place…"), action: #selector(openStorageSettings), keyEquivalent: "")
+                freeSpace.target = self
+                menu.addItem(freeSpace)
+            }
+        } else {
+            menu.addItem(disabledItem(String(localized: "Capture active · \(copyCount()) copies")))
+        }
+        menu.addItem(.separator())
+    }
+
+    /// The discreet signal when copies would be missed after a restart.
+    private func addLaunchAtLoginNotice(to menu: NSMenu) {
+        guard launchAtLogin.status != .enabled else { return }
+        let notice = disabledItem(String(localized: "Le lancement à l’ouverture de session est désactivé."))
+        notice.setAccessibilityIdentifier("statusItem.launchAtLoginNotice")
+        menu.addItem(notice)
+        let enable = NSMenuItem(title: String(localized: "Activer le lancement automatique"), action: #selector(enableLaunchAtLogin), keyEquivalent: "")
+        enable.target = self
+        menu.addItem(enable)
+        menu.addItem(.separator())
+    }
+
+    private func disabledItem(_ title: String) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        item.isEnabled = false
+        return item
     }
 
     private static func eventModifiers(_ modifiers: HotKeyModifiers) -> NSEvent.ModifierFlags {
@@ -119,6 +156,13 @@ final class StatusItemController: NSObject {
 
     @objc private func openSettings() {
         onOpenSettings()
+    }
+
+    @objc private func enableLaunchAtLogin() {
+        launchAtLogin.setEnabled(true)
+        if launchAtLogin.status == .requiresApproval {
+            launchAtLogin.openSystemSettings()
+        }
     }
 
     @objc private func openStorageSettings() {

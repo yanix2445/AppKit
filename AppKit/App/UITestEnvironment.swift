@@ -11,11 +11,14 @@ struct UITestEnvironment {
     /// Never the real permission: tests must not paste into whatever app is in front.
     let directPasteService: any DirectPasteService
     let directPasteDefaults: UserDefaults
+    /// Never the real login items of this Mac.
+    let launchAtLoginService: any LaunchAtLoginService
 
     static let identifierVariable = "APPKIT_UI_TEST_ID"
     static let deleteKeyVariable = "APPKIT_UI_TEST_DELETE_KEY"
     static let trustedVariable = "APPKIT_UI_TEST_TRUSTED"
     static let explainVariable = "APPKIT_UI_TEST_EXPLAIN"
+    static let offerLaunchAtLoginVariable = "APPKIT_UI_TEST_OFFER_LOGIN"
 
     static var current: UITestEnvironment? {
         let environment = ProcessInfo.processInfo.environment
@@ -29,12 +32,14 @@ struct UITestEnvironment {
         let defaults = UserDefaults(suiteName: "appkit.uitest.\(identifier)") ?? .standard
         // The explanation of the permission would stop every test that chooses a copy.
         defaults.set(environment[explainVariable] == nil, forKey: DirectPasteCoordinator.explanationSeenKey)
+        defaults.set(environment[offerLaunchAtLoginVariable] == nil, forKey: LaunchAtLoginController.offerSeenKey)
         return UITestEnvironment(
             storeURL: directory.appending(path: "History.store"),
             keyService: FileKeyService(url: keyURL),
             pasteboardName: "appkit.uitest.\(identifier)",
             directPasteService: FakeDirectPasteService(isTrusted: environment[trustedVariable] != nil),
-            directPasteDefaults: defaults
+            directPasteDefaults: defaults,
+            launchAtLoginService: FakeLaunchAtLoginService()
         )
     }
 
@@ -54,6 +59,14 @@ struct UITestEnvironment {
         func focusedTarget() -> DirectPasteTarget { .editable }
         func postPaste() {}
         func openAccessibilitySettings() {}
+    }
+
+    private final class FakeLaunchAtLoginService: LaunchAtLoginService {
+        var status = LaunchAtLoginStatus.disabled
+
+        func enable() throws { status = .enabled }
+        func disable() throws { status = .disabled }
+        func openSystemSettings() {}
     }
 
     private struct FileKeyService: EncryptionKeyService {
