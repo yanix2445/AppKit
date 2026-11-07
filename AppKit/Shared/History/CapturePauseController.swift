@@ -32,6 +32,18 @@ final class CapturePauseController {
 
     var isPaused: Bool { pause.isActive(at: now()) }
 
+    /// What the menu and the strip say of the pause, if there is one.
+    var statusText: String? {
+        switch pause {
+        case .until(let end) where isPaused:
+            String(localized: "Capture en pause jusqu’à \(end.formatted(date: .omitted, time: .shortened))")
+        case .untilResumed:
+            String(localized: "Capture en pause jusqu’à réactivation")
+        default:
+            ignoresNextCopy ? String(localized: "La prochaine copie sera ignorée") : nil
+        }
+    }
+
     func pause(for interval: TimeInterval) {
         let end = now().addingTimeInterval(interval)
         set(.until(end))

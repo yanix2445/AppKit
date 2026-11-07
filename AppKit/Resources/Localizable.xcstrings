@@ -111,6 +111,16 @@
         }
       }
     },
+    "%lld résultats": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld results"
+          }
+        }
+      }
+    },
     "1 jour": {
       "localizations": {
         "en": {
@@ -127,6 +137,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 month"
+          }
+        }
+      }
+    },
+    "1 résultat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 result"
           }
         }
       }
@@ -261,6 +281,26 @@
         }
       }
     },
+    "Aucun résultat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No results"
+          }
+        }
+      }
+    },
+    "Aucun résultat pour « %@ »": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No results for “%@”"
+          }
+        }
+      }
+    },
     "Aucun son n’est joué quand ils sont désactivés dans Réglages Système.": {
       "localizations": {
         "en": {
@@ -277,6 +317,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "None"
+          }
+        }
+      }
+    },
+    "Aucune copie dans cette catégorie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No copies in this category"
           }
         }
       }
@@ -471,6 +521,16 @@
         }
       }
     },
+    "Chercher dans toutes les catégories": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search All Categories"
+          }
+        }
+      }
+    },
     "Choisissez ce qui se passe quand vous validez une copie dans le bandeau.": {
       "localizations": {
         "en": {
@@ -561,6 +621,16 @@
         }
       }
     },
+    "Copie supprimée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy deleted"
+          }
+        }
+      }
+    },
     "Copie écartée": {
       "localizations": {
         "en": {
@@ -577,6 +647,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copy only"
+          }
+        }
+      }
+    },
+    "Copies épinglées": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinned copies"
           }
         }
       }
@@ -681,6 +761,26 @@
         }
       }
     },
+    "Désépingler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unpin"
+          }
+        }
+      }
+    },
+    "Effacer la recherche": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear search"
+          }
+        }
+      }
+    },
     "Effacer tout l’historique": {
       "localizations": {
         "en": {
@@ -727,6 +827,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Waiting for your approval in System Settings."
+          }
+        }
+      }
+    },
+    "Essayez d’autres mots.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try other words."
           }
         }
       }
@@ -1261,6 +1371,16 @@
         }
       }
     },
+    "Plus d’options": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More options"
+          }
+        }
+      }
+    },
     "Plus tard": {
       "localizations": {
         "en": {
@@ -1311,6 +1431,16 @@
         }
       }
     },
+    "Rechercher dans l’historique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search the history"
+          }
+        }
+      }
+    },
     "Rechercher une app": {
       "localizations": {
         "en": {
@@ -1357,6 +1487,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove %@"
+          }
+        }
+      }
+    },
+    "Rien dans la catégorie %@. Essayez d’autres mots, ou cherchez dans toutes les catégories.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing in the %@ category. Try other words, or search all categories."
           }
         }
       }
@@ -1641,6 +1781,16 @@
         }
       }
     },
+    "Tout": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
     "Tout effacer": {
       "localizations": {
         "en": {
@@ -1717,6 +1867,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use %@"
+          }
+        }
+      }
+    },
+    "Voir toutes les copies": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show All Copies"
           }
         }
       }
@@ -1847,6 +2007,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ item"
+          }
+        }
+      }
+    },
+    "Épingler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pin"
+          }
+        }
+      }
+    },
+    "Épinglée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinned"
           }
         }
       }

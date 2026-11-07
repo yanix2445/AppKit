@@ -6,6 +6,7 @@ import SwiftUI
 struct ClipCardView: View {
     let clip: Clip
     let isSelected: Bool
+    var highlightedWords: [String] = []
     let appearance: SourceAppAppearance
     let thumbnailProvider: ClipThumbnailProvider
 
@@ -97,11 +98,19 @@ struct ClipCardView: View {
                         }
                     }
 
-                Text(format)
+                HStack(spacing: Spacing.xSmall) {
+                    Text(format)
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    if clip.isPinned {
+                        Image(systemName: "pin.fill")
+                            .font(.system(size: StripMetrics.pinIconSize))
+                            .accessibilityHidden(true)
+                            .accessibilityIdentifier("history.pinBadge")
+                    }
+                }
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, Spacing.medium)
                     .padding(.bottom, StripMetrics.cardFooterBottomInset)
                     .frame(height: StripMetrics.cardFooterHeight, alignment: .bottom)
@@ -120,7 +129,7 @@ struct ClipCardView: View {
             .onHover { isHovered = $0 }
             .task(id: consentRevision) { readFileSize() }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel([format, sourceName, date, spokenContent, badge].compactMap { $0 }.joined(separator: ", "))
+            .accessibilityLabel([format, sourceName, date, spokenContent, badge, clip.isPinned ? String(localized: "Épinglée") : nil].compactMap { $0 }.joined(separator: ", "))
             .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
             .accessibilityIdentifier("history.card")
         }
@@ -136,7 +145,7 @@ struct ClipCardView: View {
     }
 
     private func textPreview(_ text: String) -> some View {
-        Text(verbatim: String(text.prefix(StripMetrics.previewCharacterLimit)))
+        Text(ClipSearchHighlight.attributed(String(text.prefix(StripMetrics.previewCharacterLimit)), words: highlightedWords))
             .font(.body)
             .lineLimit(StripMetrics.previewLineLimit)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

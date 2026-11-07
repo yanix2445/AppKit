@@ -37,7 +37,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let lifecycle = dependencies.lifecycle
         let historyStrip = HistoryStripController(
             history: dependencies.history,
-            loadThumbnail: { await lifecycle.thumbnail(of: $0) }
+            loadThumbnail: { await lifecycle.thumbnail(of: $0) },
+            actions: HistoryStripActions(
+                togglePin: { id in Task { await lifecycle.togglePin(id) } },
+                movePinned: { id, place in Task { await lifecycle.movePinned(id, to: place) } },
+                remove: { lifecycle.remove($0) },
+                undoRemoval: { lifecycle.undoRemoval() },
+                commitRemovals: { Task { await lifecycle.commitRemovals() } },
+                openSettings: { [weak self] in self?.settings?.show() },
+                quit: { NSApp.terminate(nil) }
+            )
         ) { [weak self] clip, style in
             self?.restore(clip, style: style)
         }
@@ -60,7 +69,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             onDiscard: { [weak self] in self?.statusItem?.flashDiscardedCopy() },
             onPauseChange: { [weak self] in
                 self?.statusItem?.capturePauseDidChange()
-                historyStrip.pauseDidChange()
             }
         )
         statusItem?.capturePauseDidChange()
@@ -107,6 +115,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 await lifecycle.startOver()
             }
         }
+    }
+
+    /// A copy removed just before quitting must still leave the disk.
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        historyStrip?.closeImmediately()
+        guard let lifecycle = dependencies?.lifecycle, lifecycle.hasRemovals else { return .terminateNow }
+        Task {
+            await lifecycle.commitRemovals()
+            sender.reply(toApplicationShouldTerminate: true)
+        }
+        return .terminateLater
     }
 
     private func restore(_ clip: Clip, style: ClipPasteStyle) {

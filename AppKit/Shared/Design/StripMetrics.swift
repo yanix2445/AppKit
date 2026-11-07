@@ -2,7 +2,7 @@ import CoreGraphics
 
 /// The fixed sizes of the strip and its cards in the mockups.
 enum StripMetrics {
-    static let stripHeight: CGFloat = 212
+    static let stripHeight: CGFloat = 252
     static let screenMargin: CGFloat = 10
     static let cardWidth: CGFloat = 196
     static let cardHeight: CGFloat = 176
@@ -19,7 +19,14 @@ enum StripMetrics {
     static let selectionRingWidth: CGFloat = 3
     static let previewLineLimit = 6
     static let discardFlashOpacity: CGFloat = 0.25
-    static let pauseBannerHeight: CGFloat = 40
+    static let toolbarHeight: CGFloat = 28
+    static let searchFieldWidth: CGFloat = 237
+    static let focusRingWidth: CGFloat = 2
+    static let toolbarButtonSize: CGFloat = 28
+    static let pinnedSectionInset: CGFloat = 6
+    static let pinIconSize: CGFloat = 10
+    static let dragPlaceholderDash: CGFloat = 6
+    static let dropPlaceholderOpacity: CGFloat = 0.2
     static let filePreviewIconSize: CGFloat = 56
     static let colorValueMinimumScale: CGFloat = 0.7
     static let briefMessageWidth: CGFloat = 336
