@@ -5,7 +5,12 @@ import SwiftUI
 /// scene, because the menu of its icon is an `NSMenu`.
 @MainActor
 final class SettingsWindowController {
+    private let launchAtLogin: LaunchAtLoginController
     private lazy var window = makeWindow()
+
+    init(launchAtLogin: LaunchAtLoginController) {
+        self.launchAtLogin = launchAtLogin
+    }
 
     func show() {
         NSApp.activate()
@@ -13,7 +18,7 @@ final class SettingsWindowController {
     }
 
     private func makeWindow() -> NSWindow {
-        let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
+        let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView(launchAtLogin: launchAtLogin)))
         window.title = String(localized: "Réglages")
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false

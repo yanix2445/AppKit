@@ -10,6 +10,7 @@ final class AppDependencies {
     let lifecycle: HistoryLifecycle
     let directPasteService: any DirectPasteService
     let directPasteDefaults: UserDefaults
+    let launchAtLogin: LaunchAtLoginController
     private let monitor: ClipboardMonitor
     private var captureTask: Task<Void, Never>?
     private var retryTask: Task<Void, Never>?
@@ -21,6 +22,7 @@ final class AppDependencies {
         let location = AppDependencies.makeLocation()
         directPasteService = location.directPasteService
         directPasteDefaults = location.directPasteDefaults
+        launchAtLogin = LaunchAtLoginController(service: location.launchAtLoginService, defaults: location.directPasteDefaults)
         monitor = ClipboardMonitor(
             pasteboard: SystemPasteboardService(name: location.pasteboardName),
             frontmostApp: SystemFrontmostAppService(),
@@ -45,6 +47,7 @@ final class AppDependencies {
         let pasteboardName: NSPasteboard.Name
         let directPasteService: any DirectPasteService
         let directPasteDefaults: UserDefaults
+        let launchAtLoginService: any LaunchAtLoginService
     }
 
     private static func makeLocation() -> Location {
@@ -55,7 +58,8 @@ final class AppDependencies {
                 keyService: environment.keyService,
                 pasteboardName: NSPasteboard.Name(environment.pasteboardName),
                 directPasteService: environment.directPasteService,
-                directPasteDefaults: environment.directPasteDefaults
+                directPasteDefaults: environment.directPasteDefaults,
+                launchAtLoginService: environment.launchAtLoginService
             )
         }
         #endif
@@ -65,7 +69,8 @@ final class AppDependencies {
             keyService: SystemEncryptionKeyService(service: "yanis-harrat.AppKit.history"),
             pasteboardName: .general,
             directPasteService: SystemDirectPasteService(),
-            directPasteDefaults: .standard
+            directPasteDefaults: .standard,
+            launchAtLoginService: SystemLaunchAtLoginService()
         )
     }
 

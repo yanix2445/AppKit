@@ -508,6 +508,36 @@ final class HistoryStripUITests: XCTestCase {
         attachScreenshot(named: "Autre appareil")
     }
 
+    @MainActor func testTheFirstLaunchOffersToOpenAtLogin() {
+        app.launchEnvironment["APPKIT_UI_TEST_OFFER_LOGIN"] = "1"
+        launchApp()
+        XCTAssertTrue(app.staticTexts["Lancer AppKit à l’ouverture de session ?"].waitForExistence(timeout: 5))
+        app.buttons["Activer"].click()
+
+        statusItem.rightClick()
+        XCTAssertTrue(app.menuItems["statusItem.settings"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.menuItems["statusItem.launchAtLoginNotice"].exists)
+    }
+
+    @MainActor func testWhenOffTheMenuSaysSoAndSettingsCanTurnItOn() {
+        launchApp()
+        XCTAssertTrue(statusItem.waitForExistence(timeout: 5))
+        attachScreenshot(named: "Icône", of: statusItem)
+        statusItem.rightClick()
+        XCTAssertTrue(app.menuItems["statusItem.launchAtLoginNotice"].waitForExistence(timeout: 5))
+        app.menuItems["statusItem.settings"].click()
+
+        let toggle = app.descendants(matching: .any)["settings.launchAtLogin"]
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        attachScreenshot(named: "Réglages Général", of: app.windows.firstMatch)
+        toggle.click()
+        app.windows.firstMatch.typeKey("w", modifierFlags: .command)
+
+        statusItem.rightClick()
+        XCTAssertTrue(app.menuItems["statusItem.settings"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.menuItems["statusItem.launchAtLoginNotice"].exists)
+    }
+
     @MainActor private func pressGlobalShortcut() {
         XCUIApplication().typeKey("v", modifierFlags: [.shift, .command])
     }

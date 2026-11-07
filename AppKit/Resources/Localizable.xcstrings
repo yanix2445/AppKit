@@ -71,12 +71,32 @@
         }
       }
     },
+    "Activer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable"
+          }
+        }
+      }
+    },
     "Activer le collage direct": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Enable Direct Paste"
+          }
+        }
+      }
+    },
+    "Activer le lancement automatique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn On Opening at Login"
           }
         }
       }
@@ -177,6 +197,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desktop"
+          }
+        }
+      }
+    },
+    "Capture active · %lld copies": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Capture on · %lld copy"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Capture on · %lld copies"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Capture active · %lld copie"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Capture active · %lld copies"
+                }
+              }
+            }
           }
         }
       }
@@ -351,6 +411,16 @@
         }
       }
     },
+    "En attente de votre accord dans les Réglages Système.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for your approval in System Settings."
+          }
+        }
+      }
+    },
     "Fermer": {
       "localizations": {
         "en": {
@@ -387,6 +457,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keep automatically generated copies"
+          }
+        }
+      }
+    },
+    "Général": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
           }
         }
       }
@@ -471,12 +551,42 @@
         }
       }
     },
+    "Lancer AppKit à l’ouverture de session": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open AppKit at login"
+          }
+        }
+      }
+    },
+    "Lancer AppKit à l’ouverture de session ?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open AppKit at login?"
+          }
+        }
+      }
+    },
     "Le bandeau reste accessible par l’icône de la barre de menus.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The strip stays available from the menu bar icon."
+          }
+        }
+      }
+    },
+    "Le lancement à l’ouverture de session est désactivé.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opening at login is off."
           }
         }
       }
@@ -527,6 +637,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open Settings"
+          }
+        }
+      }
+    },
+    "Ouvrir les Réglages Système": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open System Settings"
           }
         }
       }
@@ -627,6 +747,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "To paste directly into the app you’re using, AppKit needs the Accessibility permission. Without it, the item is simply copied and you press ⌘V."
+          }
+        }
+      }
+    },
+    "Pour ne rater aucune copie après un redémarrage. Vous pourrez changer d’avis dans les Réglages.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So you don’t miss any copy after a restart. You can change your mind in Settings."
+          }
+        }
+      }
+    },
+    "Pour que vos copies soient gardées dès le démarrage du Mac.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So your copies are kept as soon as your Mac starts."
           }
         }
       }
@@ -877,6 +1017,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "You copied “%1$@”, stored in %2$@. To show it and paste it back, AppKit needs to read this file."
+          }
+        }
+      }
+    },
+    "macOS a refusé ce changement. Réessayez depuis les Réglages Système.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS refused this change. Try again from System Settings."
           }
         }
       }

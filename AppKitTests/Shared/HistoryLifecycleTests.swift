@@ -310,4 +310,23 @@ struct HistoryLifecycleTests {
         }
         #expect(lifecycle.history.clips.count == 2)
     }
+
+    /// The budget of the story, from login to ready to capture, with a long history.
+    @Test func openingALongHistoryIsReadyWithinASecond() async throws {
+        let store = try ClipStore(modelContainer: .inMemoryHistory())
+        let first = try makeLifecycle(store: store)
+        await first.open()
+        for index in 0..<1_000 {
+            await first.capture(clip("copie \(index)"))
+        }
+
+        let second = try makeLifecycle(store: store)
+        let elapsed = await ContinuousClock().measure {
+            await second.open()
+        }
+
+        #expect(second.state == .ready)
+        #expect(second.history.clips.count == 1_000)
+        #expect(elapsed < .seconds(1), "\(elapsed)")
+    }
 }

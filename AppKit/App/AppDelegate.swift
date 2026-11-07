@@ -8,7 +8,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var historyStrip: HistoryStripController?
     private var statusItem: StatusItemController?
     private let copiedMessage = CopiedMessageController()
-    private let settings = SettingsWindowController()
+    private var settings: SettingsWindowController?
+    private let launchAtLoginAlert = LaunchAtLoginAlertPresenter()
     private let recovery = HistoryRecoveryAlertPresenter()
     private let hotKeyConflict = HotKeyConflictAlertPresenter()
     private var globalHotKey: GlobalHotKeyController?
@@ -25,6 +26,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         self.dependencies = dependencies
+        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin)
         directPaste = DirectPasteCoordinator(
             service: dependencies.directPasteService,
             defaults: dependencies.directPasteDefaults,
@@ -39,9 +41,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.restore(clip, style: style)
         }
         self.historyStrip = historyStrip
+        let history = dependencies.history
         statusItem = StatusItemController(
+            copyCount: { history.clips.count },
+            launchAtLogin: dependencies.launchAtLogin,
             onPrimaryClick: { historyStrip.toggle() },
-            onOpenSettings: { [weak self] in self?.settings.show() }
+            onOpenSettings: { [weak self] in self?.settings?.show() }
         )
         dependencies.onFilesCaptured = { [protectedFolderAlert] files in
             protectedFolderAlert.explainIfNeeded(for: files)
@@ -50,6 +55,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.handle(state)
         }
         startGlobalHotKey(historyStrip: historyStrip)
+        // Past launch, as the offer runs modally.
+        Task { [launchAtLoginAlert, launchAtLogin = dependencies.launchAtLogin] in
+            launchAtLogin.offerOnce { launchAtLoginAlert.askToEnable() }
+        }
     }
 
     private func startGlobalHotKey(historyStrip: HistoryStripController) {
