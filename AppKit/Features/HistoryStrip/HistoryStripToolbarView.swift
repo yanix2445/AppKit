@@ -138,12 +138,24 @@ struct HistoryStripToolbarView: View {
             if viewModel.isSearching && viewModel.hasNoResults {
                 keyHint(["esc"], "Effacer la recherche")
             } else {
-                keyHint(["↩"], "Coller")
-                keyHint(["⇧", "↩"], "Texte brut")
-                keyHint(viewModel.query.isEmpty ? ["⌫"] : ["⌘", "⌫"], "Supprimer")
+                keyHint(.paste, "Coller")
+                keyHint(.pastePlainText, "Texte brut")
+                // ⌫ edits a search: ⌘⌫ then deletes the copy.
+                if viewModel.query.isEmpty {
+                    keyHint(.delete, "Supprimer")
+                } else {
+                    keyHint(["⌘", "⌫"], "Supprimer")
+                }
             }
         }
         .fixedSize()
+    }
+
+    @ViewBuilder
+    private func keyHint(_ action: HotKeyAction, _ title: LocalizedStringKey) -> some View {
+        if let combination = viewModel.combination(for: action) {
+            keyHint(combination.symbols, title)
+        }
     }
 
     private func keyHint(_ keys: [String], _ title: LocalizedStringKey) -> some View {
@@ -153,7 +165,9 @@ struct HistoryStripToolbarView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("\(Text(title)), \(keys.joined())"))
+        .accessibilityIdentifier("history.keyHint")
     }
 
     private var pauseMenu: some View {

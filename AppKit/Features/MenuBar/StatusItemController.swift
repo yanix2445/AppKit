@@ -12,18 +12,24 @@ final class StatusItemController: NSObject {
     private let onPrimaryClick: () -> Void
     private let onOpenSettings: () -> Void
     private var state = HistoryLifecycleState.starting
-    private var openHistoryHotKey: HotKeyCombination?
+    private var clipboardDenied = false
+    private let shortcuts: ShortcutsController
+    private let onOpenClipboardSettings: () -> Void
 
     init(
         copyCount: @escaping () -> Int,
         launchAtLogin: LaunchAtLoginController,
         pause: CapturePauseController,
+        shortcuts: ShortcutsController,
         onPrimaryClick: @escaping () -> Void,
-        onOpenSettings: @escaping () -> Void
+        onOpenSettings: @escaping () -> Void,
+        onOpenClipboardSettings: @escaping () -> Void
     ) {
         self.copyCount = copyCount
         self.launchAtLogin = launchAtLogin
         self.pause = pause
+        self.shortcuts = shortcuts
+        self.onOpenClipboardSettings = onOpenClipboardSettings
         self.onPrimaryClick = onPrimaryClick
         self.onOpenSettings = onOpenSettings
         super.init()
@@ -68,9 +74,10 @@ final class StatusItemController: NSObject {
         }
     }
 
-    /// Shown next to the menu entry, as a reminder.
-    func setOpenHistoryHotKey(_ combination: HotKeyCombination?) {
-        openHistoryHotKey = combination
+    /// Without the pasteboard, nothing is captured: the icon says so.
+    func setClipboardDenied(_ isDenied: Bool) {
+        clipboardDenied = isDenied
+        updateImage()
     }
 
     private func updateImage() {
@@ -91,7 +98,8 @@ final class StatusItemController: NSObject {
     private var userPauseTitle: String? { pause.statusText }
 
     private var pauseTitle: String? {
-        switch state {
+        if clipboardDenied { return String(localized: "Capture en pause · presse-papiers refusé") }
+        return switch state {
         case .diskFull: String(localized: "Capture en pause · disque plein")
         case .keyUnavailable: String(localized: "Capture en pause · clé inaccessible")
         case .keyMissing: String(localized: "Capture en pause · clé introuvable")
@@ -100,7 +108,8 @@ final class StatusItemController: NSObject {
     }
 
     private var pauseExplanation: String? {
-        switch state {
+        if clipboardDenied { return String(localized: "Sans cet accès, vos copies ne sont pas gardées et le bandeau reste vide.") }
+        return switch state {
         case .diskFull: String(localized: "La capture reprendra seule dès qu’il y aura de la place. Aucune copie n’est écrite à moitié.")
         case .keyUnavailable: String(localized: "La capture reprendra seule dès que la clé sera accessible. Aucune copie n’est écrite en clair.")
         case .keyMissing: String(localized: "Aucune copie n’est écrite en clair.")
@@ -125,9 +134,9 @@ final class StatusItemController: NSObject {
 
         let open = NSMenuItem(title: String(localized: "Ouvrir l’historique"), action: #selector(openHistory), keyEquivalent: "")
         open.target = self
-        if let openHistoryHotKey {
-            open.keyEquivalent = openHistoryHotKey.character.lowercased()
-            open.keyEquivalentModifierMask = Self.eventModifiers(openHistoryHotKey.modifiers)
+        if let hotKey = shortcuts.combination(for: .openHistory) {
+            open.keyEquivalent = hotKey.character.lowercased()
+            open.keyEquivalentModifierMask = Self.eventModifiers(hotKey.modifiers)
         }
         menu.addItem(open)
         menu.addItem(makePauseItem())
@@ -183,7 +192,11 @@ final class StatusItemController: NSObject {
             title.setAccessibilityIdentifier("statusItem.pause")
             menu.addItem(title)
             menu.addItem(disabledItem(pauseExplanation))
-            if state == .diskFull {
+            if clipboardDenied {
+                let open = NSMenuItem(title: String(localized: "Ouvrir les Réglages Système"), action: #selector(openClipboardSettings), keyEquivalent: "")
+                open.target = self
+                menu.addItem(open)
+            } else if state == .diskFull {
                 let freeSpace = NSMenuItem(title: String(localized: "Libérer de la place…"), action: #selector(openStorageSettings), keyEquivalent: "")
                 freeSpace.target = self
                 menu.addItem(freeSpace)
@@ -227,6 +240,10 @@ final class StatusItemController: NSObject {
 
     @objc private func openHistory() {
         onPrimaryClick()
+    }
+
+    @objc private func openClipboardSettings() {
+        onOpenClipboardSettings()
     }
 
     @objc private func openSettings() {

@@ -7,13 +7,16 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var dependencies: AppDependencies?
     private var historyStrip: HistoryStripController?
+    private var permissions: PermissionsController?
+    private var shortcuts: ShortcutsController?
+    private let clipboardAlert = ClipboardAccessAlertPresenter()
+    private var hasExplainedRefusal = false
     private var statusItem: StatusItemController?
     private let copiedMessage = CopiedMessageController()
     private var settings: SettingsWindowController?
     private let launchAtLoginAlert = LaunchAtLoginAlertPresenter()
     private let recovery = HistoryRecoveryAlertPresenter()
     private let hotKeyConflict = HotKeyConflictAlertPresenter()
-    private var globalHotKey: GlobalHotKeyController?
     private let directPasteAlert = DirectPasteAlertPresenter()
     private var directPaste: DirectPasteCoordinator?
     private let protectedFolderAlert = ProtectedFolderAlertPresenter()
@@ -27,7 +30,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         self.dependencies = dependencies
-        settings = SettingsWindowController(launchAtLogin: dependencies.launchAtLogin, lifecycle: dependencies.lifecycle, defaults: dependencies.directPasteDefaults, feedback: dependencies.feedback)
+        let permissions = PermissionsController(
+            directPaste: dependencies.directPasteService,
+            clipboard: dependencies.clipboardAccess,
+            launchAtLogin: dependencies.launchAtLogin,
+            defaults: dependencies.directPasteDefaults
+        )
+        self.permissions = permissions
         directPaste = DirectPasteCoordinator(
             service: dependencies.directPasteService,
             defaults: dependencies.directPasteDefaults,
@@ -51,18 +60,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.restore(clip, style: style)
         }
         self.historyStrip = historyStrip
+        let pause = dependencies.pause
+        let shortcuts = makeShortcuts(dependencies: dependencies, historyStrip: historyStrip, pause: pause)
+        self.shortcuts = shortcuts
+        historyStrip.setShortcuts(shortcuts)
+        settings = SettingsWindowController(
+            launchAtLogin: dependencies.launchAtLogin,
+            shortcuts: shortcuts,
+            permissions: permissions,
+            lifecycle: dependencies.lifecycle,
+            defaults: dependencies.directPasteDefaults,
+            feedback: dependencies.feedback
+        )
         let history = dependencies.history
         statusItem = StatusItemController(
             copyCount: { history.clips.count },
             launchAtLogin: dependencies.launchAtLogin,
-            pause: dependencies.pause,
+            pause: pause,
+            shortcuts: shortcuts,
             onPrimaryClick: { historyStrip.toggle() },
-            onOpenSettings: { [weak self] in self?.settings?.show() }
+            onOpenSettings: { [weak self] in self?.settings?.show() },
+            onOpenClipboardSettings: { permissions.openClipboardSettings() }
         )
         dependencies.onFilesCaptured = { [protectedFolderAlert] files in
             protectedFolderAlert.explainIfNeeded(for: files)
         }
-        let pause = dependencies.pause
         historyStrip.setPause(pause)
         dependencies.start(
             onStateChange: { [weak self] state in self?.handle(state) },
@@ -72,27 +94,70 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         )
         statusItem?.capturePauseDidChange()
-        startGlobalHotKey(historyStrip: historyStrip)
-        // Past launch, as the offer runs modally.
-        Task { [launchAtLoginAlert, launchAtLogin = dependencies.launchAtLogin] in
+        permissions.onClipboardAccessChange = { [weak self] _ in self?.applyClipboardAccess() }
+        permissions.startObserving()
+        // Past launch, as these explanations run modally.
+        Task { [weak self, launchAtLoginAlert, launchAtLogin = dependencies.launchAtLogin] in
+            self?.resolveClipboardAccess()
+            shortcuts.start()
             launchAtLogin.offerOnce { launchAtLoginAlert.askToEnable() }
         }
     }
 
-    private func startGlobalHotKey(historyStrip: HistoryStripController) {
-        let globalHotKey = GlobalHotKeyController(
-            service: SystemHotKeyService(),
-            onTrigger: { historyStrip.toggle() },
-            askForFallback: { [hotKeyConflict] taken, fallbacks in
-                hotKeyConflict.askForFallback(taken: taken, fallbacks: fallbacks)
-            }
+    private func makeShortcuts(
+        dependencies: AppDependencies,
+        historyStrip: HistoryStripController,
+        pause: CapturePauseController
+    ) -> ShortcutsController {
+        let defaults = dependencies.directPasteDefaults
+        return ShortcutsController(
+            defaults: defaults,
+            openHistory: GlobalHotKeyController(
+                action: .openHistory,
+                service: SystemHotKeyService(),
+                defaults: defaults,
+                onTrigger: { historyStrip.toggle() },
+                askForFallback: { [hotKeyConflict] taken, fallbacks in
+                    hotKeyConflict.askForFallback(taken: taken, fallbacks: fallbacks)
+                }
+            ),
+            togglePause: GlobalHotKeyController(
+                action: .togglePause,
+                service: SystemHotKeyService(),
+                defaults: defaults,
+                onTrigger: {
+                    if pause.statusText == nil {
+                        pause.pauseUntilResumed()
+                    } else {
+                        pause.resume()
+                    }
+                }
+            )
         )
-        self.globalHotKey = globalHotKey
-        // Past launch, as the alert about a taken shortcut runs modally.
-        Task { [weak self] in
-            globalHotKey.start()
-            historyStrip.setOpenHotKey(globalHotKey.registered)
-            self?.statusItem?.setOpenHistoryHotKey(globalHotKey.registered)
+    }
+
+    /// The first time, says why before macOS asks; « Pas maintenant » leaves capture in pause.
+    private func resolveClipboardAccess() {
+        guard let permissions, let dependencies else { return }
+        if permissions.shouldExplainClipboard {
+            permissions.markClipboardExplained()
+            if !clipboardAlert.explainReading() {
+                dependencies.pause.pauseUntilResumed()
+            }
+        }
+        applyClipboardAccess()
+    }
+
+    private func applyClipboardAccess() {
+        guard let permissions, let dependencies else { return }
+        let isDenied = permissions.clipboardAccess == .denied
+        dependencies.setCanReadClipboard(!isDenied)
+        statusItem?.setClipboardDenied(isDenied)
+        if isDenied, !hasExplainedRefusal {
+            hasExplainedRefusal = true
+            if clipboardAlert.explainRefusal() {
+                permissions.openClipboardSettings()
+            }
         }
     }
 

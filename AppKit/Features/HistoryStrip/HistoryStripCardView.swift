@@ -36,18 +36,18 @@ struct HistoryStripCardView: View {
         }
         .contextMenu {
             Button("Coller", systemImage: "doc.on.clipboard") { viewModel.choose(clip.id) }
-                .keyboardShortcut(.return, modifiers: [])
+                .keyboardShortcut(viewModel.combination(for: .paste)?.keyboardShortcut)
             // An image or a file has no text to paste alone.
             if clip.content.plainText != nil {
                 Button("Coller en texte brut", systemImage: "textformat") { viewModel.choose(clip.id, style: .plainText) }
-                    .keyboardShortcut(.return, modifiers: .shift)
+                    .keyboardShortcut(viewModel.combination(for: .pastePlainText)?.keyboardShortcut)
             }
             Divider()
             Button(pinTitle, systemImage: clip.isPinned ? "pin.slash" : "pin") { viewModel.togglePin(clip.id) }
-                .keyboardShortcut("p", modifiers: .command)
+                .keyboardShortcut(viewModel.combination(for: .togglePin)?.keyboardShortcut)
             Divider()
             Button("Supprimer", systemImage: "trash", role: .destructive) { viewModel.remove(clip.id) }
-                .keyboardShortcut(.delete, modifiers: [])
+                .keyboardShortcut(viewModel.combination(for: .delete)?.keyboardShortcut)
                 .accessibilityIdentifier("history.menu.delete")
         }
     }

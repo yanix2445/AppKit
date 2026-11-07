@@ -13,7 +13,10 @@ final class AppDependencies {
     let launchAtLogin: LaunchAtLoginController
     let pause: CapturePauseController
     let feedback: CopyFeedbackController
+    let clipboardAccess: any ClipboardAccessService
     private var capturesCopies = false
+    /// Nothing is read before the user knows why, nor once macOS refuses.
+    private var canReadClipboard = false
     private let monitor: ClipboardMonitor
     private var captureTask: Task<Void, Never>?
     private var retryTask: Task<Void, Never>?
@@ -27,6 +30,7 @@ final class AppDependencies {
         nonisolated(unsafe) let defaults = location.directPasteDefaults
         directPasteService = location.directPasteService
         directPasteDefaults = location.directPasteDefaults
+        clipboardAccess = location.clipboardAccess
         launchAtLogin = LaunchAtLoginController(service: location.launchAtLoginService, defaults: location.directPasteDefaults)
         monitor = ClipboardMonitor(
             pasteboard: SystemPasteboardService(name: location.pasteboardName),
@@ -53,6 +57,7 @@ final class AppDependencies {
         let directPasteDefaults: UserDefaults
         let launchAtLoginService: any LaunchAtLoginService
         let soundService: any SoundService
+        let clipboardAccess: any ClipboardAccessService
     }
 
     private static func makeLocation() -> Location {
@@ -65,7 +70,8 @@ final class AppDependencies {
                 directPasteService: environment.directPasteService,
                 directPasteDefaults: environment.directPasteDefaults,
                 launchAtLoginService: environment.launchAtLoginService,
-                soundService: environment.soundService
+                soundService: environment.soundService,
+                clipboardAccess: environment.clipboardAccess
             )
         }
         #endif
@@ -77,7 +83,8 @@ final class AppDependencies {
             directPasteService: SystemDirectPasteService(),
             directPasteDefaults: .standard,
             launchAtLoginService: SystemLaunchAtLoginService(),
-            soundService: SystemSoundService()
+            soundService: SystemSoundService(),
+            clipboardAccess: SystemClipboardAccessService()
         )
     }
 
@@ -137,8 +144,13 @@ final class AppDependencies {
         }
     }
 
+    func setCanReadClipboard(_ canRead: Bool) {
+        canReadClipboard = canRead
+        updateMonitorPause()
+    }
+
     private func updateMonitorPause() {
-        let isPaused = !capturesCopies || pause.isPaused
+        let isPaused = !capturesCopies || !canReadClipboard || pause.isPaused
         Task { [monitor] in
             await monitor.setPaused(isPaused)
         }

@@ -23,6 +23,19 @@ public struct HotKeyCombination: Hashable, Codable, Sendable {
         return symbols
     }
 
+    /// The keys that write no text, with the names AppKit shows for them.
+    public static let specialKeyNames: [UInt32: String] = [
+        36: "↩", 48: "⇥", 49: "␣", 51: "⌫", 53: "⎋", 117: "⌦",
+        123: "←", 124: "→", 125: "↓", 126: "↑",
+        122: "F1", 120: "F2", 99: "F3", 118: "F4", 96: "F5", 97: "F6",
+        98: "F7", 100: "F8", 101: "F9", 109: "F10", 103: "F11", 111: "F12",
+    ]
+
+    /// A space writes text, so it does not count here.
+    public var isSpecialKey: Bool {
+        keyCode != 49 && Self.specialKeyNames[keyCode] != nil
+    }
+
     public var displayName: String {
         symbols.joined()
     }

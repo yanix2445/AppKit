@@ -1,12 +1,62 @@
 {
   "sourceLanguage": "fr",
   "strings": {
+    "%@ est déjà pris par macOS ou une autre app. Choisissez une autre combinaison.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is already taken by macOS or another app. Choose another combination."
+          }
+        }
+      }
+    },
     "%@ est déjà utilisé par une autre app": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ is already used by another app"
+          }
+        }
+      }
+    },
+    "%@ est réservé par macOS. Choisissez une autre combinaison.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is reserved by macOS. Choose another combination."
+          }
+        }
+      }
+    },
+    "%@ sert déjà dans le bandeau. Choisissez une autre combinaison.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is already used in the strip. Choose another combination."
+          }
+        }
+      }
+    },
+    "%@ sert déjà à : %@. Choisissez une autre combinaison.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ is already used for: %2$@. Choose another combination."
+          }
+        }
+      }
+    },
+    "%@ sert à écrire dans la recherche. Ajoutez ⌘, ⌃ ou ⌥.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ types in the search. Add ⌘, ⌃ or ⌥."
           }
         }
       }
@@ -181,6 +231,26 @@
         }
       }
     },
+    "Accessibilité": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accessibility"
+          }
+        }
+      }
+    },
+    "Accès au presse-papiers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasteboard access"
+          }
+        }
+      }
+    },
     "Activer": {
       "localizations": {
         "en": {
@@ -251,12 +321,32 @@
         }
       }
     },
+    "AppKit ne peut pas lire le presse-papiers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AppKit can’t read the pasteboard"
+          }
+        }
+      }
+    },
     "AppKit n’a rien effacé. La clé est rangée dans le Trousseau de ce Mac : elle a peut-être été supprimée, ou pas encore restaurée.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "AppKit has erased nothing. The key is kept in this Mac’s keychain: it may have been deleted, or not restored yet."
+          }
+        }
+      }
+    },
+    "AppKit va lire votre presse-papiers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AppKit will read your pasteboard"
           }
         }
       }
@@ -277,6 +367,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Above this, a copy is kept apart and doesn’t count against the limit."
+          }
+        }
+      }
+    },
+    "Aucun": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
           }
         }
       }
@@ -357,6 +457,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow Direct Paste"
+          }
+        }
+      }
+    },
+    "Autorisée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed"
           }
         }
       }
@@ -481,6 +591,16 @@
         }
       }
     },
+    "Capture en pause · presse-papiers refusé": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture paused · pasteboard denied"
+          }
+        }
+      }
+    },
     "Catégories exclues": {
       "localizations": {
         "en": {
@@ -497,6 +617,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "What you copy in this app is never kept."
+          }
+        }
+      }
+    },
+    "Ce raccourci doit contenir ⌘, ⌃ ou ⌥ pour marcher depuis n’importe quelle app.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This shortcut needs ⌘, ⌃ or ⌥ to work from any app."
           }
         }
       }
@@ -651,6 +781,16 @@
         }
       }
     },
+    "Copies volumineuses": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large copies"
+          }
+        }
+      }
+    },
     "Copies épinglées": {
       "localizations": {
         "en": {
@@ -701,12 +841,32 @@
         }
       }
     },
+    "Dans le bandeau": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the Strip"
+          }
+        }
+      }
+    },
     "De 1 Go à 10 Go.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "From 1 GB to 10 GB."
+          }
+        }
+      }
+    },
+    "Depuis n’importe quelle app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From Any App"
           }
         }
       }
@@ -751,6 +911,26 @@
         }
       }
     },
+    "Déplacer un épinglé à droite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move a pinned copy right"
+          }
+        }
+      }
+    },
+    "Déplacer un épinglé à gauche": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move a pinned copy left"
+          }
+        }
+      }
+    },
     "Déplacé ou supprimé": {
       "localizations": {
         "en": {
@@ -767,6 +947,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unpin"
+          }
+        }
+      }
+    },
+    "Effacer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
+    "Effacer : %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear: %@"
+          }
+        }
+      }
+    },
+    "Effacer ce raccourci": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear this shortcut"
           }
         }
       }
@@ -1131,6 +1341,16 @@
         }
       }
     },
+    "Les autres raccourcis sont dans la rubrique Raccourcis.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The other shortcuts are in the Shortcuts section."
+          }
+        }
+      }
+    },
     "Les copies plus anciennes sont supprimées, sauf les épinglées.": {
       "localizations": {
         "en": {
@@ -1201,12 +1421,42 @@
         }
       }
     },
+    "L’état se met à jour à l’ouverture des Réglages et à votre retour de Réglages Système.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The state updates when Settings opens and when you come back from System Settings."
+          }
+        }
+      }
+    },
     "Mettre en pause": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Pause"
+          }
+        }
+      }
+    },
+    "Mettre en pause ou reprendre la capture": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause or resume capture"
+          }
+        }
+      }
+    },
+    "Mise à jour de l’état": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "State updates"
           }
         }
       }
@@ -1237,6 +1487,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passwords and confidential copies"
+          }
+        }
+      }
+    },
+    "Ouverture de session": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Login"
+          }
+        }
+      }
+    },
+    "Ouvrir le réglage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Setting"
+          }
+        }
+      }
+    },
+    "Ouvrir le réglage : %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open setting: %@"
           }
         }
       }
@@ -1361,6 +1641,16 @@
         }
       }
     },
+    "Permissions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permissions"
+          }
+        }
+      }
+    },
     "Place occupée par l’historique": {
       "localizations": {
         "en": {
@@ -1401,6 +1691,16 @@
         }
       }
     },
+    "Pour garder l’historique de ce que vous copiez, AppKit lit le presse-papiers à chaque copie. macOS va vous demander votre accord. Rien ne quitte ce Mac. Les mots de passe et les copies confidentielles ne sont jamais gardés.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To keep the history of what you copy, AppKit reads the pasteboard at each copy. macOS will ask for your permission. Nothing leaves this Mac. Passwords and confidential copies are never kept."
+          }
+        }
+      }
+    },
     "Pour ne rater aucune copie après un redémarrage. Vous pourrez changer d’avis dans les Réglages.": {
       "localizations": {
         "en": {
@@ -1421,12 +1721,52 @@
         }
       }
     },
+    "Précédent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
     "Quitter AppKit": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Quit AppKit"
+          }
+        }
+      }
+    },
+    "Raccourcis": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcuts"
+          }
+        }
+      }
+    },
+    "Raccourcis par défaut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default shortcuts"
+          }
+        }
+      }
+    },
+    "Rechercher dans les réglages…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search settings…"
           }
         }
       }
@@ -1447,6 +1787,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Search for an app"
+          }
+        }
+      }
+    },
+    "Refusée": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denied"
           }
         }
       }
@@ -1541,6 +1891,86 @@
         }
       }
     },
+    "Rétablir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore"
+          }
+        }
+      }
+    },
+    "Rétablir : %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore: %@"
+          }
+        }
+      }
+    },
+    "Rétablir le raccourci par défaut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore the default shortcut"
+          }
+        }
+      }
+    },
+    "Sans cet accès, vos copies ne sont pas gardées et le bandeau reste vide.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without this access, your copies aren’t kept and the strip stays empty."
+          }
+        }
+      }
+    },
+    "Sans cet accès, vos copies ne sont pas gardées et le bandeau reste vide. Réglages Système › Confidentialité et sécurité": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without this access, your copies aren’t kept and the strip stays empty. System Settings › Privacy & Security"
+          }
+        }
+      }
+    },
+    "Sans elle, AppKit ne se lance pas seul au démarrage du Mac.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without it, AppKit doesn’t start by itself when the Mac starts."
+          }
+        }
+      }
+    },
+    "Sans elle, l’élément est copié et vous faites ⌘V.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without it, the item is copied and you press ⌘V."
+          }
+        }
+      }
+    },
+    "Sans lui, vos copies ne sont pas gardées et le bandeau reste vide.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without it, your copies aren’t kept and the strip stays empty."
+          }
+        }
+      }
+    },
     "Sans sa clé, cet historique ne peut plus être lu. Sa suppression est définitive, même si la clé réapparaît ensuite.": {
       "localizations": {
         "en": {
@@ -1601,12 +2031,32 @@
         }
       }
     },
+    "Sons": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sounds"
+          }
+        }
+      }
+    },
     "Stockage": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Storage"
+          }
+        }
+      }
+    },
+    "Suivant": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forward"
           }
         }
       }
@@ -1667,6 +2117,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete the entire history, pinned items included?"
+          }
+        }
+      }
+    },
+    "Tapez un raccourci…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type a shortcut…"
           }
         }
       }
@@ -1817,6 +2277,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The entire history will be erased. Pinned items and temporary large copies are left alone."
+          }
+        }
+      }
+    },
+    "Tout rétablir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore All"
           }
         }
       }
@@ -1991,12 +2461,32 @@
         }
       }
     },
+    "À autoriser": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To allow"
+          }
+        }
+      }
+    },
     "À l’instant": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Just now"
+          }
+        }
+      }
+    },
+    "Échap annule l’enregistrement en cours.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escape cancels the recording."
           }
         }
       }
@@ -2017,6 +2507,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pin"
+          }
+        }
+      }
+    },
+    "Épingler ou désépingler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pin or unpin"
           }
         }
       }
